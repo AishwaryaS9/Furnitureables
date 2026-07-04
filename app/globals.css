@@ -7,6 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -49,10 +50,15 @@
 }
 
 :root {
-  /* --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0); */
-  --background: #f5dbce;
-  --foreground: #482e2a;
+
+  /* --background: #f5dbce;
+  --foreground: #482e2a; */
+
+  --background: #F8F8F8;
+  --foreground: #000000;
+  --primary: #000000;
+  --muted-accent: #A0B6CD;
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -131,4 +137,26 @@
   html {
     @apply font-sans;
   }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b2afaf;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a4a2e6;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
 }
