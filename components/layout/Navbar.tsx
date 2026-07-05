@@ -11,10 +11,15 @@ import {
   X,
   ChevronDown
 } from "lucide-react";
+import { useCartStore } from "@/store/cart";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // const items = useCartStore((s) => s.items);
+
+  // const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   const categories = [
     { name: "Living Room", href: "/categories/living-room" },

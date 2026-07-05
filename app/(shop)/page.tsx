@@ -1,16 +1,18 @@
 "use client";
 
-import ProductFilters from "@/components/product/ProductFilters";
+import ProductFilters from "@/components/product/filters/ProductFilters";
 import ProductGrid from "@/components/product/ProductGrid";
 import Image from "next/image";
-import { images } from "../assets";
+import heroFurniture from "../../public/images/hero-furniture3.jpg";
+import SearchBar from "@/components/product/filters/SearchBar";
+import Pagination from "@/components/product/Pagination";
 
 export default function Shop() {
     return (
         <main className="min-h-screen bg-background text-foreground">
             <section className="relative w-full h-[60vh] md:h-[70vh]">
                 <Image
-                    src={images.heroFurniture}
+                    src={heroFurniture}
                     alt="Furniture Banner"
                     fill
                     priority
@@ -48,6 +50,7 @@ export default function Shop() {
 
                     {/* Filters */}
                     <div className="flex justify-center">
+                        <SearchBar />
                         <div className="bg-white/70 backdrop-blur-md border rounded-xl p-4 shadow-sm">
                             <ProductFilters />
                         </div>
@@ -57,6 +60,7 @@ export default function Shop() {
                     <div className="pt-4">
                         <ProductGrid />
                     </div>
+                    <Pagination />
                 </div>
             </section>
         </main>

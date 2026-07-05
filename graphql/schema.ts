@@ -1,28 +1,24 @@
-import { gql } from "graphql-tag";
-
-export const typeDefs = gql`
+export const typeDefs = /* GraphQL */ `
   type Product {
-    id: ID!
+    id: String!
     title: String!
     price: Float!
     image: String
-    category: String
+    type: String
     material: String
-    color: String
-    room: String
+    createdAt: String!
   }
 
   input ProductFilterInput {
-    category: String
+    type: String
     material: String
-    color: String
-    room: String
     minPrice: Float
     maxPrice: Float
+    search: String
   }
 
   type Query {
-    products(filter: ProductFilterInput): [Product!]!
-    product(id: ID!): Product
+    products(filter: ProductFilterInput, page: Int, limit: Int): [Product!]!
+    product(id: String!): Product   
   }
 `;
