@@ -15,6 +15,7 @@ export const typeDefs = /* GraphQL */ `
     minPrice: Float
     maxPrice: Float
     search: String
+    excludeId: String
   }
 
   type Query {

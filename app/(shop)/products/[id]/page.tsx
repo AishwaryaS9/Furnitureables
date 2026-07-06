@@ -1,6 +1,8 @@
+import { Product } from "@prisma/client";
 import ProductClient from "./ProductClient";
 
-async function getProduct(id: string) {
+// async function getProduct(id: string) {
+async function getProduct(id: string): Promise<Product | null> {
   const res = await fetch("http://localhost:3000/api/graphql", {
     method: "POST",
     headers: {
@@ -36,9 +38,10 @@ async function getProduct(id: string) {
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  // params: Promise<{ id: string }>;
+  params: { id: string }
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   const product = await getProduct(id);
   if (!product) {

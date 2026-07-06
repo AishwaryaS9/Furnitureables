@@ -17,9 +17,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // const items = useCartStore((s) => s.items);
+  const items = useCartStore((s) => s.items);
 
-  // const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
+  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   const categories = [
     { name: "Living Room", href: "/categories/living-room" },
@@ -115,9 +115,14 @@ export default function Navbar() {
             </Link>
             <Link href="/cart" aria-label="Cart" className="p-2 hover:text-foreground transition-colors relative">
               <ShoppingCart size={22} />
-              <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+              {/* <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                 2
-              </span>
+              </span> */}
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </Link>
           </div>
 
@@ -125,9 +130,14 @@ export default function Navbar() {
           <div className="flex md:hidden items-center gap-4 text-muted-foreground">
             <Link href="/cart" aria-label="Cart" className="p-2 hover:text-foreground relative">
               <ShoppingCart size={24} />
-              <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+              {/* <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                 2
-              </span>
+              </span> */}
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                  {totalItems}
+                </span>
+              )}
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}

@@ -1,5 +1,6 @@
 "use client";
 
+import RelatedProducts from "@/components/product/RelatedProducts";
 import { useCartStore } from "@/store/cart";
 import Image from "next/image";
 
@@ -32,7 +33,6 @@ export default function ProductClient({ product }: any) {
                         {product.type && <p>Type: {product.type}</p>}
                     </div>
 
-                    {/* ✅ NOW WORKS */}
                     <button
                         onClick={() =>
                             addToCart({
@@ -49,6 +49,12 @@ export default function ProductClient({ product }: any) {
 
                 </div>
             </div>
+
+            <div className="max-w-6xl mx-auto">
+                <RelatedProducts type={product.type} id={product.id} />
+            </div>
+
+
         </main>
     );
 }

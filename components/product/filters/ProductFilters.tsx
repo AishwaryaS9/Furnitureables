@@ -28,18 +28,29 @@ export default function ProductFilters() {
         <option value="bedroom">Bedroom</option>
       </select>
 
-      {/* Price */}
+      {/* Min Price */}
       <input
         type="number"
         placeholder="Min Price"
-        onChange={(e) => setFilter("minPrice", Number(e.target.value))}
+        onChange={(e) =>
+          setFilter(
+            "minPrice",
+            e.target.value ? Number(e.target.value) : undefined
+          )
+        }
         className="border rounded px-2 py-1 w-24"
       />
 
+      {/* Max Price */}
       <input
         type="number"
         placeholder="Max Price"
-        onChange={(e) => setFilter("maxPrice", Number(e.target.value))}
+        onChange={(e) =>
+          setFilter(
+            "maxPrice",
+            e.target.value ? Number(e.target.value) : undefined
+          )
+        }
         className="border rounded px-2 py-1 w-24"
       />
 

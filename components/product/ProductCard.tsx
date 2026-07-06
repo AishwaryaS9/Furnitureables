@@ -13,6 +13,7 @@ type Product = {
   image: string;
   material?: string;
   color?: string;
+  type?: string;
 };
 
 export default function ProductCard({ product }: { product: Product }) {
