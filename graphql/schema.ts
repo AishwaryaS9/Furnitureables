@@ -19,7 +19,13 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Query {
-    products(filter: ProductFilterInput, page: Int, limit: Int): [Product!]!
-    product(id: String!): Product   
-  }
+    products(
+      filter: ProductFilterInput
+      page: Int
+      limit: Int
+      related: Boolean
+    ): [Product!]!
+
+  product(id: String!): Product
+}
 `;

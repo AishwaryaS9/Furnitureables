@@ -16,7 +16,12 @@ const prisma = new PrismaClient({
 const resolvers = {
   Query: {
     products: async (_: any, args: any) => {
-      const { filter, page = 1, limit = 8 } = args;
+      const {
+        filter,
+        page = 1,
+        limit = 8,
+        related = false,
+      } = args;
 
       const where: any = {};
 
@@ -24,7 +29,7 @@ const resolvers = {
         if (filter.type) where.type = filter.type;
         if (filter.material) where.material = filter.material;
 
-        // SEARCH (title)
+        // 🔍 SEARCH
         if (filter.search) {
           where.title = {
             contains: filter.search,
@@ -32,17 +37,28 @@ const resolvers = {
           };
         }
 
+        // PRICE FILTER
         if (filter.minPrice || filter.maxPrice) {
           where.price = {};
           if (filter.minPrice) where.price.gte = filter.minPrice;
           if (filter.maxPrice) where.price.lte = filter.maxPrice;
         }
+
+        // EXCLUDE CURRENT PRODUCT (FOR RELATED)
+        if (filter.excludeId) {
+          where.NOT = {
+            id: filter.excludeId,
+          };
+        }
       }
 
       return prisma.product.findMany({
         where,
-        skip: (page - 1) * limit,
-        take: limit,
+
+        // SWITCH BEHAVIOR
+        skip: related ? undefined : (page - 1) * limit,
+        take: related ? 4 : limit,
+
         orderBy: { createdAt: "desc" },
       });
     },
