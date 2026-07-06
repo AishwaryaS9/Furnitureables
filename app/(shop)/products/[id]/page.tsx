@@ -14,10 +14,15 @@ async function getProduct(id: string): Promise<Product | null> {
           product(id: $id) {
             id
             title
+            description
             price
-            image
+            image  
             material
             type
+            color
+            room
+            dimensions
+            stock
           }
         }
       `,
@@ -33,8 +38,6 @@ async function getProduct(id: string): Promise<Product | null> {
   return json.data.product;
 }
 
-
-
 export default async function ProductPage({
   params,
 }: {
@@ -44,6 +47,7 @@ export default async function ProductPage({
   const { id } = await params;
 
   const product = await getProduct(id);
+  console.log("PRODUCT", product)
   if (!product) {
     return <p className="text-center mt-10">Product not found</p>;
   }

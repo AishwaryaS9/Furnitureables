@@ -14,8 +14,9 @@ export const prisma = new PrismaClient({
 });
 
 async function main() {
+  await prisma.product.deleteMany();
   await prisma.product.createMany({
-    skipDuplicates: true,
+    // skipDuplicates: true,
     data: [
       {
         title: "Modern Sofa",

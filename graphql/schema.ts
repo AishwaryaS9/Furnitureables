@@ -1,13 +1,22 @@
 export const typeDefs = /* GraphQL */ `
+
   type Product {
-    id: String!
-    title: String!
-    price: Float!
-    image: String
-    type: String
-    material: String
-    createdAt: String!
-  }
+  id: String!
+  title: String!
+  description: String
+  price: Float!
+  image: String
+
+  type: String
+  material: String
+
+  color: String
+  room: String
+  dimensions: String
+  stock: Int
+
+  createdAt: String!
+}
 
   input ProductFilterInput {
     type: String

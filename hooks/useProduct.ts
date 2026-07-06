@@ -11,10 +11,11 @@ export const useProduct = (id: string) => {
         },
         body: JSON.stringify({
           query: `
-            query GetProduct($id: ID!) {
+            query GetProduct($id: String!) {
               product(id: $id) {
                 id
                 title
+                description
                 price
                 image
                 material
@@ -26,7 +27,8 @@ export const useProduct = (id: string) => {
             }
           `,
           variables: { id },
-        }),
+        }
+        ),
       });
 
       const json = await res.json();
