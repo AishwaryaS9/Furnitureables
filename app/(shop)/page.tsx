@@ -1,82 +1,60 @@
 "use client";
 
-import ProductFilters from "@/components/product/filters/ProductFilters";
 import ProductGrid from "@/components/product/ProductGrid";
 import Image from "next/image";
 import heroFurniture from "../../public/images/hero-furniture3.jpg";
-import SearchBar from "@/components/product/filters/SearchBar";
 import Link from "next/link";
 
 export default function Shop() {
     return (
-        <main className="min-h-screen bg-background text-foreground">
-            <section className="relative w-full h-[60vh] md:h-[70vh]">
+        <main className="min-h-screen bg-[#FDFDFD] text-zinc-900 antialiased selection:bg-zinc-900 selection:text-white">
+
+            <section className="relative w-full h-[55vh] md:h-[65vh] overflow-hidden">
                 <Image
                     src={heroFurniture}
-                    alt="Furniture Banner"
+                    alt="Premium Furniture Curated Showroom Banner"
                     fill
                     priority
-                    className="object-cover"
+                    className="object-cover object-center scale-105 animate-[subtle-zoom_20s_ease-out_forwards]"
                 />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 bg-linear-to-t from-zinc-900/50 via-black/20 to-zinc-900/30" />
 
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                    <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 space-y-4">
+                    <h1 className="text-4xl md:text-6xl font-normal text-white tracking-tight font-serif max-w-3xl leading-tight">
                         Elevate Your Living Space
                     </h1>
-                    <p className="text-white/80 mt-4 max-w-xl text-sm md:text-base">
-                        Discover modern, stylish, and comfortable furniture crafted for
-                        everyday living.
+                    <p className="text-zinc-200/90 max-w-xl text-sm md:text-base font-light tracking-wide leading-relaxed">
+                        Discover modern, meticulously engineered furniture archetypes built around organic materials and modern lifestyles.
                     </p>
                 </div>
             </section>
 
-            <section className="py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto space-y-10">
+            <section className="py-12 lg:py-20 px-4 sm:px-6 lg:px-10">
+                <div className="max-w-360 mx-auto space-y-12">
 
-                    {/* Section Heading */}
                     <div className="text-center space-y-3 max-w-2xl mx-auto">
-                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                        <h2 className="text-2xl md:text-3xl font-normal tracking-tight font-serif text-zinc-900">
                             Explore Our Collection
                         </h2>
-                        <p className="text-muted-foreground text-sm">
-                            Carefully curated furniture pieces designed for comfort, style,
-                            and functionality.
+                        <p className="text-zinc-500 text-sm font-light max-w-md mx-auto leading-relaxed">
+                            Carefully curated signature pieces designed to establish clean lines, warm minimalism, and structural purpose.
                         </p>
                     </div>
 
-                    {/* Filters */}
-                    <div className="flex justify-center">
-                        <SearchBar />
-                        <div className="bg-white/70 backdrop-blur-md border rounded-xl p-4 shadow-sm">
-                            <ProductFilters />
-                        </div>
-                    </div>
-
-                    {/* Products */}
                     <div className="pt-4">
                         <ProductGrid />
                     </div>
-                    {/* <Pagination /> */}
-                    <div className="mt-12 flex justify-center">
+
+                    <div className="mt-16 flex justify-center">
                         <Link
                             href="/products"
-                            className="
-            px-6
-            py-3
-            rounded-lg
-            bg-zinc-900
-            text-white
-            hover:bg-zinc-800
-            transition
-        "
+                            className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold tracking-widest uppercase hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-md shadow-zinc-950/10 hover:shadow-lg hover:shadow-zinc-950/15"
                         >
-                            View More Products
+                            View Full Architectural Catalog
                         </Link>
                     </div>
+
                 </div>
             </section>
         </main>

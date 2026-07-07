@@ -1,17 +1,15 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { FaInstagram, FaFacebook, FaTwitter, FaPinterest } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-background border-t border-border pt-16 pb-8 text-foreground transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="w-full bg-background border-t border-border pt-16 pb-8 text-foreground transition-colors">
+      <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10">
 
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
 
-          {/* Brand Column */}
           <div className="space-y-4">
             <Link href="/" className="text-2xl font-serif font-bold tracking-tight text-primary">
               Furniture<span className="font-sans text-muted-foreground">ables</span>

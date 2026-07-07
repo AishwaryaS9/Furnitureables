@@ -47,7 +47,6 @@ export default async function ProductPage({
   const { id } = await params;
 
   const product = await getProduct(id);
-  console.log("PRODUCT", product)
   if (!product) {
     return <p className="text-center mt-10">Product not found</p>;
   }

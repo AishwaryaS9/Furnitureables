@@ -18,7 +18,6 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const items = useCartStore((s) => s.items);
-
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   const categories = [
@@ -31,12 +30,11 @@ export default function Navbar() {
 
   return (
     <header className="w-full bg-background border-b border-border sticky top-0 z-50 text-foreground transition-colors">
-      {/* Top Promotional Banner */}
       <div className="w-full bg-primary text-primary-foreground text-xs py-2 px-4 text-center font-medium tracking-wide">
         Mid-Summer Sale: Up to 40% off premium solid wood furniture! 🪵
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-20 gap-4">
 
           {/* Logo */}
@@ -56,7 +54,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)} // delay to allow clicks
+                onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
                 className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
               >
                 Shop Furniture <ChevronDown size={16} />
@@ -74,7 +72,7 @@ export default function Navbar() {
                     </Link>
                   ))}
                   <div className="border-t border-border my-1"></div>
-                  <Link href="/shop" className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-accent hover:text-accent-foreground transition-colors">
+                  <Link href="/products" className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-accent hover:text-accent-foreground transition-colors">
                     Browse All Collections
                   </Link>
                 </div>
@@ -115,11 +113,8 @@ export default function Navbar() {
             </Link>
             <Link href="/cart" aria-label="Cart" className="p-2 hover:text-foreground transition-colors relative">
               <ShoppingCart size={22} />
-              {/* <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
-                2
-              </span> */}
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-in zoom-in duration-300">
                   {totalItems}
                 </span>
               )}
@@ -130,11 +125,8 @@ export default function Navbar() {
           <div className="flex md:hidden items-center gap-4 text-muted-foreground">
             <Link href="/cart" aria-label="Cart" className="p-2 hover:text-foreground relative">
               <ShoppingCart size={24} />
-              {/* <span className="absolute top-1 right-1 bg-destructive text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
-                2
-              </span> */}
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-3 bg-red-500 text-destructive-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-in zoom-in duration-300">
                   {totalItems}
                 </span>
               )}
@@ -142,7 +134,7 @@ export default function Navbar() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md hover:text-foreground hover:bg-accent focus:outline-none transition-colors"
-              aria-expanded="false"
+              aria-expanded={isOpen}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -151,10 +143,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Content Drawer */}
       {isOpen && (
         <div className="md:hidden bg-background border-t border-border px-4 pt-2 pb-6 space-y-3 shadow-inner">
-          {/* Mobile Search */}
           <div className="relative my-2">
             <input
               type="text"
