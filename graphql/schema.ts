@@ -1,22 +1,26 @@
 export const typeDefs = /* GraphQL */ `
-
   type Product {
-  id: String!
-  title: String!
-  description: String
-  price: Float!
-  image: String
+    id: String!
+    title: String!
+    description: String
+    price: Float!
+    image: String
 
-  type: String
-  material: String
+    type: String
+    material: String
 
-  color: String
-  room: String
-  dimensions: String
-  stock: Int
+    color: String
+    room: String
+    dimensions: String
+    stock: Int
 
-  createdAt: String!
-}
+    createdAt: String!
+  }
+
+  type ProductsResponse {
+    items: [Product!]!
+    total: Int!
+  }
 
   input ProductFilterInput {
     type: String
@@ -33,8 +37,8 @@ export const typeDefs = /* GraphQL */ `
       page: Int
       limit: Int
       related: Boolean
-    ): [Product!]!
+    ): ProductsResponse!
 
-  product(id: String!): Product
-}
+    product(id: String!): Product
+  }
 `;

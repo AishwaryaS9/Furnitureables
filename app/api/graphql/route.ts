@@ -26,10 +26,13 @@ const resolvers = {
       const where: any = {};
 
       if (filter) {
-        if (filter.type) where.type = filter.type;
-        if (filter.material) where.material = filter.material;
 
-        // 🔍 SEARCH
+        if (filter.type)
+          where.type = filter.type;
+
+        if (filter.material)
+          where.material = filter.material;
+
         if (filter.search) {
           where.title = {
             contains: filter.search,
@@ -37,14 +40,16 @@ const resolvers = {
           };
         }
 
-        // PRICE FILTER
         if (filter.minPrice || filter.maxPrice) {
           where.price = {};
-          if (filter.minPrice) where.price.gte = filter.minPrice;
-          if (filter.maxPrice) where.price.lte = filter.maxPrice;
+
+          if (filter.minPrice)
+            where.price.gte = filter.minPrice;
+
+          if (filter.maxPrice)
+            where.price.lte = filter.maxPrice;
         }
 
-        // EXCLUDE CURRENT PRODUCT (FOR RELATED)
         if (filter.excludeId) {
           where.NOT = {
             id: filter.excludeId,
@@ -52,16 +57,33 @@ const resolvers = {
         }
       }
 
-      return prisma.product.findMany({
+      const total = await prisma.product.count({
+        where,
+      });
+
+      const items = await prisma.product.findMany({
         where,
 
-        // SWITCH BEHAVIOR
-        skip: related ? undefined : (page - 1) * limit,
-        take: related ? 4 : limit,
+        skip: related
+          ? undefined
+          : (page - 1) * limit,
 
-        orderBy: { createdAt: "desc" },
+        take: related
+          ? 4
+          : limit,
+
+        orderBy: {
+          createdAt: "desc",
+        },
       });
+
+      return {
+        items,
+        total,
+      };
+
     },
+
 
     product: async (_: any, { id }: any) => {
       return prisma.product.findUnique({

@@ -1,8 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { useFilterStore } from "@/store/useFilterStore";
+import { useQuery } from "@tanstack/react-query";
 
 export const useProducts = () => {
-
   const filters = useFilterStore((state) => state.filters);
 
   const cleanFilters = Object.fromEntries(
@@ -13,21 +12,32 @@ export const useProducts = () => {
 
   return useQuery({
     queryKey: ["products", cleanFilters, page],
+
     queryFn: async () => {
       const res = await fetch("/api/graphql", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
+
         body: JSON.stringify({
           query: `
-          query GetProducts($filter: ProductFilterInput, $page: Int) {
-            products(filter: $filter, page: $page) {
-              id
-              title
-              price
-              image
+            query GetProducts($filter: ProductFilterInput, $page: Int) {
+              products(filter: $filter, page: $page) {
+
+                total
+
+                items {
+                  id
+                  title
+                  price
+                  image
+                  type
+                  material
+                }
+              }
             }
-          }
-        `,
+          `,
           variables: {
             filter: cleanFilters,
             page,
@@ -36,6 +46,7 @@ export const useProducts = () => {
       });
 
       const json = await res.json();
+
       return json.data.products;
     },
   });

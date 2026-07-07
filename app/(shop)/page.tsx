@@ -5,7 +5,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import Image from "next/image";
 import heroFurniture from "../../public/images/hero-furniture3.jpg";
 import SearchBar from "@/components/product/filters/SearchBar";
-import Pagination from "@/components/product/Pagination";
+import Link from "next/link";
 
 export default function Shop() {
     return (
@@ -60,7 +60,23 @@ export default function Shop() {
                     <div className="pt-4">
                         <ProductGrid />
                     </div>
-                    <Pagination />
+                    {/* <Pagination /> */}
+                    <div className="mt-12 flex justify-center">
+                        <Link
+                            href="/products"
+                            className="
+            px-6
+            py-3
+            rounded-lg
+            bg-zinc-900
+            text-white
+            hover:bg-zinc-800
+            transition
+        "
+                        >
+                            View More Products
+                        </Link>
+                    </div>
                 </div>
             </section>
         </main>
