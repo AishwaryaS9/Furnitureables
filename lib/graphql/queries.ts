@@ -12,6 +12,7 @@ export const GET_PRODUCTS = gql`
         image
         type
         material
+        createdAt
       }
     }
   }

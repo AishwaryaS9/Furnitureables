@@ -6,6 +6,7 @@ type Filters = {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
+  sortBy?: string;
 };
 
 type FilterStore = {
@@ -18,6 +19,7 @@ type FilterStore = {
   ) => void;
 
   setPage: (page: number) => void;
+
   resetFilters: () => void;
 };
 

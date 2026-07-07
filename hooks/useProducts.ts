@@ -24,9 +24,7 @@ export const useProducts = () => {
           query: `
             query GetProducts($filter: ProductFilterInput, $page: Int) {
               products(filter: $filter, page: $page) {
-
                 total
-
                 items {
                   id
                   title
@@ -34,6 +32,7 @@ export const useProducts = () => {
                   image
                   type
                   material
+                  createdAt
                 }
               }
             }

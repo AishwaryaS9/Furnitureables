@@ -14,9 +14,9 @@ export const prisma = new PrismaClient({
 });
 
 async function main() {
-  await prisma.product.deleteMany();
+  // await prisma.product.deleteMany();
   await prisma.product.createMany({
-    // skipDuplicates: true,
+    skipDuplicates: true,
     data: [
       {
         title: "Modern Sofa",
@@ -158,6 +158,146 @@ async function main() {
         dimensions: "140x70x75",
         sku: "SD01",
       },
+      {
+        title: "Accent Armchair",
+        description:
+          "Comfortable accent armchair with soft cushioning and elegant wooden legs, ideal for reading corners and living spaces.",
+        price: 329,
+        stock: 7,
+        image: "/images/armchair.jpg",
+        type: "chair",
+        material: "fabric",
+        color: "beige",
+        room: "living",
+        dimensions: "85x80x95",
+        sku: "AC01",
+      },
+      {
+        title: "Nightstand",
+        description:
+          "Compact bedside nightstand with two drawers, providing convenient storage for books, lamps, and essentials.",
+        price: 179,
+        stock: 11,
+        image: "/images/nightstand.jpg",
+        type: "storage",
+        material: "wood",
+        color: "white",
+        room: "bedroom",
+        dimensions: "50x40x55",
+        sku: "NS01",
+      },
+      {
+        title: "Console Table",
+        description:
+          "Slim console table featuring a modern design, perfect for hallways, entryways, or decorative displays.",
+        price: 289,
+        stock: 6,
+        image: "/images/console-table.jpg",
+        type: "table",
+        material: "wood",
+        color: "walnut",
+        room: "living",
+        dimensions: "120x35x80",
+        sku: "CN01",
+      },
+      {
+        title: "Bar Stool",
+        description:
+          "Stylish bar stool with a sturdy metal frame and padded seat, suitable for kitchen islands and home bars.",
+        price: 149,
+        stock: 14,
+        image: "/images/bar-stool.jpg",
+        type: "chair",
+        material: "metal",
+        color: "grey",
+        room: "dining",
+        dimensions: "45x45x75",
+        sku: "BS02",
+      },
+      {
+        title: "Chest of Drawers",
+        description:
+          "Spacious chest of drawers with a sleek finish, offering ample storage for clothing, accessories, and linens.",
+        price: 649,
+        stock: 5,
+        image: "/images/chest-drawers.jpg",
+        type: "storage",
+        material: "wood",
+        color: "oak",
+        room: "bedroom",
+        dimensions: "120x50x90",
+        sku: "CD01",
+      },
+      {
+        title: "Outdoor Bench",
+        description:
+          "Durable outdoor bench crafted from weather-resistant wood, ideal for patios, gardens, and balconies.",
+        price: 379,
+        stock: 8,
+        image: "/images/outdoor-bench.jpg",
+        type: "bench",
+        material: "wood",
+        color: "teak",
+        room: "outdoor",
+        dimensions: "150x60x85",
+        sku: "OB01",
+      },
+      {
+        title: "Lounge Sofa",
+        description:
+          "Premium L-shaped lounge sofa with plush cushions and a contemporary design, perfect for spacious living rooms.",
+        price: 1299,
+        stock: 4,
+        image: "/images/lounge-sofa.jpg",
+        type: "sofa",
+        material: "fabric",
+        color: "navy",
+        room: "living",
+        dimensions: "280x170x85",
+        sku: "SF02",
+      },
+      {
+        title: "Kitchen Island",
+        description:
+          "Functional kitchen island featuring a durable wooden top, built-in storage shelves, and a modern aesthetic.",
+        price: 749,
+        stock: 5,
+        image: "/images/kitchen-island.jpg",
+        type: "table",
+        material: "wood",
+        color: "white",
+        room: "kitchen",
+        dimensions: "150x80x90",
+        sku: "KI01",
+      },
+      {
+        title: "Shoe Cabinet",
+        description:
+          "Elegant shoe cabinet with multiple compartments, designed to keep entryways organized and clutter-free.",
+        price: 299,
+        stock: 9,
+        image: "/images/shoe-cabinet.jpg",
+        type: "storage",
+        material: "wood",
+        color: "oak",
+        room: "entryway",
+        dimensions: "100x35x120",
+        sku: "SC01",
+      },
+      {
+        title: "Gaming Desk",
+        description:
+          "Modern gaming desk with a spacious surface, cable management features, and a sturdy metal frame for immersive setups.",
+        price: 499,
+        stock: 6,
+        image: "/images/gaming-desk.jpg",
+        type: "desk",
+        material: "metal",
+        color: "black",
+        room: "office",
+        dimensions: "160x75x75",
+        sku: "GD01",
+      }
     ]
   });
 

@@ -5,24 +5,38 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart";
 import { ShoppingBag, ArrowRight } from "lucide-react";
+import { Product } from "@/types/product";
 
-type Product = {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  material?: string;
-  color?: string;
-  type?: string;
-};
 
 export default function ProductCard({ product }: { product: Product }) {
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const isNewProduct = (() => {
+    const rawDate = product.createdAt;
+    if (!rawDate) return false;
+
+    const createdDate = new Date(rawDate).getTime();
+    if (isNaN(createdDate)) return false;
+
+    const currentDate = new Date().getTime();
+    const daysDifference = (currentDate - createdDate) / (1000 * 60 * 60 * 24);
+
+    return daysDifference >= 0 && daysDifference <= 7;
+  })();
 
   return (
     <div className="group relative flex flex-col bg-card border border-border/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-border">
 
       <Link href={`/products/${product.id}`} className="relative w-full aspect-4/5 overflow-hidden bg-muted/30 block">
+
+        {isNewProduct && (
+          <div className="absolute top-3 left-3 z-10 pointer-events-none">
+            <span className="inline-flex items-center rounded-md bg-zinc-950/90 text-white text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 backdrop-blur-xs shadow-xs ring-1 ring-white/10">
+              New
+            </span>
+          </div>
+        )}
+
         <Image
           src={product.image || "/images/placeholder.jpg"}
           alt={product.title}
@@ -63,7 +77,6 @@ export default function ProductCard({ product }: { product: Product }) {
           </h3>
         </div>
 
-        {/* Price & Primary Link Row */}
         <div className="pt-2 border-t border-border/40 flex items-center justify-between text-left">
           <span className="text-base font-bold text-foreground">
             ${product.price.toLocaleString()}

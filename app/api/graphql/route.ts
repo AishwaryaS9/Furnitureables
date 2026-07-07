@@ -27,11 +27,17 @@ const resolvers = {
 
       if (filter) {
 
-        if (filter.type)
-          where.type = filter.type;
+        if (filter.category) {
+          where.type = filter.category;
+        }
 
-        if (filter.material)
+        if (filter.room) {
+          where.room = filter.room;
+        }
+
+        if (filter.material) {
           where.material = filter.material;
+        }
 
         if (filter.search) {
           where.title = {
@@ -61,6 +67,31 @@ const resolvers = {
         where,
       });
 
+      let orderBy: any = {
+        createdAt: "desc",
+      };
+
+      switch (filter?.sortBy) {
+        case "priceAsc":
+          orderBy = { price: "asc" };
+          break;
+
+        case "priceDesc":
+          orderBy = { price: "desc" };
+          break;
+
+        case "nameAsc":
+          orderBy = { title: "asc" };
+          break;
+
+        case "nameDesc":
+          orderBy = { title: "desc" };
+          break;
+
+        default:
+          orderBy = { createdAt: "desc" };
+      }
+
       const items = await prisma.product.findMany({
         where,
 
@@ -72,9 +103,7 @@ const resolvers = {
           ? 4
           : limit,
 
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy,
       });
 
       return {

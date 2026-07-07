@@ -5,15 +5,12 @@ export const typeDefs = /* GraphQL */ `
     description: String
     price: Float!
     image: String
-
     type: String
     material: String
-
     color: String
     room: String
     dimensions: String
     stock: Int
-
     createdAt: String!
   }
 
@@ -23,11 +20,13 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ProductFilterInput {
-    type: String
+    category: String
+    room: String
     material: String
     minPrice: Float
     maxPrice: Float
     search: String
+    sortBy: String
     excludeId: String
   }
 
@@ -38,7 +37,6 @@ export const typeDefs = /* GraphQL */ `
       limit: Int
       related: Boolean
     ): ProductsResponse!
-
     product(id: String!): Product
   }
 `;
