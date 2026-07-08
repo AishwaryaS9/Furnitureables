@@ -75,48 +75,6 @@ export default function ProductFilters() {
 
       </div>
 
-      {/* SORT */}
-
-      <div className="relative group">
-
-        <select
-          value={filters.sortBy ?? ""}
-          onChange={(e) =>
-            setFilter(
-              "sortBy",
-              e.target.value || undefined
-            )
-          }
-          className="appearance-none bg-white border border-zinc-200 rounded-xl px-4 py-2.5 pr-10 text-xs min-w-44"
-        >
-          <option value="">Sort By</option>
-
-          <option value="latest">
-            Latest
-          </option>
-
-          <option value="priceAsc">
-            Price: Low → High
-          </option>
-
-          <option value="priceDesc">
-            Price: High → Low
-          </option>
-
-          <option value="nameAsc">
-            Name: A → Z
-          </option>
-
-          <option value="nameDesc">
-            Name: Z → A
-          </option>
-
-        </select>
-
-        <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2" />
-
-      </div>
-
       {/* MIN PRICE */}
 
       <input
