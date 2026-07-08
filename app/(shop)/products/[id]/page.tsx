@@ -3,7 +3,8 @@ import ProductClient from "./ProductClient";
 
 // async function getProduct(id: string) {
 async function getProduct(id: string): Promise<Product | null> {
-  const res = await fetch("http://localhost:3000/api/graphql", {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+  const res = await fetch(`${baseUrl}/api/graphql`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
