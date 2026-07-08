@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client";
+import { Product } from "@/types/product";
 import ProductClient from "./ProductClient";
 
 // async function getProduct(id: string) {

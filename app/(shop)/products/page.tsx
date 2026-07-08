@@ -6,9 +6,14 @@ import Pagination from "@/components/product/Pagination";
 import SearchBar from "@/components/product/filters/SearchBar";
 import ProductFilters from "@/components/product/filters/ProductFilters";
 import { useProducts } from "@/hooks/useProducts";
+import { useFilterStore } from "@/store/useFilterStore";
 
 export default function ProductsPage() {
     const { data: products, isLoading } = useProducts();
+    const { setFilter } = useFilterStore();
+
+    const filters = useFilterStore((s) => s.filters);
+
 
     const items = products?.items || [];
     const total = products?.total || 0;
@@ -46,11 +51,37 @@ export default function ProductsPage() {
                     <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
                         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <span className="text-xs text-zinc-400 font-medium whitespace-nowrap hidden sm:inline">Sort by:</span>
-                            <select className="text-xs font-medium text-zinc-700 bg-white border border-zinc-200 rounded-xl px-3 py-2 outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 cursor-pointer transition-all">
-                                <option>Featured Designs</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Newest Additions</option>
+                            <select
+                                className="text-xs font-medium text-zinc-700 bg-white border border-zinc-200 rounded-xl px-3 py-2 outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 cursor-pointer transition-all"
+                                value={filters.sortBy ?? ""}
+                                onChange={(e) =>
+                                    setFilter(
+                                        "sortBy",
+                                        e.target.value || undefined
+                                    )
+                                }>
+
+                                <option value="">Sort By</option>
+
+                                <option value="latest">
+                                    Newest Additions
+                                </option>
+
+                                <option value="priceAsc">
+                                    Price: Low → High
+                                </option>
+
+                                <option value="priceDesc">
+                                    Price: High → Low
+                                </option>
+
+                                <option value="nameAsc">
+                                    Name: A → Z
+                                </option>
+
+                                <option value="nameDesc">
+                                    Name: Z → A
+                                </option>
                             </select>
                         </div>
                     </div>

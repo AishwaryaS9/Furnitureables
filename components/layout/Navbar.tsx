@@ -5,17 +5,23 @@ import Link from "next/link";
 import {
   ShoppingCart,
   Heart,
-  User,
   Search,
   Menu,
   X,
-  ChevronDown
+  ChevronDown,
+  PackageIcon
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
+import { useUser, useClerk, UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const { user } = useUser();
+  const { openSignIn } = useClerk();
+  const router = useRouter();
 
   const items = useCartStore((s) => s.items);
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
@@ -102,9 +108,28 @@ export default function Navbar() {
             <button aria-label="Search" className="lg:hidden p-2 hover:text-foreground transition-colors">
               <Search size={22} />
             </button>
-            <Link href="/account" aria-label="Account" className="p-2 hover:text-foreground transition-colors">
-              <User size={22} />
-            </Link>
+            <div className="hidden sm:flex items-center gap-4">
+              {!user ? (
+                <button
+                  onClick={() => openSignIn()}
+                  className="px-5 py-2 border border-primary text-primary hover:bg-primary hover:border-none hover:text-white transition cursor-pointer rounded-full text-sm font-sans uppercase focus:outline-none focus:ring-0 focus:ring-primary"
+                  aria-label="Login or create account"
+                >
+                  Login
+                </button>
+              ) : (
+                <UserButton
+                  // afterSignOutUrl="/"
+                  appearance={{ elements: { userButtonAvatarBox: "w-6 h-6 border-customBlack/50" } }}
+                  aria-label="User account menu"
+                >
+                  <UserButton.MenuItems>
+                    <UserButton.Action label="My Orders" onClick={() => router.push('/orders')} labelIcon={<PackageIcon size={16} />} />
+                  </UserButton.MenuItems>
+                </UserButton>
+              )}
+            </div>
+
             <Link href="/wishlist" aria-label="Wishlist" className="p-2 hover:text-foreground transition-colors relative">
               <Heart size={22} />
               <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
