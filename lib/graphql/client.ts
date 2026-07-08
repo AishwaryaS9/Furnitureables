@@ -1,5 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+
 export const graphqlClient = new GraphQLClient(
-    "http://localhost:3000/api/graphql"
+    `${baseUrl}/api/graphql`
 );
