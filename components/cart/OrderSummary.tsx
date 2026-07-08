@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { useCartStore } from "@/store/cart";
 import { ShieldCheck, Truck, Tag } from "lucide-react";
+import { useUser, useClerk } from "@clerk/nextjs";
+
 
 export default function OrderSummary() {
     const items = useCartStore((s) => s.items);
+    const { user } = useUser();
+    const { openSignIn } = useClerk();
     const [couponCode, setCouponCode] = useState("");
     const [isApplied, setIsApplied] = useState(false);
 
@@ -24,6 +28,19 @@ export default function OrderSummary() {
         } else {
             alert("Invalid design collective code. Try 'FURNISH10'");
         }
+    };
+
+    const handleCheckout = () => {
+        if (!user) {
+            // Option: Open sign-in modal
+            openSignIn();
+            // Optional: You could also add a toast library here (like sonner/react-hot-toast)
+            // alert("Please login to continue shopping");
+            return;
+        }
+
+        // Proceed to your actual checkout logic (e.g., Stripe redirect)
+        console.log("Proceeding to checkout...");
     };
 
     return (
@@ -130,9 +147,10 @@ export default function OrderSummary() {
             {/* Checkout Button */}
             <button
                 disabled={items.length === 0}
+                onClick={handleCheckout} 
                 className="w-full bg-zinc-900 text-white hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 font-semibold text-xs uppercase tracking-widest py-4 rounded-xl shadow-xs active:scale-[0.99] transition-all cursor-pointer disabled:cursor-not-allowed"
             >
-                Proceed to Secure Checkout
+                {user ? "Proceed to Secure Checkout" : "Login to Checkout"}
             </button>
 
             {/* Security Check */}
