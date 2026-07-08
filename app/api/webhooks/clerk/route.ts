@@ -80,6 +80,8 @@ export async function POST(req: Request) {
             break;
     }
 
+    console.log('response user==>', JSON.stringify(Response))
+
     return Response.json({
         success: true,
     });
