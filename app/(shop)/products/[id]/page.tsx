@@ -1,10 +1,15 @@
 import { Product } from "@/types/product";
 import ProductClient from "./ProductClient";
 
-// async function getProduct(id: string) {
 async function getProduct(id: string): Promise<Product | null> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
-  const res = await fetch(`${baseUrl}/api/graphql`, {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (process.env.NEXT_VERCEL_URL
+      ? `${process.env.NEXT_VERCEL_URL}`
+      : `${process.env.NEXT_PUBLIC_APP_URL}`);
+  const url = new URL("/api/graphql", baseUrl).toString();
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,10 +47,9 @@ async function getProduct(id: string): Promise<Product | null> {
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
-  // params: { id: string }
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   const product = await getProduct(id);
   if (!product) {

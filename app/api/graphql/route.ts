@@ -1,17 +1,6 @@
-import "dotenv/config";
 import { createSchema, createYoga } from "graphql-yoga";
-import { PrismaClient } from "@prisma/client";
-import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { typeDefs } from "@/graphql/schema";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-const prisma = new PrismaClient({
-  adapter: new PrismaPg(pool),
-});
+import { prisma } from "@/lib/prisma";
 
 const resolvers = {
   Query: {

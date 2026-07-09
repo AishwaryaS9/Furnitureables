@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@/generated/prisma/index";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -14,7 +14,6 @@ export const prisma = new PrismaClient({
 });
 
 async function main() {
-  // await prisma.product.deleteMany();
   await prisma.product.createMany({
     skipDuplicates: true,
     data: [

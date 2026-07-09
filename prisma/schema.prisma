@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -8,10 +9,7 @@ datasource db {
 
 model User {
   id        String   @id @default(cuid())
-
-  // Clerk User ID
   clerkId   String   @unique
-
   email     String   @unique
   firstName String?
   lastName  String?
@@ -55,7 +53,7 @@ model CartItem {
   id        String @id @default(cuid())
 
   cartId    String
-  cart      Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cart      Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   productId String
   product   Product @relation(fields: [productId], references: [id])
