@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import RelatedProducts from "@/components/product/RelatedProducts";
 import { useCartStore } from "@/store/cart";
 import Image from "next/image";
 import { Check, Truck } from "lucide-react";
+import RelatedProducts from "@/components/product/RelatedProducts";
 
 export default function ProductClient({ product }: any) {
     const addToCart = useCartStore((s) => s.addToCart);
