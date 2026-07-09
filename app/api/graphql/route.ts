@@ -15,7 +15,6 @@ const resolvers = {
       const where: any = {};
 
       if (filter) {
-
         if (filter.category) {
           where.type = filter.category;
         }
@@ -38,11 +37,13 @@ const resolvers = {
         if (filter.minPrice || filter.maxPrice) {
           where.price = {};
 
-          if (filter.minPrice)
+          if (filter.minPrice) {
             where.price.gte = filter.minPrice;
+          }
 
-          if (filter.maxPrice)
+          if (filter.maxPrice) {
             where.price.lte = filter.maxPrice;
+          }
         }
 
         if (filter.excludeId) {
@@ -83,15 +84,8 @@ const resolvers = {
 
       const items = await prisma.product.findMany({
         where,
-
-        skip: related
-          ? undefined
-          : (page - 1) * limit,
-
-        take: related
-          ? 4
-          : limit,
-
+        skip: related ? undefined : (page - 1) * limit,
+        take: related ? 4 : limit,
         orderBy,
       });
 
@@ -99,9 +93,7 @@ const resolvers = {
         items,
         total,
       };
-
     },
-
 
     product: async (_: any, { id }: any) => {
       return prisma.product.findUnique({
@@ -110,6 +102,7 @@ const resolvers = {
     },
   },
 };
+
 const schema = createSchema({
   typeDefs,
   resolvers,
@@ -118,6 +111,13 @@ const schema = createSchema({
 const yoga = createYoga({
   schema,
   graphqlEndpoint: "/api/graphql",
+  fetchAPI: { Response },
 });
 
-export { yoga as GET, yoga as POST };
+export async function GET(request: Request) {
+  return yoga.fetch(request);
+}
+
+export async function POST(request: Request) {
+  return yoga.fetch(request);
+}
