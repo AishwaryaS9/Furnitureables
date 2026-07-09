@@ -9,6 +9,9 @@ async function getProduct(id: string): Promise<Product | null> {
       : "http://localhost:3000";
   const url = new URL("/api/graphql", baseUrl).toString();
 
+  console.log("Base URL:", baseUrl);
+  console.log("Final URL:", url);
+
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -16,32 +19,37 @@ async function getProduct(id: string): Promise<Product | null> {
     },
     body: JSON.stringify({
       query: `
-        query GetProduct($id: String!) {
-          product(id: $id) {
-            id
-            title
-            description
-            price
-            image  
-            material
-            type
-            color
-            room
-            dimensions
-            stock
-          }
+      query GetProduct($id: String!) {
+        product(id: $id) {
+          id
+          title
+          description
+          price
+          image
+          material
+          type
+          color
+          room
+          dimensions
+          stock
         }
-      `,
+      }
+    `,
       variables: { id },
     }),
     cache: "no-store",
   });
 
-  const json = await res.json();
+  console.log("Request URL:", url);
+  console.log("Status:", res.status);
 
-  if (json.errors) return null;
+  const text = await res.text();
+  console.log("Raw response:", text);
 
-  return json.data.product;
+  const json = JSON.parse(text);
+
+  return json.data?.product ?? null;
+
 }
 
 export default async function ProductPage({
