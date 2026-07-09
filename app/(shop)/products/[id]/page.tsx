@@ -4,10 +4,9 @@ import ProductClient from "./ProductClient";
 
 async function getProduct(id: string): Promise<Product | null> {
   const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL ??
-    (process.env.NEXT_VERCEL_URL
-      ? `${process.env.NEXT_VERCEL_URL}`
-      : `${process.env.NEXT_PUBLIC_APP_URL}`);
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
   const url = new URL("/api/graphql", baseUrl).toString();
 
   const res = await fetch(url, {
@@ -48,11 +47,11 @@ async function getProduct(id: string): Promise<Product | null> {
 export default async function ProductPage({
   params,
 }: {
-  params: { id: string };
-  // params: Promise<{ id: string }>;
+  // params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  // const { id } = await params;
+  // const { id } = params;
+  const { id } = await params;
 
   const product = await getProduct(id);
   if (!product) {
