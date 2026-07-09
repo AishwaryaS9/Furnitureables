@@ -15,17 +15,22 @@ export default function RelatedProducts({ type, id }: any) {
                 body: JSON.stringify({
                     query: `
             query ($filter: ProductFilterInput) {
-              products(filter: $filter) {
-                id
-                title
-                price
-                image
+              products(filter: $filter, related: true) {
+                  items {
+                    id
+                    title
+                    price
+                    image
+                    createdAt
+                    material
+                    color
+                }
               }
             }
           `,
                     variables: {
                         filter: {
-                            type,
+                            category: type,
                             excludeId: id,
                         },
                     },
@@ -33,7 +38,7 @@ export default function RelatedProducts({ type, id }: any) {
             });
 
             const json = await res.json();
-            return json.data?.products || [];
+            return json.data?.products?.items || [];
         },
     });
 
