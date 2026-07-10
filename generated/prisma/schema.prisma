@@ -8,12 +8,11 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(cuid())
-  clerkId   String  @unique
-  email     String  @unique
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
   firstName String?
   lastName  String?
-
   cart      Cart?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -61,4 +60,5 @@ model CartItem {
   quantity Int
 
   @@unique([cartId, productId])
+  @@index([cartId])
 }
