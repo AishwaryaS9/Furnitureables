@@ -3,6 +3,7 @@ import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import CartSync from "@/components/cart/CartSync";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -35,7 +36,10 @@ export default function RootLayout({
         className={`${playfairDisplay.variable} ${montserrat.variable} h-full antialiased`}
       >
         <body>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <CartSync />
+            {children}
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

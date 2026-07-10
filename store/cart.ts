@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-type CartItem = {
+export type CartItem = {
     id: string;
     title: string;
     price: number;
@@ -10,42 +11,90 @@ type CartItem = {
 
 type CartStore = {
     items: CartItem[];
-    addToCart: (product: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
+
+    addToCart: (
+        product: Omit<CartItem, "quantity"> & { quantity?: number }
+    ) => void;
+
     removeFromCart: (id: string) => void;
+
     clearCart: () => void;
+
+    setCart: (items: CartItem[]) => void;
+
+    mergeCart: (items: CartItem[]) => void;
 };
 
-export const useCartStore = create<CartStore>((set) => ({
-    items: [],
+export const useCartStore = create<CartStore>()(
+    persist(
+        (set) => ({
+            items: [],
 
-    addToCart: (product) =>
-        set((state) => {
-            const existing = state.items.find((i) => i.id === product.id);
-            // Default to 1 if a custom quantity wasn't provided
-            const quantityToAdd = product.quantity ?? 1;
+            addToCart: (product) =>
+                set((state) => {
+                    const quantityToAdd = product.quantity ?? 1;
 
-            if (existing) {
-                return {
-                    items: state.items.map((i) =>
-                        i.id === product.id
-                            ? { ...i, quantity: i.quantity + quantityToAdd } // Increment by chosen quantity
-                            : i
-                    ),
-                };
-            }
+                    const existing = state.items.find((i) => i.id === product.id);
 
-            // Destructure to separate quantity from the rest of the product properties
-            const { quantity, ...productDetails } = product;
+                    if (existing) {
+                        return {
+                            items: state.items.map((item) =>
+                                item.id === product.id
+                                    ? {
+                                        ...item,
+                                        quantity: item.quantity + quantityToAdd,
+                                    }
+                                    : item
+                            ),
+                        };
+                    }
 
-            return {
-                items: [...state.items, { ...productDetails, quantity: quantityToAdd }],
-            };
+                    const { quantity, ...productDetails } = product;
+
+                    return {
+                        items: [
+                            ...state.items,
+                            {
+                                ...productDetails,
+                                quantity: quantityToAdd,
+                            },
+                        ],
+                    };
+                }),
+
+            removeFromCart: (id) =>
+                set((state) => ({
+                    items: state.items.filter((item) => item.id !== id),
+                })),
+
+            clearCart: () => set({ items: [] }),
+
+            setCart: (items) => set({ items }),
+
+            mergeCart: (incomingItems) =>
+                set((state) => {
+                    const merged = [...state.items];
+
+                    incomingItems.forEach((incoming) => {
+                        const index = merged.findIndex((i) => i.id === incoming.id);
+
+                        if (index !== -1) {
+                            merged[index] = {
+                                ...merged[index],
+                                quantity: merged[index].quantity + incoming.quantity,
+                            };
+                        } else {
+                            merged.push({ ...incoming });
+                        }
+                    });
+
+                    return {
+                        items: merged,
+                    };
+                }),
         }),
-
-    removeFromCart: (id) =>
-        set((state) => ({
-            items: state.items.filter((i) => i.id !== id),
-        })),
-
-    clearCart: () => set({ items: [] }),
-}));
+        {
+            name: "guest-cart", // localStorage key
+        }
+    )
+);
