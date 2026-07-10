@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type CartItem = {
+export interface CartItem {
     id: string;
     title: string;
     price: number;
     image?: string;
     quantity: number;
-};
+}
 
 type CartStore = {
     items: CartItem[];
@@ -22,14 +22,17 @@ type CartStore = {
 
     setCart: (items: CartItem[]) => void;
 
-    mergeCart: (items: CartItem[]) => void;
+    cartReady: boolean;
+
+    setCartReady: (ready: boolean) => void;
+
 };
 
 export const useCartStore = create<CartStore>()(
     persist(
         (set) => ({
             items: [],
-
+            cartReady: false,
             addToCart: (product) =>
                 set((state) => {
                     const quantityToAdd = product.quantity ?? 1;
@@ -67,34 +70,19 @@ export const useCartStore = create<CartStore>()(
                     items: state.items.filter((item) => item.id !== id),
                 })),
 
-            clearCart: () => set({ items: [] }),
+            clearCart: () => set({
+                items: [],
+            }),
 
             setCart: (items) => set({ items }),
 
-            mergeCart: (incomingItems) =>
-                set((state) => {
-                    const merged = [...state.items];
-
-                    incomingItems.forEach((incoming) => {
-                        const index = merged.findIndex((i) => i.id === incoming.id);
-
-                        if (index !== -1) {
-                            merged[index] = {
-                                ...merged[index],
-                                quantity: merged[index].quantity + incoming.quantity,
-                            };
-                        } else {
-                            merged.push({ ...incoming });
-                        }
-                    });
-
-                    return {
-                        items: merged,
-                    };
+            setCartReady: (ready) =>
+                set({
+                    cartReady: ready,
                 }),
         }),
         {
-            name: "guest-cart", // localStorage key
+            name: "guest-cart",
         }
     )
 );

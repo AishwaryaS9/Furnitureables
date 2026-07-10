@@ -14,6 +14,18 @@ export const typeDefs = /* GraphQL */ `
     createdAt: String!
   }
 
+  type CartItem {
+    productId: String!
+    quantity: Int!
+
+    product: Product!
+  }
+
+  type Cart {
+    id: String!
+    items: [CartItem!]!
+  }
+
   type ProductsResponse {
     items: [Product!]!
     total: Int!
@@ -30,6 +42,11 @@ export const typeDefs = /* GraphQL */ `
     excludeId: String
   }
 
+  input CartItemInput {
+    productId: String!
+    quantity: Int!
+  }
+
   type Query {
     products(
       filter: ProductFilterInput
@@ -37,6 +54,13 @@ export const typeDefs = /* GraphQL */ `
       limit: Int
       related: Boolean
     ): ProductsResponse!
+
     product(id: String!): Product
+
+    cart: Cart
+  }
+
+  type Mutation {
+    saveCart(items: [CartItemInput!]!): Cart!
   }
 `;
