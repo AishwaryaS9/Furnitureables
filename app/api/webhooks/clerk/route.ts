@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     }
 
     const { type, data } = event;
-    console.log("event info", JSON.stringify(event))
+    // console.log("event info", JSON.stringify(event))
 
     switch (type) {
         case "user.created":
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
             break;
     }
 
-    console.log('response user==>', JSON.stringify(Response))
+    // console.log('response user==>', JSON.stringify(Response))
 
     return Response.json({
         success: true,

@@ -296,7 +296,77 @@ async function main() {
         room: "office",
         dimensions: "160x75x75",
         sku: "GD01",
-      }
+      },
+      {
+        title: "Round Dining Chair",
+        description:
+          "Elegant upholstered dining chair with a curved backrest and solid wooden legs, providing comfort and style for modern dining spaces.",
+        price: 229,
+        stock: 10,
+        image: "/images/round-dining-chair.jpg",
+        type: "chair",
+        material: "fabric",
+        color: "cream",
+        room: "dining",
+        dimensions: "55x60x85",
+        sku: "CH02",
+      },
+      {
+        title: "Floating Wall Shelf",
+        description:
+          "Minimalist floating wall shelf crafted from solid oak, perfect for displaying books, plants, and decorative items.",
+        price: 99,
+        stock: 20,
+        image: "/images/wall-shelf.jpg",
+        type: "storage",
+        material: "wood",
+        color: "oak",
+        room: "living",
+        dimensions: "100x25x5",
+        sku: "WS01",
+      },
+      {
+        title: "Queen Size Bed",
+        description:
+          "Modern queen-size bed with a durable wooden frame and padded headboard, designed for both comfort and elegance.",
+        price: 849,
+        stock: 6,
+        image: "/images/queen-bed.jpg",
+        type: "bed",
+        material: "wood",
+        color: "grey",
+        room: "bedroom",
+        dimensions: "205x160x110",
+        sku: "BD02",
+      },
+      {
+        title: "Coffee Bar Cabinet",
+        description:
+          "Versatile coffee bar cabinet with drawers, shelves, and a spacious countertop for organizing coffee essentials and kitchen accessories.",
+        price: 459,
+        stock: 7,
+        image: "/images/coffee-bar-cabinet.jpg",
+        type: "storage",
+        material: "wood",
+        color: "walnut",
+        room: "kitchen",
+        dimensions: "120x45x90",
+        sku: "CB01",
+      },
+      {
+        title: "Patio Dining Set",
+        description:
+          "Weather-resistant outdoor dining set including a table and four chairs, ideal for patios, gardens, and outdoor gatherings.",
+        price: 999,
+        stock: 4,
+        image: "/images/patio-dining-set.jpg",
+        type: "table",
+        material: "metal",
+        color: "charcoal",
+        room: "outdoor",
+        dimensions: "150x90x75",
+        sku: "PD01",
+      },
     ]
   });
 
