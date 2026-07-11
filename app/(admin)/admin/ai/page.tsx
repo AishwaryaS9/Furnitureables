@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function page() {
+export default function AIPage() {
   return (
-    <div>page</div>
+    <div>AIPage</div>
   )
 }
