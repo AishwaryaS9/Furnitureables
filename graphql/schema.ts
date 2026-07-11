@@ -31,6 +31,13 @@ export const typeDefs = /* GraphQL */ `
     total: Int!
   }
 
+  # NEW
+  type UploadResult {
+    inserted: Int!
+    updated: Int!
+    failed: Int!
+  }
+
   input ProductFilterInput {
     category: String
     room: String
@@ -40,6 +47,21 @@ export const typeDefs = /* GraphQL */ `
     search: String
     sortBy: String
     excludeId: String
+  }
+
+  # NEW
+  input ProductUploadInput {
+    title: String!
+    description: String
+    price: Float!
+    stock: Int!
+    image: String
+    type: String!
+    material: String!
+    color: String!
+    room: String!
+    dimensions: String!
+    sku: String!
   }
 
   input CartItemInput {
@@ -62,5 +84,8 @@ export const typeDefs = /* GraphQL */ `
 
   type Mutation {
     saveCart(items: [CartItemInput!]!): Cart!
+
+    # NEW
+    uploadProducts(products: [ProductUploadInput!]!): UploadResult!
   }
 `;
