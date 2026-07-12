@@ -24,9 +24,24 @@ export const typeDefs = /* GraphQL */ `
     RAZORPAY
   }
 
+  enum MediaType {
+    IMAGE
+    VIDEO
+  }
+
   ############################
   ## PRODUCT
   ############################
+
+  type ProductMedia {
+    id: String!
+
+    url: String!
+
+    type: MediaType!
+
+    sortOrder: Int!
+  }
 
   type Product {
     id: String!
@@ -37,7 +52,7 @@ export const typeDefs = /* GraphQL */ `
     price: Float!
     stock: Int!
 
-    image: String
+    media: [ProductMedia!]!
 
     type: String!
     material: String!
@@ -196,7 +211,7 @@ export const typeDefs = /* GraphQL */ `
     price: Float!
     stock: Int!
 
-    image: String
+    media: [ProductMediaInput!]
 
     type: String!
     material: String!
@@ -207,6 +222,12 @@ export const typeDefs = /* GraphQL */ `
     sku: String!
   }
 
+  input ProductMediaInput {
+    url: String!
+    type: MediaType!
+    sortOrder: Int
+  }
+
   input ProductInput {
     title: String!
     description: String
@@ -214,7 +235,7 @@ export const typeDefs = /* GraphQL */ `
     price: Float!
     stock: Int!
 
-    image: String
+    media: [String!]
 
     type: String!
     material: String!
@@ -232,7 +253,7 @@ export const typeDefs = /* GraphQL */ `
     price: Float
     stock: Int
 
-    image: String
+    media: [String!]
 
     type: String
     material: String

@@ -68,7 +68,7 @@ export default function CartSync() {
                         id: item.product.id,
                         title: item.product.title,
                         price: item.product.price,
-                        image: item.product.image,
+                        image: item.product.media,
                         quantity: item.quantity,
                     })) ?? [];
 

@@ -5,6 +5,7 @@ import { useCartStore } from "@/store/cart";
 import Image from "next/image";
 import { Check, Truck } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
+import { getProductThumbnail } from "@/lib/utils";
 
 export default function ProductClient({ product }: any) {
     const addToCart = useCartStore((s) => s.addToCart);
@@ -15,7 +16,7 @@ export default function ProductClient({ product }: any) {
             id: product.id,
             title: product.title,
             price: product.price,
-            image: product.image,
+            image: getProductThumbnail(product),
             quantity: quantity,
         });
     };
@@ -31,7 +32,7 @@ export default function ProductClient({ product }: any) {
                     <div className="lg:col-span-7 lg:sticky lg:top-8">
                         <div className="relative aspect-[1.6] w-full rounded-3xl bg-[#f4f4f5] overflow-hidden">
                             <Image
-                                src={product.image || "/placeholder.png"}
+                                src={getProductThumbnail(product)}
                                 alt={product.title}
                                 fill
                                 priority

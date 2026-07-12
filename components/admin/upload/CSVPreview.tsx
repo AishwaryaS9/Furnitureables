@@ -36,7 +36,11 @@ export default function CSVPreview({ rows }: Props) {
                                     key={header}
                                     className="border px-4 py-2"
                                 >
-                                    {row[header]}
+                                    {header === "media"
+                                        ? row.media
+                                            ?.map((m: any) => `${m.type}: ${m.url}`)
+                                            .join(", ")
+                                        : String(row[header] ?? "")}
                                 </td>
                             ))}
                         </tr>

@@ -1,23 +1,49 @@
+export type MediaType = "IMAGE" | "VIDEO";
+
+export interface ProductMedia {
+  id: string;
+  url: string;
+  type: "IMAGE" | "VIDEO";
+  altText?: string;
+  sortOrder: number;
+}
+
 export interface Product {
   id: string;
   title: string;
+  description?: string;
   price: number;
   stock: number;
   sku: string;
-  image?: string;
+
+  image?: string; 
+
+  media?: ProductMedia[];
+
   material?: string;
   color?: string;
   type?: string;
-  createdAt?: string;
-};
+  room?: string;
+  dimensions?: string;
 
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export type ProductUploadInput = {
   title: string;
   description?: string | null;
+
   price: number;
   stock: number;
-  image?: string | null;
+
+  media?: {
+    url: string;
+    type: MediaType;
+    altText?: string;
+    sortOrder?: number;
+  }[];
+
   type: string;
   material: string;
   color: string;
@@ -29,9 +55,12 @@ export type ProductUploadInput = {
 export interface ProductFormData {
   title: string;
   description?: string;
+
   price: number;
   stock: number;
-  image?: string;
+
+  media: ProductMedia[];
+
   type: string;
   material: string;
   color: string;

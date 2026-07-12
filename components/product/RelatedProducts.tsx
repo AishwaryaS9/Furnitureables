@@ -17,14 +17,20 @@ export default function RelatedProducts({ type, id }: any) {
             query ($filter: ProductFilterInput) {
               products(filter: $filter, related: true) {
                   items {
+                        id
+                        title
+                        price
+                        createdAt
+                        material
+                        color
+
+                media {
                     id
-                    title
-                    price
-                    image
-                    createdAt
-                    material
-                    color
+                    url
+                    type
+                    sortOrder
                 }
+                }   
               }
             }
           `,

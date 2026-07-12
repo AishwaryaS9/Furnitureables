@@ -3,12 +3,24 @@ import { gql } from "graphql-request";
 export const GET_CART = gql`
   query GetCart {
     cart {
+      id
+
       items {
         id
-        title
-        price
-        image
         quantity
+
+        product {
+          id
+          title
+          price
+
+          media {
+            id
+            url
+            type
+            sortOrder
+          }
+        }
       }
     }
   }

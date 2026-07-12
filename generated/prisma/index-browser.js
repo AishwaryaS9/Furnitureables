@@ -136,7 +136,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   price: 'price',
   description: 'description',
   stock: 'stock',
-  image: 'image',
   type: 'type',
   material: 'material',
   color: 'color',
@@ -145,6 +144,16 @@ exports.Prisma.ProductScalarFieldEnum = {
   sku: 'sku',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductMediaScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  url: 'url',
+  type: 'type',
+  altText: 'altText',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.CartScalarFieldEnum = {
@@ -233,6 +242,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.MediaType = exports.$Enums.MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO'
+};
+
 exports.OrderStatus = exports.$Enums.OrderStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
@@ -257,6 +271,7 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
 exports.Prisma.ModelName = {
   User: 'User',
   Product: 'Product',
+  ProductMedia: 'ProductMedia',
   Cart: 'Cart',
   CartItem: 'CartItem',
   Address: 'Address',

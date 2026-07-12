@@ -32,9 +32,9 @@ export default function ProductForm({
 }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>(initialValues);
 
-  const handleChange = (
+  function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ) {
     const { name, value } = e.target;
 
     setForm((prev) => ({
@@ -44,14 +44,14 @@ export default function ProductForm({
           ? Number(value)
           : value,
     }));
-  };
+  }
 
-  const handleSubmit = async (
+  async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
-  ) => {
+  ) {
     e.preventDefault();
     await onSubmit(form);
-  };
+  }
 
   return (
     <form

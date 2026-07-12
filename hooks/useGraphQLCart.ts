@@ -1,40 +1,40 @@
 "use client";
 
 import { graphqlClient } from "@/lib/graphql/client";
-import { GET_CART, SAVE_CART, CLEAR_CART } from "@/graphql/cart";
-
-export type CartItem = {
-    id: string;
-    title: string;
-    price: number;
-    image?: string;
-    quantity: number;
-};
+import {
+    GET_CART,
+    SAVE_CART,
+    CLEAR_CART,
+} from "@/graphql/cart";
+import { getProductThumbnail } from "@/lib/utils";
+import { CartItem, CartQueryResponse } from "@/types/cart";
 
 export function useGraphQLCart() {
     /**
      * Fetch logged-in user's cart
      */
     async function getCart(): Promise<CartItem[]> {
-        const data = await graphqlClient.request<{
-            cart: {
-                items: CartItem[];
-            };
-        }>(GET_CART);
+        const data =
+            await graphqlClient.request<CartQueryResponse>(
+                GET_CART
+            );
 
-        return data.cart.items;
+        return data.cart.items.map((item) => ({
+            id: item.product.id,
+            title: item.product.title,
+            price: item.product.price,
+            image: getProductThumbnail(item.product),
+            quantity: item.quantity,
+        }));
     }
 
     /**
      * Save entire cart
      */
     async function saveCart(items: CartItem[]) {
-        await graphqlClient.request(
-            SAVE_CART,
-            {
-                items,
-            }
-        );
+        await graphqlClient.request(SAVE_CART, {
+            items,
+        });
     }
 
     /**
