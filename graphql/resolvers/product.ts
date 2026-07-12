@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 
-export const productResolver = {
+export const productResolvers = {
     Query: {
-        products: async (_: unknown, args: any) => {
+        products: async (_: any, args: any) => {
             const {
                 filter,
                 page = 1,
@@ -25,10 +25,20 @@ export const productResolver = {
                     where.material = filter.material;
                 }
 
+                if (filter.color) {
+                    where.color = filter.color;
+                }
+
                 if (filter.search) {
                     where.title = {
                         contains: filter.search,
                         mode: "insensitive",
+                    };
+                }
+
+                if (filter.excludeId) {
+                    where.NOT = {
+                        id: filter.excludeId,
                     };
                 }
 
@@ -42,12 +52,6 @@ export const productResolver = {
                     if (filter.maxPrice) {
                         where.price.lte = filter.maxPrice;
                     }
-                }
-
-                if (filter.excludeId) {
-                    where.NOT = {
-                        id: filter.excludeId,
-                    };
                 }
             }
 
@@ -93,12 +97,45 @@ export const productResolver = {
             };
         },
 
-        product: async (_: unknown, { id }: any) => {
+        product: async (_: any, { id }: { id: string }) => {
             return prisma.product.findUnique({
+                where: { id },
+            });
+        },
+
+        adminProducts: async () => {
+            return prisma.product.findMany({
+                orderBy: {
+                    createdAt: "desc",
+                },
+            });
+        },
+    },
+
+    Mutation: {
+        createProduct: async (_: any, { data }: any) => {
+            return prisma.product.create({
+                data,
+            });
+        },
+
+        updateProduct: async (_: any, { id, data }: any) => {
+            return prisma.product.update({
+                where: {
+                    id,
+                },
+                data,
+            });
+        },
+
+        deleteProduct: async (_: any, { id }: { id: string }) => {
+            await prisma.product.delete({
                 where: {
                     id,
                 },
             });
+
+            return true;
         },
     },
 };

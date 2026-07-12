@@ -1,13 +1,16 @@
-export type Product = {
+export interface Product {
   id: string;
   title: string;
   price: number;
-  image: string;
+  stock: number;
+  sku: string;
+  image?: string;
   material?: string;
   color?: string;
   type?: string;
   createdAt?: string;
 };
+
 
 export type ProductUploadInput = {
   title: string;
@@ -22,3 +25,17 @@ export type ProductUploadInput = {
   dimensions: string;
   sku: string;
 };
+
+export interface ProductFormData {
+  title: string;
+  description?: string;
+  price: number;
+  stock: number;
+  image?: string;
+  type: string;
+  material: string;
+  color: string;
+  room: string;
+  dimensions: string;
+  sku: string;
+}
