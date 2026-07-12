@@ -16,7 +16,7 @@ const emptyValues: ProductFormData = {
   description: "",
   price: 0,
   stock: 0,
-  image: "",
+  media: [],
   type: "",
   material: "",
   color: "",
@@ -133,11 +133,28 @@ export default function ProductForm({
           required
         />
 
-        <Input
+        {/* <Input
           name="image"
           placeholder="/images/sofa.jpg"
           value={form.image}
           onChange={handleChange}
+        /> */}
+        <Input
+          name="image"
+          placeholder="/images/sofa.jpg"
+          value={form.media[0]?.url ?? ""}
+          onChange={(e) =>
+            setForm((prev: any) => ({
+              ...prev,
+              media: [
+                {
+                  url: e.target.value,
+                  type: "IMAGE",
+                  sortOrder: 0,
+                },
+              ],
+            }))
+          }
         />
       </div>
 
