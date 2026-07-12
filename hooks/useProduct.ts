@@ -1,38 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
+import { graphqlClient } from "@/lib/graphql/client";
+import { PRODUCT_BY_ID } from "@/lib/graphql/queries";
 
 export const useProduct = (id: string) => {
-  return useQuery({
-    queryKey: ["product", id],
-    queryFn: async () => {
-      const res = await fetch("/api/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-            query GetProduct($id: String!) {
-              product(id: $id) {
-                id
-                title
-                description
-                price
-                image
-                material
-                color
-                room
-                dimensions
-                stock
-              }
-            }
-          `,
-          variables: { id },
-        }
-        ),
-      });
+    return useQuery({
+        queryKey: ["product", id],
 
-      const json = await res.json();
-      return json.data.product;
-    },
-  });
+        queryFn: async () => {
+            const data = await graphqlClient.request(PRODUCT_BY_ID, {
+                id,
+            });
+
+            return data.product;
+        },
+
+        enabled: !!id,
+    });
 };
