@@ -40,7 +40,25 @@ export default function EditProductPage() {
       </h1>
 
       <ProductForm
-        initialValues={product}
+        initialValues={{
+          title: product.title,
+          description: product.description ?? "",
+          price: product.price,
+          stock: product.stock,
+          sku: product.sku,
+          type: product.type,
+          material: product.material,
+          color: product.color,
+          room: product.room,
+          dimensions: product.dimensions,
+
+          media:
+            product.media?.map((m: any) => ({
+              url: m.url,
+              type: m.type,
+              sortOrder: m.sortOrder,
+            })) ?? [],
+        }}
         onSubmit={handleSubmit}
         loading={updateProduct.isPending}
       />

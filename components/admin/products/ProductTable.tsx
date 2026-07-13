@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
-
 import { useDeleteProduct } from "@/hooks/useDeleteProduct";
 import { Product } from "@/types/product";
 import { getProductThumbnail } from "@/lib/utils";
+import Image from "next/image";
 
 interface Props {
   products: Product[];
@@ -51,11 +50,14 @@ export default function ProductTable({
               className="border-t"
             >
               <td className="p-4">
-                <img
-                  src={getProductThumbnail(product)}
-                  alt={product.title}
-                  className="h-16 w-16 rounded object-cover"
-                />
+                <div className="relative h-16 w-16">
+                  <Image
+                    src={getProductThumbnail(product)}
+                    alt={product.title}
+                    fill
+                    className="rounded object-cover"
+                  />
+                </div>
               </td>
 
               <td className="p-4">

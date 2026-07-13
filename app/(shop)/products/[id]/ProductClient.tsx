@@ -5,7 +5,6 @@ import { useCartStore } from "@/store/cart";
 import Image from "next/image";
 import { Check, Truck } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
-import { getProductThumbnail } from "@/lib/utils";
 
 export default function ProductClient({ product }: any) {
     const addToCart = useCartStore((s) => s.addToCart);
@@ -24,15 +23,14 @@ export default function ProductClient({ product }: any) {
         images[0].url
     );
 
-    console.log("PRODUCT:", product);
-    console.log("MEDIA:", product.media);
-
     const handleAddToCart = () => {
         addToCart({
             id: product.id,
             title: product.title,
             price: product.price,
-            image: getProductThumbnail(product),
+            image:
+                product.media?.[0]?.url ??
+                "/images/placeholder.jpg",
             quantity: quantity,
         });
     };
@@ -44,7 +42,6 @@ export default function ProductClient({ product }: any) {
                 {/* Main Product Section Split */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
 
-                    {/* Left Canvas: Wide Frame Backdrop */}
                     {/* Left Canvas: Product Gallery */}
                     <div className="lg:col-span-7 lg:sticky lg:top-8">
                         {/* Main Image */}

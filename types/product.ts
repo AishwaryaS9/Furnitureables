@@ -1,12 +1,19 @@
 export type MediaType = "IMAGE" | "VIDEO";
 
 export interface ProductMedia {
-  id: string;
+  id?: string;
   url: string;
   type: "IMAGE" | "VIDEO";
   altText?: string;
   sortOrder: number;
 }
+
+export type ProductMediaInput = {
+  url: string;
+  type: MediaType;
+  altText?: string;
+  sortOrder: number;
+};
 
 export interface Product {
   id: string;
@@ -16,7 +23,7 @@ export interface Product {
   stock: number;
   sku: string;
 
-  image?: string; 
+  image?: string;
 
   media?: ProductMedia[];
 
@@ -59,7 +66,7 @@ export interface ProductFormData {
   price: number;
   stock: number;
 
-  media: ProductMedia[];
+  media: ProductMediaInput[];
 
   type: string;
   material: string;
