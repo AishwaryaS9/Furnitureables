@@ -1,8 +1,8 @@
 import { gql } from "graphql-request";
 
 export const CREATE_PRODUCT = gql`
-  mutation CreateProduct($data: ProductInput!) {
-    createProduct(data: $data) {
+  mutation CreateProduct($input: ProductInput!) {
+    createProduct(input: $input) {
       id
       title
     }
@@ -12,9 +12,9 @@ export const CREATE_PRODUCT = gql`
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
     $id: String!
-    $data: UpdateProductInput!
+    $input: UpdateProductInput!
   ) {
-    updateProduct(id: $id, data: $data) {
+    updateProduct(id: $id, input: $input) {
       id
       title
     }

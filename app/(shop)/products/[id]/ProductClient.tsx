@@ -11,6 +11,22 @@ export default function ProductClient({ product }: any) {
     const addToCart = useCartStore((s) => s.addToCart);
     const [quantity, setQuantity] = useState(1);
 
+    const images =
+        product.media?.length
+            ? product.media
+            : [
+                {
+                    url: "/images/placeholder.jpg",
+                },
+            ];
+
+    const [selectedImage, setSelectedImage] = useState(
+        images[0].url
+    );
+
+    console.log("PRODUCT:", product);
+    console.log("MEDIA:", product.media);
+
     const handleAddToCart = () => {
         addToCart({
             id: product.id,
@@ -29,15 +45,40 @@ export default function ProductClient({ product }: any) {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
 
                     {/* Left Canvas: Wide Frame Backdrop */}
+                    {/* Left Canvas: Product Gallery */}
                     <div className="lg:col-span-7 lg:sticky lg:top-8">
+                        {/* Main Image */}
                         <div className="relative aspect-[1.6] w-full rounded-3xl bg-[#f4f4f5] overflow-hidden">
                             <Image
-                                src={getProductThumbnail(product)}
+                                src={selectedImage}
                                 alt={product.title}
                                 fill
                                 priority
                                 className="object-contain p-6 sm:p-12 transition-transform duration-300"
                             />
+                        </div>
+
+                        {/* Thumbnail Gallery */}
+                        <div className="mt-5 flex gap-3 overflow-x-auto pb-2">
+                            {images.map((image: any, index: number) => (
+                                <button
+                                    key={image.id ?? index}
+                                    type="button"
+                                    onClick={() => setSelectedImage(image.url)}
+                                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-200 
+                                        ${selectedImage === image.url
+                                            ? "border-zinc-900 ring-2 ring-zinc-200"
+                                            : "border-zinc-200 hover:border-zinc-400"
+                                        }`}
+                                >
+                                    <Image
+                                        src={image.url}
+                                        alt={`${product.title} ${index + 1}`}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </button>
+                            ))}
                         </div>
                     </div>
 

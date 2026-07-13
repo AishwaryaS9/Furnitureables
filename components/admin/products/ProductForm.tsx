@@ -31,6 +31,7 @@ export default function ProductForm({
   loading = false,
 }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>(initialValues);
+  const [uploading, setUploading] = useState(false);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,6 +45,47 @@ export default function ProductForm({
           ? Number(value)
           : value,
     }));
+  }
+
+  async function handleImageUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/media/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await res.json();
+
+      setForm((prev: any) => ({
+        ...prev,
+        media: [
+          {
+            url: data.url,
+            type: "IMAGE",
+            sortOrder: 0,
+          },
+        ],
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSubmit(
@@ -133,29 +175,28 @@ export default function ProductForm({
           required
         />
 
-        {/* <Input
-          name="image"
-          placeholder="/images/sofa.jpg"
-          value={form.image}
-          onChange={handleChange}
-        /> */}
-        <Input
-          name="image"
-          placeholder="/images/sofa.jpg"
-          value={form.media[0]?.url ?? ""}
-          onChange={(e) =>
-            setForm((prev: any) => ({
-              ...prev,
-              media: [
-                {
-                  url: e.target.value,
-                  type: "IMAGE",
-                  sortOrder: 0,
-                },
-              ],
-            }))
-          }
-        />
+        <div className="col-span-2 space-y-2">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            disabled={uploading}
+          />
+
+          {uploading && (
+            <p className="text-sm text-muted-foreground">
+              Uploading...
+            </p>
+          )}
+
+          {form.media[0]?.url && (
+            <img
+              src={form.media[0].url}
+              alt="Preview"
+              className="h-28 w-28 rounded-lg border object-cover"
+            />
+          )}
+        </div>
       </div>
 
       <textarea
@@ -169,9 +210,9 @@ export default function ProductForm({
 
       <Button
         type="submit"
-        disabled={loading}
+        disabled={loading || uploading}
       >
-        {loading ? "Saving..." : "Save Product"}
+        {uploading ? "Uploading..." : loading ? "Saving..." : "Save Product"}
       </Button>
     </form>
   );

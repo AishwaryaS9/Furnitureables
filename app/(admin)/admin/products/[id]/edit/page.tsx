@@ -19,7 +19,7 @@ export default function EditProductPage() {
   async function handleSubmit(values: ProductFormData) {
     await updateProduct.mutateAsync({
       id,
-      data: values,
+      input: values,
     });
 
     router.push("/admin/products");

@@ -8,14 +8,14 @@ export function useUpdateProduct() {
   return useMutation({
     mutationFn: async ({
       id,
-      data,
+      input,
     }: {
       id: string;
-      data: any;
+      input: any;
     }) => {
       return graphqlClient.request(UPDATE_PRODUCT, {
         id,
-        data,
+        input,
       });
     },
 

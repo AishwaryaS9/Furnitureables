@@ -228,41 +228,41 @@ export const typeDefs = /* GraphQL */ `
     sortOrder: Int
   }
 
-  input ProductInput {
-    title: String!
-    description: String
+input ProductInput {
+  title: String!
+  description: String
 
-    price: Float!
-    stock: Int!
+  price: Float!
+  stock: Int!
 
-    media: [String!]
+  media: [ProductMediaInput!]
 
-    type: String!
-    material: String!
-    color: String!
-    room: String!
-    dimensions: String!
+  type: String!
+  material: String!
+  color: String!
+  room: String!
+  dimensions: String!
 
-    sku: String!
-  }
+  sku: String!
+}
 
-  input UpdateProductInput {
-    title: String
-    description: String
+input UpdateProductInput {
+  title: String
+  description: String
 
-    price: Float
-    stock: Int
+  price: Float
+  stock: Int
 
-    media: [String!]
+  media: [ProductMediaInput!]
 
-    type: String
-    material: String
-    color: String
-    room: String
-    dimensions: String
+  type: String
+  material: String
+  color: String
+  room: String
+  dimensions: String
 
-    sku: String
-  }
+  sku: String
+}
 
   input CartItemInput {
     productId: String!
