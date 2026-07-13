@@ -3,7 +3,16 @@ import ProductClient from "./ProductClient";
 
 async function getProduct(id: string) {
   return prisma.product.findUnique({
-    where: { id },
+    where: {
+      id,
+    },
+    include: {
+      media: {
+        orderBy: {
+          sortOrder: "asc",
+        },
+      },
+    },
   });
 }
 

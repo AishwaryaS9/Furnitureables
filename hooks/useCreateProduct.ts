@@ -7,9 +7,9 @@ export function useCreateProduct() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: ProductFormData) => {
+        mutationFn: async (input: ProductFormData) => {
             return graphqlClient.request(CREATE_PRODUCT, {
-                data,
+                input,
             });
         },
 
