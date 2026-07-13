@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProductFormData } from "@/types/product";
+import { ProductFormData, ProductMediaInput } from "@/types/product";
 
 interface ProductFormProps {
   initialValues?: ProductFormData;
@@ -50,34 +51,45 @@ export default function ProductForm({
   async function handleImageUpload(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files ?? []);
+
+    if (!files.length) return;
 
     setUploading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const uploadedMedia: ProductMediaInput[] = [];
 
-      const res = await fetch("/api/media/upload", {
-        method: "POST",
-        body: formData,
-      });
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      if (!res.ok) {
-        throw new Error("Upload failed");
+        const res = await fetch("/api/media/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          throw new Error("Upload failed");
+        }
+
+        const data = await res.json();
+
+        uploadedMedia.push({
+          url: data.url,
+          type: "IMAGE",
+          sortOrder: uploadedMedia.length,
+        });
       }
 
-      const data = await res.json();
-
-      setForm((prev: any) => ({
+      setForm((prev) => ({
         ...prev,
         media: [
-          {
-            url: data.url,
-            type: "IMAGE",
-            sortOrder: 0,
-          },
+          ...prev.media,
+          ...uploadedMedia.map((media, index) => ({
+            ...media,
+            sortOrder: prev.media.length + index,
+          })),
         ],
       }));
     } catch (err) {
@@ -175,9 +187,10 @@ export default function ProductForm({
           required
         />
 
-        <div className="col-span-2 space-y-2">
+        <div className="col-span-2 space-y-4">
           <Input
             type="file"
+            multiple
             accept="image/*"
             onChange={handleImageUpload}
             disabled={uploading}
@@ -185,16 +198,26 @@ export default function ProductForm({
 
           {uploading && (
             <p className="text-sm text-muted-foreground">
-              Uploading...
+              Uploading images...
             </p>
           )}
 
-          {form.media[0]?.url && (
-            <img
-              src={form.media[0].url}
-              alt="Preview"
-              className="h-28 w-28 rounded-lg border object-cover"
-            />
+          {form.media.length > 0 && (
+            <div className="flex flex-wrap gap-4">
+              {form.media.map((media, index) => (
+                <div
+                  key={index}
+                  className="relative h-28 w-28 overflow-hidden rounded-lg border"
+                >
+                  <Image
+                    src={media.url}
+                    alt={`Preview ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -212,7 +235,11 @@ export default function ProductForm({
         type="submit"
         disabled={loading || uploading}
       >
-        {uploading ? "Uploading..." : loading ? "Saving..." : "Save Product"}
+        {uploading
+          ? "Uploading..."
+          : loading
+            ? "Saving..."
+            : "Save Product"}
       </Button>
     </form>
   );
