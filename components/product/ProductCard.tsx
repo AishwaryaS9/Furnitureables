@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { Product } from "@/types/product";
+import { getProductThumbnail } from "@/lib/utils";
 
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -38,7 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
 
         <Image
-          src={product.image || "/images/placeholder.jpg"}
+          src={getProductThumbnail(product)}
           alt={product.title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

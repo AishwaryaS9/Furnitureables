@@ -16,14 +16,16 @@ export const uploadResolver = {
             let failed = 0;
 
             for (const product of products) {
+                console.log("Upload products", product);
                 try {
-                    const exists = await prisma.product.findUnique({
+                    const existing = await prisma.product.findUnique({
                         where: {
                             sku: product.sku,
                         },
                     });
 
-                    await prisma.product.upsert({
+
+                    const savedProduct = await prisma.product.upsert({
                         where: {
                             sku: product.sku,
                         },
@@ -33,7 +35,7 @@ export const uploadResolver = {
                             description: product.description,
                             price: Number(product.price),
                             stock: Number(product.stock),
-                            image: product.image,
+
                             type: product.type,
                             material: product.material,
                             color: product.color,
@@ -46,7 +48,7 @@ export const uploadResolver = {
                             description: product.description,
                             price: Number(product.price),
                             stock: Number(product.stock),
-                            image: product.image,
+
                             type: product.type,
                             material: product.material,
                             color: product.color,
@@ -56,16 +58,36 @@ export const uploadResolver = {
                         },
                     });
 
-                    if (exists) {
+                    // Replace existing media with uploaded media
+                    if (product.media?.length) {
+                        await prisma.productMedia.deleteMany({
+                            where: {
+                                productId: savedProduct.id,
+                            },
+                        });
+
+                        await prisma.productMedia.createMany({
+                            data: product.media.map((media, index) => ({
+                                productId: savedProduct.id,
+                                url: media.url,
+                                type: media.type,
+                                altText: media.altText ?? null,
+                                sortOrder: media.sortOrder ?? index,
+                            })),
+                        });
+                    }
+
+                    if (existing) {
                         updated++;
                     } else {
                         inserted++;
                     }
                 } catch (error) {
                     console.error(
-                        `Failed to upload product with SKU ${product.sku}:`,
+                        `Failed to upload product with SKU ${product.sku} `,
                         error
                     );
+
                     failed++;
                 }
             }
@@ -78,3 +100,4 @@ export const uploadResolver = {
         },
     },
 };
+

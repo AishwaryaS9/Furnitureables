@@ -7,6 +7,153 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        String    @id @default(cuid())
+  clerkId   String    @unique
+  email     String    @unique
+  firstName String?
+  lastName  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  addresses Address[]
+  cart      Cart?
+  orders    Order[]
+}
+
+model Product {
+  id          String         @id @default(cuid())
+  title       String
+  price       Float
+  description String?
+  stock       Int
+  type        String
+  material    String
+  color       String
+  room        String
+  dimensions  String
+  sku         String         @unique
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  media       ProductMedia[]
+}
+
+model ProductMedia {
+  id        String    @id @default(cuid())
+  productId String
+  url       String
+  type      MediaType
+  altText   String?
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  userId       String
+  fullName     String
+  phone        String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String
+  postalCode   String
+  country      String
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders       Order[]
+
+  @@index([userId])
+}
+
+model Order {
+  id                    String        @id @default(cuid())
+  orderNumber           String        @unique
+  userId                String
+  addressId             String?
+  subtotal              Float
+  shipping              Float
+  tax                   Float
+  discount              Float
+  total                 Float
+  currency              String        @default("INR")
+  status                OrderStatus   @default(PENDING)
+  paymentStatus         PaymentStatus @default(PENDING)
+  paymentMethod         PaymentMethod
+  stripePaymentIntentId String?
+  razorpayOrderId       String?
+  razorpayPaymentId     String?
+  fullName              String
+  phone                 String
+  addressLine1          String
+  addressLine2          String?
+  city                  String
+  state                 String
+  postalCode            String
+  country               String
+  couponCode            String?
+  notes                 String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  address               Address?      @relation(fields: [addressId], references: [id])
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items                 OrderItem[]
+
+  @@index([userId])
+  @@index([addressId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  title     String
+  image     String?
+  sku       String
+  price     Float
+  quantity  Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
 enum OrderStatus {
   PENDING
   CONFIRMED
@@ -26,165 +173,4 @@ enum PaymentMethod {
   COD
   STRIPE
   RAZORPAY
-}
-
-model User {
-  id        String  @id @default(cuid())
-  clerkId   String  @unique
-  email     String  @unique
-  firstName String?
-  lastName  String?
-
-  cart      Cart?
-  addresses Address[]
-  orders    Order[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Product {
-  id          String      @id @default(cuid())
-  title       String
-  price       Float
-  description String?
-  stock       Int
-  image       String?
-  type        String
-  material    String
-  color       String
-  room        String
-  dimensions  String
-  sku         String      @unique
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @default(now()) @updatedAt
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-}
-
-model Cart {
-  id String @id @default(cuid())
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  items CartItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CartItem {
-  id String @id @default(cuid())
-
-  cartId String
-  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  quantity Int
-
-  @@unique([cartId, productId])
-  @@index([cartId])
-}
-
-model Address {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  fullName String
-  phone    String
-
-  addressLine1 String
-  addressLine2 String?
-
-  city       String
-  state      String
-  postalCode String
-  country    String
-
-  orders Order[]
-
-  isDefault Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-}
-
-model Order {
-  id String @id @default(cuid())
-
-  orderNumber String @unique
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  addressId String?
-  address   Address? @relation(fields: [addressId], references: [id], onDelete: SetNull)
-
-  items OrderItem[]
-
-  subtotal Float
-  shipping Float
-  tax      Float
-  discount Float
-  total    Float
-
-  currency String @default("INR")
-
-  status OrderStatus @default(PENDING)
-
-  paymentStatus PaymentStatus @default(PENDING)
-  paymentMethod PaymentMethod
-
-  stripePaymentIntentId String?
-  razorpayOrderId       String?
-  razorpayPaymentId     String?
-
-  fullName String
-  phone    String
-
-  addressLine1 String
-  addressLine2 String?
-
-  city       String
-  state      String
-  postalCode String
-  country    String
-
-  couponCode String?
-  notes      String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([addressId])
-  @@index([status])
-  @@index([paymentStatus])
-  @@index([createdAt])
-}
-
-model OrderItem {
-  id String @id @default(cuid())
-
-  orderId String
-  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  title    String
-  image    String?
-  sku      String
-  price    Float
-  quantity Int
-
-  @@index([orderId])
-  @@index([productId])
 }

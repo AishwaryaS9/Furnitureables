@@ -16,7 +16,7 @@ const emptyValues: ProductFormData = {
   description: "",
   price: 0,
   stock: 0,
-  image: "",
+  media: [],
   type: "",
   material: "",
   color: "",
@@ -32,9 +32,9 @@ export default function ProductForm({
 }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>(initialValues);
 
-  const handleChange = (
+  function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ) {
     const { name, value } = e.target;
 
     setForm((prev) => ({
@@ -44,14 +44,14 @@ export default function ProductForm({
           ? Number(value)
           : value,
     }));
-  };
+  }
 
-  const handleSubmit = async (
+  async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
-  ) => {
+  ) {
     e.preventDefault();
     await onSubmit(form);
-  };
+  }
 
   return (
     <form
@@ -133,11 +133,28 @@ export default function ProductForm({
           required
         />
 
-        <Input
+        {/* <Input
           name="image"
           placeholder="/images/sofa.jpg"
           value={form.image}
           onChange={handleChange}
+        /> */}
+        <Input
+          name="image"
+          placeholder="/images/sofa.jpg"
+          value={form.media[0]?.url ?? ""}
+          onChange={(e) =>
+            setForm((prev: any) => ({
+              ...prev,
+              media: [
+                {
+                  url: e.target.value,
+                  type: "IMAGE",
+                  sortOrder: 0,
+                },
+              ],
+            }))
+          }
         />
       </div>
 

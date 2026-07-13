@@ -5,17 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 import { useDeleteProduct } from "@/hooks/useDeleteProduct";
-// import { Product } from "@/types/product";
-
-interface Product {
-  id: string;
-  title: string;
-  sku: string;
-  image?: string;
-  type: string;
-  stock: number;
-  price: number;
-}
+import { Product } from "@/types/product";
+import { getProductThumbnail } from "@/lib/utils";
 
 interface Props {
   products: Product[];
@@ -61,10 +52,7 @@ export default function ProductTable({
             >
               <td className="p-4">
                 <img
-                  src={
-                    product.image ||
-                    "/images/placeholder.jpg"
-                  }
+                  src={getProductThumbnail(product)}
                   alt={product.title}
                   className="h-16 w-16 rounded object-cover"
                 />
@@ -131,3 +119,4 @@ export default function ProductTable({
     </div>
   );
 }
+

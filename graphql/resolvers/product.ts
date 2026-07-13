@@ -89,8 +89,16 @@ export const productResolvers = {
                 skip: related ? undefined : (page - 1) * limit,
                 take: related ? 4 : limit,
                 orderBy,
-            });
 
+                include: {
+                    media: {
+                        orderBy: {
+                            sortOrder: "asc",
+                        },
+                    },
+                },
+            });
+            console.log("ITEM->product resolvers", JSON.stringify(items, null, 2));
             return {
                 items,
                 total,
@@ -100,6 +108,14 @@ export const productResolvers = {
         product: async (_: any, { id }: { id: string }) => {
             return prisma.product.findUnique({
                 where: { id },
+
+                include: {
+                    media: {
+                        orderBy: {
+                            sortOrder: "asc",
+                        },
+                    },
+                },
             });
         },
 
@@ -108,23 +124,50 @@ export const productResolvers = {
                 orderBy: {
                     createdAt: "desc",
                 },
+
+                include: {
+                    media: {
+                        orderBy: {
+                            sortOrder: "asc",
+                        },
+                    },
+                },
             });
         },
     },
 
     Mutation: {
-        createProduct: async (_: any, { data }: any) => {
+        createProduct: async (_: any, { input }: any) => {
             return prisma.product.create({
-                data,
+                data: {
+                    ...input,
+                    media: {
+                        create: input.media ?? [],
+                    },
+                },
+                include: {
+                    media: true,
+                },
             });
         },
 
-        updateProduct: async (_: any, { id, data }: any) => {
+        updateProduct: async (_: any, { id, input }: any) => {
             return prisma.product.update({
                 where: {
                     id,
                 },
-                data,
+                data: {
+                    ...input,
+                    ...(input.media && {
+                        media: {
+                            deleteMany: {},
+                            create: input.media,
+                        },
+                    }),
+                },
+                include: {
+                    media: true,
+                },
             });
         },
 

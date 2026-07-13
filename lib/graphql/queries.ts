@@ -9,10 +9,16 @@ export const GET_PRODUCTS = gql`
         id
         title
         price
-        image
         type
         material
         createdAt
+
+        media {
+          id
+          url
+          type
+          sortOrder
+        }
       }
     }
   }
@@ -26,7 +32,6 @@ export const ADMIN_PRODUCTS = gql`
       description
       price
       stock
-      image
       type
       material
       color
@@ -35,6 +40,13 @@ export const ADMIN_PRODUCTS = gql`
       sku
       createdAt
       updatedAt
+
+      media {
+        id
+        url
+        type
+        sortOrder
+      }
     }
   }
 `;
@@ -47,13 +59,19 @@ export const PRODUCT_BY_ID = gql`
       description
       price
       stock
-      image
       type
       material
       color
       room
       dimensions
       sku
+
+      media {
+        id
+        url
+        type
+        sortOrder
+      }
     }
   }
 `;

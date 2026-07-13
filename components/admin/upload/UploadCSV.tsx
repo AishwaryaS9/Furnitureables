@@ -5,6 +5,7 @@ import Papa from 'papaparse';
 import CSVPreview from "./CSVPreview";
 import UploadSummary from "./UploadSummary";
 import ValidationErrors from "./ValidationErrors";
+import { parseProductsCSV } from "@/lib/csv/parser";
 
 export default function UploadCSV() {
   const [rows, setRows] = useState<any[]>([]);
@@ -17,7 +18,9 @@ export default function UploadCSV() {
       skipEmptyLines: true,
 
       complete(results) {
-        setRows(results.data);
+        const products = parseProductsCSV(results.data as any[]);
+
+        setRows(products);
       },
     });
   };

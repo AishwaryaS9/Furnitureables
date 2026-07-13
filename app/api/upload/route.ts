@@ -19,23 +19,30 @@ export async function POST(request: Request) {
             sku: product.sku,
           },
         });
-
         if (existing) {
+          // console.log("product media", JSON.stringify(product.media, null, 2));
+          // console.log("product media url", product.media?.[0]?.url);
           await prisma.product.update({
             where: {
               sku: product.sku,
             },
+
             data: {
               title: product.title,
               description: product.description,
               price: Number(product.price),
               stock: Number(product.stock),
-              image: product.image,
+
               type: product.type,
               material: product.material,
               color: product.color,
               room: product.room,
               dimensions: product.dimensions,
+
+              media: {
+                deleteMany: {},
+                create: product.media ?? [],
+              },
             },
           });
 
@@ -43,15 +50,30 @@ export async function POST(request: Request) {
         } else {
           await prisma.product.create({
             data: {
-              ...product,
+              title: product.title,
+              description: product.description,
               price: Number(product.price),
               stock: Number(product.stock),
+
+              type: product.type,
+              material: product.material,
+              color: product.color,
+              room: product.room,
+              dimensions: product.dimensions,
+              sku: product.sku,
+
+              media: {
+                create: product.media ?? [],
+              },
             },
           });
 
           inserted++;
         }
-      } catch {
+      } catch (error) {
+        console.error("Upload error for SKU:", product.sku);
+        console.error(error);
+
         failed++;
         errors.push(`SKU ${product.sku} could not be uploaded.`);
       }
