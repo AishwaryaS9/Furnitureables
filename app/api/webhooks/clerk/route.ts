@@ -1,6 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import type { WebhookEvent } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -25,14 +26,14 @@ export async function POST(req: Request) {
 
     const wh = new Webhook(WEBHOOK_SECRET);
 
-    let event: any;
+    let event: WebhookEvent;
 
     try {
         event = wh.verify(payload, {
             "svix-id": svixId,
             "svix-timestamp": svixTimestamp,
             "svix-signature": svixSignature,
-        });
+        }) as WebhookEvent;
     } catch (err) {
         console.error("Webhook verification failed:", err);
 

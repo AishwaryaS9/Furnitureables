@@ -79,7 +79,7 @@ export default function ProductGrid() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both ease-out">
-        {items.map((product: any) => (
+        {items.map((product) => (
           <div
             key={product.id}
             className="transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_-20px_rgba(0,0,0,0.04)] rounded-2xl"

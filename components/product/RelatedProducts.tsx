@@ -1,51 +1,19 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { useRelatedProducts } from "@/hooks/useRelatedProducts";
 
-export default function RelatedProducts({ type, id }: any) {
-    const { data, isLoading } = useQuery({
-        queryKey: ["related", type, id],
-        queryFn: async () => {
-            const res = await fetch("/api/graphql", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    query: `
-            query ($filter: ProductFilterInput) {
-              products(filter: $filter, related: true) {
-                  items {
-                        id
-                        title
-                        price
-                        createdAt
-                        material
-                        color
+interface RelatedProductsProps {
+    type: string;
+    id: string;
+}
 
-                media {
-                    id
-                    url
-                    type
-                    sortOrder
-                }
-                }   
-              }
-            }
-          `,
-                    variables: {
-                        filter: {
-                            category: type,
-                            excludeId: id,
-                        },
-                    },
-                }),
-            });
-
-            const json = await res.json();
-            return json.data?.products?.items || [];
-        },
+export default function RelatedProducts({ type, id }: RelatedProductsProps) {
+    const { data, isLoading } = useRelatedProducts({
+        type,
+        id,
     });
 
     if (isLoading) {
@@ -87,7 +55,7 @@ export default function RelatedProducts({ type, id }: any) {
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {data.map((p: any) => (
+            {data.map((p) => (
                 <div key={p.id} className="transition-all duration-300 hover:-translate-y-1">
                     <ProductCard product={p} />
                 </div>

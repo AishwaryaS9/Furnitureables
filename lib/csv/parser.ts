@@ -1,8 +1,8 @@
-import { ProductUploadInput } from "@/types/product";
+import { CreateProductInput } from "@/types/product";
 
 export function parseProductsCSV(
-    rows: any[]
-): ProductUploadInput[] {
+    rows: Record<string, string>[]
+): CreateProductInput[] {
     return rows.map((row) => ({
         title: row.title,
         description: row.description || "",

@@ -1,38 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useCartStore } from "@/store/cart";
 import Image from "next/image";
 import { Check, Truck } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
+import { Product } from "@/types/product";
+import { useAddToCart } from "@/hooks/useAddToCart";
 
-export default function ProductClient({ product }: any) {
-    const addToCart = useCartStore((s) => s.addToCart);
+export default function ProductClient({ product }: { product: Product }) {
+    const addToCart = useAddToCart();
     const [quantity, setQuantity] = useState(1);
 
     const images =
-        product.media?.length
+        product.media.length > 0
             ? product.media
-            : [
-                {
-                    url: "/images/placeholder.jpg",
-                },
-            ];
+            : [{
+                id: "placeholder",
+                url: "/images/placeholder.jpg",
+                type: "IMAGE",
+                altText: null,
+                sortOrder: 0,
+            }];
+
 
     const [selectedImage, setSelectedImage] = useState(
-        images[0].url
+        () => images[0]?.url ?? "/images/placeholder.jpg"
     );
 
     const handleAddToCart = () => {
-        addToCart({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image:
-                product.media?.[0]?.url ??
-                "/images/placeholder.jpg",
-            quantity: quantity,
-        });
+        addToCart(product, quantity);
     };
 
     return (
@@ -50,21 +46,30 @@ export default function ProductClient({ product }: any) {
                                 src={selectedImage}
                                 alt={product.title}
                                 fill
+                                sizes="(max-width: 1024px) 100vw, 58vw"
                                 priority
-                                className="object-contain p-6 sm:p-12 transition-transform duration-300"
+                                // className="object-contain p-6 sm:p-12 transition-transform duration-300"
+                                className="object-contain p-6 sm:p-12 transition-transform duration-500 hover:scale-105"
                             />
                         </div>
 
                         {/* Thumbnail Gallery */}
+                        <div className="mt-4 flex items-center justify-between">
+                            <p className="text-sm text-zinc-500">
+                                {images.length} image{images.length > 1 ? "s" : ""}
+                            </p>
+                        </div>
+
                         <div className="mt-5 flex gap-3 overflow-x-auto pb-2">
-                            {images.map((image: any, index: number) => (
+                            {images.map((image, index) => (
                                 <button
                                     key={image.id ?? index}
                                     type="button"
                                     onClick={() => setSelectedImage(image.url)}
-                                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-200 
+                                    disabled={selectedImage === image.url}
+                                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all disabled:cursor-default 
                                         ${selectedImage === image.url
-                                            ? "border-zinc-900 ring-2 ring-zinc-200"
+                                            ? "border-black ring-4 ring-black/10"
                                             : "border-zinc-200 hover:border-zinc-400"
                                         }`}
                                 >
@@ -72,6 +77,7 @@ export default function ProductClient({ product }: any) {
                                         src={image.url}
                                         alt={`${product.title} ${index + 1}`}
                                         fill
+                                        sizes="80px"
                                         className="object-cover"
                                     />
                                 </button>
@@ -131,9 +137,13 @@ export default function ProductClient({ product }: any) {
                                         −
                                     </button>
                                     <span className="font-medium text-sm tabular-nums text-zinc-900">{quantity}</span>
+                                    {/* <span className="font-medium text-sm tabular-nums text-zinc-900"> {quantity} / {product.stock}</span> */}
                                     <button
                                         type="button"
-                                        onClick={() => setQuantity(q => q + 1)}
+                                        // onClick={() => setQuantity(q => q + 1)}
+                                        onClick={() =>
+                                            setQuantity((q) => Math.min(product.stock, q + 1))
+                                        }
                                         className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-zinc-900 font-medium transition-colors"
                                     >
                                         +

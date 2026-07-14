@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UPDATE_PRODUCT } from "@/lib/graphql/mutations";
 import { graphqlClient } from "@/lib/graphql/client";
+import { Product, ProductFormData } from "@/types/product";
 
 export function useUpdateProduct() {
   const queryClient = useQueryClient();
@@ -11,7 +12,7 @@ export function useUpdateProduct() {
       input,
     }: {
       id: string;
-      input: any;
+      input: ProductFormData;
     }) => {
       const cleanedInput = {
         title: input.title,
@@ -25,14 +26,16 @@ export function useUpdateProduct() {
         dimensions: input.dimensions,
         sku: input.sku,
 
-        media: input.media?.map((m: any) => ({
+        media: input.media?.map((m) => ({
           url: m.url,
           type: m.type,
           sortOrder: m.sortOrder,
         })),
       };
 
-      return graphqlClient.request(UPDATE_PRODUCT, {
+      return graphqlClient.request<{
+        product: Product;
+      }>(UPDATE_PRODUCT, {
         id,
         input: cleanedInput,
       });

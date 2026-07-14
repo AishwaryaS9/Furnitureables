@@ -75,3 +75,41 @@ export const PRODUCT_BY_ID = gql`
     }
   }
 `;
+
+export const RELATED_PRODUCTS = `
+query ($filter: ProductFilterInput) {
+  products(filter: $filter, related: true) {
+     items {
+      id
+      title
+      price
+      createdAt
+      material
+      media {
+        id
+        url
+        type
+        sortOrder
+      }
+    }   
+  }
+}
+`;
+
+export const GET_CART = gql`
+  query GetCart {
+    cart {
+      items {
+        quantity
+        product {
+          id
+          title
+          price
+          media {
+            url
+          }
+        }
+      }
+    }
+  }
+`;

@@ -14,6 +14,7 @@ export default function EditProductPage() {
 
   const { data: product, isLoading } = useProduct(id);
 
+
   const updateProduct = useUpdateProduct();
 
   async function handleSubmit(values: ProductFormData) {
@@ -33,6 +34,24 @@ export default function EditProductPage() {
     return <p className="p-10">Product not found.</p>;
   }
 
+  const initialValues: ProductFormData = {
+    title: product.title,
+    description: product.description ?? "",
+    price: product.price,
+    stock: product.stock,
+    sku: product.sku,
+    type: product.type,
+    material: product.material,
+    color: product.color,
+    room: product.room,
+    dimensions: product.dimensions,
+    media: product.media.map((media) => ({
+      url: media.url,
+      type: media.type,
+      sortOrder: media.sortOrder,
+    })),
+  };
+
   return (
     <div className="max-w-5xl mx-auto py-8 space-y-6">
       <h1 className="text-3xl font-bold">
@@ -40,25 +59,7 @@ export default function EditProductPage() {
       </h1>
 
       <ProductForm
-        initialValues={{
-          title: product.title,
-          description: product.description ?? "",
-          price: product.price,
-          stock: product.stock,
-          sku: product.sku,
-          type: product.type,
-          material: product.material,
-          color: product.color,
-          room: product.room,
-          dimensions: product.dimensions,
-
-          media:
-            product.media?.map((m: any) => ({
-              url: m.url,
-              type: m.type,
-              sortOrder: m.sortOrder,
-            })) ?? [],
-        }}
+        initialValues={initialValues}
         onSubmit={handleSubmit}
         loading={updateProduct.isPending}
       />

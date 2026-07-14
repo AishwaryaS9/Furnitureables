@@ -26,3 +26,11 @@ export const DELETE_PRODUCT = gql`
     deleteProduct(id: $id)
   }
 `;
+
+export const SAVE_CART = gql`
+  mutation SaveCart($items: [CartItemInput!]!) {
+    saveCart(items: $items) {
+      id
+    }
+  }
+`;
