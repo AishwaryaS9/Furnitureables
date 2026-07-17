@@ -1,13 +1,6 @@
+import { CartItem } from "@/types/cart";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-export interface CartItem {
-    id: string;
-    title: string;
-    price: number;
-    image?: string;
-    quantity: number;
-}
 
 type CartStore = {
     items: CartItem[];
@@ -16,6 +9,12 @@ type CartStore = {
         product: Omit<CartItem, "quantity"> & { quantity?: number }
     ) => void;
 
+    incrementQuantity: (id: string) => void;
+
+    decrementQuantity: (id: string) => void;
+
+    updateQuantity: (id: string, quantity: number) => void;
+
     removeFromCart: (id: string) => void;
 
     clearCart: () => void;
@@ -23,16 +22,19 @@ type CartStore = {
     setCart: (items: CartItem[]) => void;
 
     cartReady: boolean;
-
     setCartReady: (ready: boolean) => void;
-
+    syncedUserId: string | null;
+    setSyncedUserId: (id: string | null) => void;
 };
+
 
 export const useCartStore = create<CartStore>()(
     persist(
         (set) => ({
             items: [],
             cartReady: false,
+            syncedUserId: null,
+            setSyncedUserId: (id) => set({ syncedUserId: id }),
             addToCart: (product) =>
                 set((state) => {
                     const quantityToAdd = product.quantity ?? 1;
@@ -65,6 +67,44 @@ export const useCartStore = create<CartStore>()(
                     };
                 }),
 
+            incrementQuantity: (id) =>
+                set((state) => ({
+                    items: state.items.map((item) =>
+                        item.id === id
+                            ? {
+                                ...item,
+                                quantity: item.quantity + 1,
+                            }
+                            : item
+                    ),
+                })),
+
+            decrementQuantity: (id) =>
+                set((state) => ({
+                    items: state.items
+                        .map((item) =>
+                            item.id === id
+                                ? {
+                                    ...item,
+                                    quantity: item.quantity - 1,
+                                }
+                                : item
+                        )
+                        .filter((item) => item.quantity > 0),
+                })),
+
+            updateQuantity: (id, quantity) =>
+                set((state) => ({
+                    items: state.items.map((item) =>
+                        item.id === id
+                            ? {
+                                ...item,
+                                quantity: Math.max(1, quantity),
+                            }
+                            : item
+                    ),
+                })),
+
             removeFromCart: (id) =>
                 set((state) => ({
                     items: state.items.filter((item) => item.id !== id),
@@ -73,6 +113,7 @@ export const useCartStore = create<CartStore>()(
             clearCart: () => set({
                 items: [],
             }),
+
 
             setCart: (items) => set({ items }),
 
@@ -83,6 +124,12 @@ export const useCartStore = create<CartStore>()(
         }),
         {
             name: "guest-cart",
+            partialize: (state) => ({
+                items: state.items,
+                syncedUserId: state.syncedUserId,
+            }),
+
         }
     )
 );
+

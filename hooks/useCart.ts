@@ -1,46 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-
-export function useCart() {
+import { graphqlClient } from "@/lib/graphql/client";
+import { GET_CART } from "@/lib/graphql/queries";
+import { CartQueryResponse } from "@/types/cart";
+export function useCart(userId?: string) {
   return useQuery({
-    queryKey: ["cart"],
-
+    queryKey: ["cart", userId ?? "anonymous"],
     queryFn: async () => {
-      const res = await fetch("/api/graphql", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          query: `
-            query {
-              cart {
-                id
-
-                items {
-                  quantity
-
-                  productId
-
-                  product {
-                    id
-                    title
-                    price
-                    image
-                  }
-                }
-              }
-            }
-          `,
-        }),
-      });
-
-      const json = await res.json();
-
-      return json.data.cart;
+      const data = await graphqlClient.request<CartQueryResponse>(GET_CART);
+      return data.cart;
     },
+    enabled: !!userId,
   });
 }
