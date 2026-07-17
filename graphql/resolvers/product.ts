@@ -1,10 +1,6 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/index";
 import { prisma } from "@/lib/prisma";
-import {
-    CreateProductArgs,
-    ProductsArgs,
-    UpdateProductArgs,
-} from "@/types/product";
+import { CreateProductArgs, ProductsArgs, UpdateProductArgs } from "@/types/product";
 
 export const productResolvers = {
     Query: {
