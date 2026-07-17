@@ -8,10 +8,9 @@ export type CartItem = {
     quantity: number;
 };
 
-export type CartQueryResponse = {
+export interface CartQueryResponse {
     cart: {
         items: {
-            id: string;
             quantity: number;
             product: {
                 id: string;
@@ -20,5 +19,6 @@ export type CartQueryResponse = {
                 media: ProductMedia[];
             };
         }[];
-    };
-};
+    } | null;
+}
+

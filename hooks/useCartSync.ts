@@ -2,60 +2,49 @@
 
 import { useEffect, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
-
 import { useCartStore } from "@/store/cart";
+import { useSaveCart } from "./useSaveCart";
 
 export function useCartSync() {
-    const { user } = useUser();
+    const { user, isLoaded } = useUser();
 
     const items = useCartStore((s) => s.items);
     const cartReady = useCartStore((s) => s.cartReady);
 
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+    const saveCart = useSaveCart();
+    const previousPayload = useRef<string>("");
 
     useEffect(() => {
+        if (!isLoaded) return;
+
         if (!user) return;
 
         if (!cartReady) return;
 
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
+        const payload = items.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+        }));
+
+        const serialized = JSON.stringify(payload);
+
+        if (serialized === previousPayload.current) {
+            return;
         }
 
-        timeoutRef.current = setTimeout(async () => {
-            try {
-                await fetch("/api/graphql", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+        previousPayload.current = serialized;
 
-                    body: JSON.stringify({
-                        query: `
-                        mutation SaveCart($items:[CartItemInput!]!){
-                            saveCart(items:$items){
-                                id
-                            }
-                        }
-                        `,
-                        variables: {
-                            items: items.map((item) => ({
-                                productId: item.id,
-                                quantity: item.quantity,
-                            })),
-                        },
-                    }),
-                });
-            } catch (err) {
-                console.error(err);
-            }
-        }, 500);
+        console.log("Active session mutation triggered - updating remote DB:", payload);
+        saveCart.mutate(payload);
 
-        return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, [items, cartReady, user]);
+    }, [
+        isLoaded,
+        user,
+        cartReady,
+        items,
+        saveCart,
+    ]);
 }
+
+
+

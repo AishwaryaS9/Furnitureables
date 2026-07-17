@@ -1,8 +1,10 @@
+import { Prisma } from "@/generated/prisma/index";
 import { prisma } from "@/lib/prisma";
+import { CreateProductArgs, ProductsArgs, UpdateProductArgs } from "@/types/product";
 
 export const productResolvers = {
     Query: {
-        products: async (_: any, args: any) => {
+        products: async (_parent: unknown, args: ProductsArgs) => {
             const {
                 filter,
                 page = 1,
@@ -10,7 +12,7 @@ export const productResolvers = {
                 related = false,
             } = args;
 
-            const where: any = {};
+            const where: Prisma.ProductWhereInput = {};
 
             if (filter) {
                 if (filter.category) {
@@ -59,7 +61,7 @@ export const productResolvers = {
                 where,
             });
 
-            let orderBy: any = {
+            let orderBy: Prisma.ProductOrderByWithRelationInput = {
                 createdAt: "desc",
             };
 
@@ -89,7 +91,6 @@ export const productResolvers = {
                 skip: related ? undefined : (page - 1) * limit,
                 take: related ? 4 : limit,
                 orderBy,
-
                 include: {
                     media: {
                         orderBy: {
@@ -98,17 +99,19 @@ export const productResolvers = {
                     },
                 },
             });
-            console.log("ITEM->product resolvers", JSON.stringify(items, null, 2));
+
             return {
                 items,
                 total,
             };
         },
 
-        product: async (_: any, { id }: { id: string }) => {
+        product: async (
+            _parent: unknown,
+            { id }: { id: string }
+        ) => {
             return prisma.product.findUnique({
                 where: { id },
-
                 include: {
                     media: {
                         orderBy: {
@@ -124,7 +127,6 @@ export const productResolvers = {
                 orderBy: {
                     createdAt: "desc",
                 },
-
                 include: {
                     media: {
                         orderBy: {
@@ -137,12 +139,17 @@ export const productResolvers = {
     },
 
     Mutation: {
-        createProduct: async (_: any, { input }: any) => {
+        createProduct: async (
+            _parent: unknown,
+            { input }: CreateProductArgs
+        ) => {
+            const { media, ...productData } = input;
+
             return prisma.product.create({
                 data: {
-                    ...input,
+                    ...productData,
                     media: {
-                        create: input.media ?? [],
+                        create: media ?? [],
                     },
                 },
                 include: {
@@ -151,17 +158,23 @@ export const productResolvers = {
             });
         },
 
-        updateProduct: async (_: any, { id, input }: any) => {
+        updateProduct: async (
+            _parent: unknown,
+            { id, input }: UpdateProductArgs
+        ) => {
+            const { media, ...productData } = input;
+
             return prisma.product.update({
                 where: {
                     id,
                 },
                 data: {
-                    ...input,
-                    ...(input.media && {
+                    ...productData,
+
+                    ...(media && {
                         media: {
                             deleteMany: {},
-                            create: input.media,
+                            create: media,
                         },
                     }),
                 },
@@ -171,7 +184,10 @@ export const productResolvers = {
             });
         },
 
-        deleteProduct: async (_: any, { id }: { id: string }) => {
+        deleteProduct: async (
+            _parent: unknown,
+            { id }: { id: string }
+        ) => {
             await prisma.product.delete({
                 where: {
                     id,

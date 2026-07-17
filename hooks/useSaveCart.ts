@@ -1,32 +1,22 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { graphqlClient } from "@/lib/graphql/client";
+import { SAVE_CART } from "@/lib/graphql/mutations";
+
+interface SaveCartItem {
+    productId: string;
+    quantity: number;
+}
 
 export function useSaveCart() {
     return useMutation({
-        mutationFn: async (items: any[]) => {
-            const res = await fetch("/api/graphql", {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                },
-
-                body: JSON.stringify({
-                    query: `
-            mutation SaveCart($items:[CartItemInput!]!) {
-              saveCart(items:$items){
-                id
-              }
-            }
-          `,
-                    variables: {
-                        items,
-                    },
-                }),
-            });
-
-            return res.json();
+        mutationFn: async (items: SaveCartItem[]) => {
+            const result = await graphqlClient.request(SAVE_CART, { items });
+            return result;
+        },
+        onError(error) {
+            console.error("SAVE CART ERROR:", error);
         },
     });
 }

@@ -40,16 +40,6 @@ export async function getOrCreateCart(userId: string) {
     return cart;
 }
 
-export function serializeCart(cart: any) {
-    return cart.items.map((item: any) => ({
-        id: item.product.id,
-        title: item.product.title,
-        price: item.product.price,
-        image: item.product.media,
-        quantity: item.quantity,
-    }));
-}
-
 export async function replaceCart(
     cartId: string,
     items: {

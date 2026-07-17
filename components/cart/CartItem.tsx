@@ -18,21 +18,19 @@ type CartItemProps = {
 };
 
 export default function CartItem({ item }: CartItemProps) {
-  const addToCart = useCartStore((s) => s.addToCart);
+
+  const incrementQuantity = useCartStore((s) => s.incrementQuantity);
+  const decrementQuantity = useCartStore((s) => s.decrementQuantity);
   const removeFromCart = useCartStore((s) => s.removeFromCart);
 
   const handleDecrease = () => {
-    if (item.quantity > 1) {
-      // Passing quantity: -1 subtracts 1 via your store's (i.quantity + quantityToAdd) logic
-      addToCart({ id: item.id, title: item.title, price: item.price, image: item.image, quantity: -1 });
-    } else {
-      removeFromCart(item.id);
-    }
+    decrementQuantity(item.id);
   };
 
   const handleIncrease = () => {
-    addToCart({ id: item.id, title: item.title, price: item.price, image: item.image, quantity: 1 });
+    incrementQuantity(item.id);
   };
+
 
   return (
     <div className="flex items-start gap-4 sm:gap-6 py-6 border-b border-zinc-100 last:border-0 group animate-in fade-in slide-in-from-bottom-2 duration-300">

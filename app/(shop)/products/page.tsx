@@ -14,9 +14,8 @@ export default function ProductsPage() {
 
     const filters = useFilterStore((s) => s.filters);
 
-
-    const items = products?.items || [];
-    const total = products?.total || 0;
+    const items = products?.items ?? [];
+    const total = products?.total ?? 0;
     const totalPages = Math.ceil(total / 8);
 
     return (
@@ -132,7 +131,7 @@ export default function ProductsPage() {
                         {!isLoading && items.length > 0 && (
                             <div className="space-y-16">
                                 <div className="grid gap-x-6 gap-y-14 transition-all duration-500 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-                                    {items.map((product: any) => (
+                                    {items.map((product) => (
                                         <div
                                             key={product.id}
                                             className="group relative transition-all duration-700 ease-[cubic-bezier(0.215,0.61,0.355,1)] hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.04)] rounded-2xl"

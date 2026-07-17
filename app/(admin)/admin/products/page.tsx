@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
 import ProductTable from "@/components/admin/products/ProductTable";
 import { useState } from "react";
-import { Product } from "@/types/product";
 import ProductStats from "@/components/admin/products/ProductStats";
 import ProductSearch from "@/components/admin/products/ProductSearch";
 
@@ -14,7 +13,7 @@ export default function AdminProductsPage() {
     const [search, setSearch] = useState("");
 
     const filteredProducts =
-        (data ?? []).filter((product: Product) => {
+        (data ?? []).filter((product) => {
             const keyword = search.toLowerCase();
 
             return (
@@ -30,17 +29,17 @@ export default function AdminProductsPage() {
     const total = filteredProducts.length;
 
     const lowStock = filteredProducts.filter(
-        (p: any) => p.stock <= 5 && p.stock > 0
+        (p) => p.stock <= 5 && p.stock > 0
     ).length;
 
     const outOfStock =
         filteredProducts.filter(
-            (p: any) => p.stock === 0
+            (p) => p.stock === 0
         ).length;
 
     const inventoryValue =
         filteredProducts.reduce(
-            (sum: any, p: any) => sum + p.price * p.stock,
+            (sum, p) => sum + p.price * p.stock,
             0
         );
 

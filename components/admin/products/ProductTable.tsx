@@ -44,7 +44,7 @@ export default function ProductTable({
         </thead>
 
         <tbody>
-          {products.map((product) => (
+          {products.map((product: Product) => (
             <tr
               key={product.id}
               className="border-t"
@@ -55,6 +55,7 @@ export default function ProductTable({
                     src={getProductThumbnail(product)}
                     alt={product.title}
                     fill
+                    sizes="64px"
                     className="rounded object-cover"
                   />
                 </div>

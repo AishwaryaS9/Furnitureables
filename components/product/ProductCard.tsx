@@ -7,10 +7,12 @@ import { useCartStore } from "@/store/cart";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { Product } from "@/types/product";
 import { getProductThumbnail } from "@/lib/utils";
+import { useAddToCart } from "@/hooks/useAddToCart";
 
 
 export default function ProductCard({ product }: { product: Product }) {
-  const addToCart = useCartStore((state) => state.addToCart);
+
+  const addToCart = useAddToCart();
 
   const isNewProduct = (() => {
     const rawDate = product.createdAt;

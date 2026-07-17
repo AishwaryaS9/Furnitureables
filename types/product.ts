@@ -1,40 +1,41 @@
 export type MediaType = "IMAGE" | "VIDEO";
 
 export interface ProductMedia {
-  id?: string;
+  id: string;
   url: string;
-  type: "IMAGE" | "VIDEO";
-  altText?: string;
+  type: MediaType;
+  altText: string | null;
   sortOrder: number;
 }
 
-export type ProductMediaInput = {
+export interface ProductMediaInput {
   url: string;
   type: MediaType;
   altText?: string;
-  sortOrder: number;
-};
+  sortOrder?: number;
+}
 
 export interface Product {
   id: string;
+
   title: string;
-  description?: string;
+  description: string | null;
+
   price: number;
   stock: number;
+
   sku: string;
 
-  image?: string;
+  media: ProductMedia[];
 
-  media?: ProductMedia[];
+  type: string;
+  material: string;
+  color: string;
+  room: string;
+  dimensions: string;
 
-  material?: string;
-  color?: string;
-  type?: string;
-  room?: string;
-  dimensions?: string;
-
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export type ProductUploadInput = {
@@ -61,10 +62,12 @@ export type ProductUploadInput = {
 
 export interface ProductFormData {
   title: string;
-  description?: string;
+  description: string;
 
   price: number;
   stock: number;
+
+  sku: string;
 
   media: ProductMediaInput[];
 
@@ -73,5 +76,48 @@ export interface ProductFormData {
   color: string;
   room: string;
   dimensions: string;
+}
+
+export interface ProductsArgs {
+  filter?: {
+    category?: string;
+    room?: string;
+    material?: string;
+    color?: string;
+    search?: string;
+    excludeId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    sortBy?: string;
+  };
+  page?: number;
+  limit?: number;
+  related?: boolean;
+}
+
+
+export interface CreateProductInput {
+  title: string;
+  description?: string;
+  price: number;
+  stock: number;
   sku: string;
+  type: string;
+  material: string;
+  color: string;
+  room: string;
+  dimensions: string;
+  media?: ProductMediaInput[];
+}
+
+
+export interface UpdateProductInput extends CreateProductInput { }
+
+export interface CreateProductArgs {
+  input: CreateProductInput;
+}
+
+export interface UpdateProductArgs {
+  id: string;
+  input: UpdateProductInput;
 }
