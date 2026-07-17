@@ -38,6 +38,28 @@ export interface Product {
   updatedAt: string | Date;
 }
 
+export type ProductUploadInput = {
+  title: string;
+  description?: string | null;
+
+  price: number;
+  stock: number;
+
+  media?: {
+    url: string;
+    type: MediaType;
+    altText?: string;
+    sortOrder?: number;
+  }[];
+
+  type: string;
+  material: string;
+  color: string;
+  room: string;
+  dimensions: string;
+  sku: string;
+};
+
 export interface ProductFormData {
   title: string;
   description: string;

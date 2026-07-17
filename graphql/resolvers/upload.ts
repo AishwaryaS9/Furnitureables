@@ -16,7 +16,6 @@ export const uploadResolver = {
             let failed = 0;
 
             for (const product of products) {
-                console.log("Upload products", product);
                 try {
                     const existing = await prisma.product.findUnique({
                         where: {
