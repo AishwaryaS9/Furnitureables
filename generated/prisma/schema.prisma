@@ -77,14 +77,15 @@ model Address {
   id           String   @id @default(cuid())
   userId       String
   fullName     String
+  phoneCode    String   @default("+91")
   phone        String
   addressLine1 String
   addressLine2 String?
+  landmark     String?
   city         String
   state        String
   postalCode   String
   country      String
-  landmark     String?
   isDefault    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

@@ -92,8 +92,8 @@ export const typeDefs = /* GraphQL */ `
     id: String!
 
     fullName: String!
+    phoneCode: String!
     phone: String!
-
     addressLine1: String!
     addressLine2: String
     landmark: String
@@ -273,8 +273,8 @@ input CartItemInput {
 input AddressInput {
   fullName: String!
 
+  phoneCode: String!
   phone: String!
-
   addressLine1: String!
   addressLine2: String
   landmark: String
@@ -290,12 +290,12 @@ input AddressInput {
 
 input UpdateAddressInput {
   fullName: String
-
+  phoneCode: String
   phone: String
 
   addressLine1: String
   addressLine2: String
-
+  landmark: String
   city: String
   state: String
 

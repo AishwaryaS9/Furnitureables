@@ -62,7 +62,7 @@ export default function AddressCard({
 
                         <Phone className="h-4 w-4" />
 
-                        {address.phone}
+                        {address.phoneCode} {address.phone}
 
                     </div>
 

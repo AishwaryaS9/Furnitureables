@@ -2,8 +2,8 @@ export interface Address {
     id: string;
 
     fullName: string;
+    phoneCode: string;
     phone: string;
-
     addressLine1: string;
     addressLine2?: string | null;
     landmark?: string | null;
@@ -18,10 +18,11 @@ export interface Address {
     updatedAt: string;
 }
 
+
 export interface AddressInput {
     fullName: string;
+    phoneCode: string;
     phone: string;
-
     addressLine1: string;
     addressLine2?: string;
     landmark?: string;
@@ -29,7 +30,6 @@ export interface AddressInput {
     state: string;
     postalCode: string;
     country: string;
-
     isDefault?: boolean;
 }
 

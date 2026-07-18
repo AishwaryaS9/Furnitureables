@@ -40,7 +40,7 @@ export default function RootLayout({
           <QueryProvider>
             <CartSync />
             {children}
-          <Toaster position="top-right" richColors />
+            <Toaster position="top-right" richColors />
           </QueryProvider>
         </body>
       </html>
