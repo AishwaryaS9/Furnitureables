@@ -9,7 +9,8 @@ import {
   Menu,
   X,
   ChevronDown,
-  PackageIcon
+  PackageIcon,
+  MapPinned
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useUser, useClerk, UserButton } from "@clerk/nextjs";
@@ -125,6 +126,11 @@ export default function Navbar() {
                 >
                   <UserButton.MenuItems>
                     <UserButton.Action label="My Orders" onClick={() => router.push('/orders')} labelIcon={<PackageIcon size={16} />} />
+                    <UserButton.Link
+                      label="My Addresses"
+                      labelIcon={<MapPinned className="h-4 w-4" />}
+                      href="/addresses"
+                    />
                   </UserButton.MenuItems>
                 </UserButton>
               )}

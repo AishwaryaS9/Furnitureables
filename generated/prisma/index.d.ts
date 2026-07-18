@@ -7484,6 +7484,7 @@ export namespace Prisma {
     state: string | null
     postalCode: string | null
     country: string | null
+    landmark: string | null
     isDefault: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7500,6 +7501,7 @@ export namespace Prisma {
     state: string | null
     postalCode: string | null
     country: string | null
+    landmark: string | null
     isDefault: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7516,6 +7518,7 @@ export namespace Prisma {
     state: number
     postalCode: number
     country: number
+    landmark: number
     isDefault: number
     createdAt: number
     updatedAt: number
@@ -7534,6 +7537,7 @@ export namespace Prisma {
     state?: true
     postalCode?: true
     country?: true
+    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7550,6 +7554,7 @@ export namespace Prisma {
     state?: true
     postalCode?: true
     country?: true
+    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7566,6 +7571,7 @@ export namespace Prisma {
     state?: true
     postalCode?: true
     country?: true
+    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7655,6 +7661,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark: string | null
     isDefault: boolean
     createdAt: Date
     updatedAt: Date
@@ -7688,6 +7695,7 @@ export namespace Prisma {
     state?: boolean
     postalCode?: boolean
     country?: boolean
+    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7707,6 +7715,7 @@ export namespace Prisma {
     state?: boolean
     postalCode?: boolean
     country?: boolean
+    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7724,6 +7733,7 @@ export namespace Prisma {
     state?: boolean
     postalCode?: boolean
     country?: boolean
+    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7741,12 +7751,13 @@ export namespace Prisma {
     state?: boolean
     postalCode?: boolean
     country?: boolean
+    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fullName" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
+  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fullName" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "landmark" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
   export type AddressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     orders?: boolean | Address$ordersArgs<ExtArgs>
@@ -7776,6 +7787,7 @@ export namespace Prisma {
       state: string
       postalCode: string
       country: string
+      landmark: string | null
       isDefault: boolean
       createdAt: Date
       updatedAt: Date
@@ -8214,6 +8226,7 @@ export namespace Prisma {
     readonly state: FieldRef<"Address", 'String'>
     readonly postalCode: FieldRef<"Address", 'String'>
     readonly country: FieldRef<"Address", 'String'>
+    readonly landmark: FieldRef<"Address", 'String'>
     readonly isDefault: FieldRef<"Address", 'Boolean'>
     readonly createdAt: FieldRef<"Address", 'DateTime'>
     readonly updatedAt: FieldRef<"Address", 'DateTime'>
@@ -11367,6 +11380,7 @@ export namespace Prisma {
     state: 'state',
     postalCode: 'postalCode',
     country: 'country',
+    landmark: 'landmark',
     isDefault: 'isDefault',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -11938,6 +11952,7 @@ export namespace Prisma {
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
+    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -11956,6 +11971,7 @@ export namespace Prisma {
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
+    landmark?: SortOrderInput | SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11977,6 +11993,7 @@ export namespace Prisma {
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
+    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -11995,6 +12012,7 @@ export namespace Prisma {
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
+    landmark?: SortOrderInput | SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12017,6 +12035,7 @@ export namespace Prisma {
     state?: StringWithAggregatesFilter<"Address"> | string
     postalCode?: StringWithAggregatesFilter<"Address"> | string
     country?: StringWithAggregatesFilter<"Address"> | string
+    landmark?: StringNullableWithAggregatesFilter<"Address"> | string | null
     isDefault?: BoolWithAggregatesFilter<"Address"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Address"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Address"> | Date | string
@@ -12659,6 +12678,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12677,6 +12697,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12693,6 +12714,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12711,6 +12733,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12728,6 +12751,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12743,6 +12767,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12759,6 +12784,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13492,6 +13518,7 @@ export namespace Prisma {
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
+    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13508,6 +13535,7 @@ export namespace Prisma {
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
+    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13524,6 +13552,7 @@ export namespace Prisma {
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
+    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14537,6 +14566,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14553,6 +14583,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14690,6 +14721,7 @@ export namespace Prisma {
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
+    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -15419,6 +15451,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15436,6 +15469,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15526,6 +15560,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15543,6 +15578,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15837,6 +15873,7 @@ export namespace Prisma {
     state: string
     postalCode: string
     country: string
+    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15882,6 +15919,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15898,6 +15936,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15914,6 +15953,7 @@ export namespace Prisma {
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

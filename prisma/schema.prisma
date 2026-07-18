@@ -84,6 +84,7 @@ model Address {
   state        String
   postalCode   String
   country      String
+  landmark     String?
   isDefault    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

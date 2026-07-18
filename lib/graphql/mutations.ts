@@ -34,3 +34,40 @@ export const SAVE_CART = gql`
     }
   }
 `;
+
+export const CREATE_ADDRESS = gql`
+  mutation CreateAddress($input: AddressInput!) {
+    createAddress(input: $input) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_ADDRESS = gql`
+  mutation UpdateAddress(
+    $id: String!
+    $input: AddressInput!
+  ) {
+    updateAddress(
+      id: $id
+      input: $input
+    ) {
+      id
+    }
+  }
+`;
+
+export const DELETE_ADDRESS = gql`
+  mutation DeleteAddress($id: String!) {
+    deleteAddress(id: $id)
+  }
+`;
+
+export const SET_DEFAULT_ADDRESS = gql`
+  mutation SetDefaultAddress($id: String!) {
+    setDefaultAddress(id: $id) {
+      id
+      isDefault
+    }
+  }
+`;

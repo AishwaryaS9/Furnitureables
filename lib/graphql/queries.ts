@@ -113,3 +113,26 @@ export const GET_CART = gql`
     }
   }
 `;
+
+export const GET_ADDRESSES = gql`
+  query GetAddresses {
+    addresses {
+      id
+      fullName
+      phone
+
+      addressLine1
+      addressLine2
+
+      city
+      state
+      postalCode
+      country
+
+      isDefault
+
+      createdAt
+      updatedAt
+    }
+  }
+`;

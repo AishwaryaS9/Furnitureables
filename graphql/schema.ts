@@ -96,6 +96,7 @@ export const typeDefs = /* GraphQL */ `
 
     addressLine1: String!
     addressLine2: String
+    landmark: String
 
     city: String!
     state: String!
@@ -264,10 +265,46 @@ input UpdateProductInput {
   sku: String
 }
 
-  input CartItemInput {
+input CartItemInput {
     productId: String!
     quantity: Int!
-  }
+}
+
+input AddressInput {
+  fullName: String!
+
+  phone: String!
+
+  addressLine1: String!
+  addressLine2: String
+  landmark: String
+
+  city: String!
+  state: String!
+
+  postalCode: String!
+  country: String!
+
+  isDefault: Boolean
+}
+
+input UpdateAddressInput {
+  fullName: String
+
+  phone: String
+
+  addressLine1: String
+  addressLine2: String
+
+  city: String
+  state: String
+
+  postalCode: String
+  country: String
+
+  isDefault: Boolean
+}
+
 
   ############################
   ## QUERIES
@@ -319,5 +356,22 @@ input UpdateProductInput {
     deleteProduct(
       id: String!
     ): Boolean!
+
+    createAddress(
+      input: AddressInput!
+    ): Address!
+
+    updateAddress(
+      id: String!
+      input: UpdateAddressInput!
+    ): Address!
+
+    deleteAddress(
+      id: String!
+    ): Boolean!
+
+    setDefaultAddress(
+      id: String!
+    ): Address!
   }
 `;
