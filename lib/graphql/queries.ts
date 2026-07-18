@@ -119,6 +119,7 @@ export const GET_ADDRESSES = gql`
     addresses {
       id
       fullName
+      phoneCode
       phone
 
       addressLine1

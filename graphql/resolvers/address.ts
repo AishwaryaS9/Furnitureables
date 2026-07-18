@@ -24,53 +24,39 @@ async function getCurrentUser() {
 
 export const addressResolver = {
     Query: {
+        // addresses: async () => {
+        //     const user = await getCurrentUser();
+
+        //     return prisma.address.findMany({
+        //         where: {
+        //             userId: user.id,
+        //         },
+        //         orderBy: [
+        //             {
+        //                 isDefault: "desc",
+        //             },
+        //             {
+        //                 createdAt: "desc",
+        //             },
+        //         ],
+        //     });
+        // },
         addresses: async () => {
             const user = await getCurrentUser();
 
-            return prisma.address.findMany({
+            const addresses = await prisma.address.findMany({
                 where: {
                     userId: user.id,
                 },
-                orderBy: [
-                    {
-                        isDefault: "desc",
-                    },
-                    {
-                        createdAt: "desc",
-                    },
-                ],
             });
+
+            console.log(addresses);
+
+            return addresses;
         },
     },
 
     Mutation: {
-        // createAddress: async (
-        //     _: unknown,
-        //     { input }: { input: AddressInput }
-        // ) => {
-        //     const user = await getCurrentUser();
-
-        //     return prisma.$transaction(async (tx) => {
-        //         if (input.isDefault) {
-        //             await tx.address.updateMany({
-        //                 where: {
-        //                     userId: user.id,
-        //                 },
-        //                 data: {
-        //                     isDefault: false,
-        //                 },
-        //             });
-        //         }
-
-        //         return tx.address.create({
-        //             data: {
-        //                 ...input,
-        //                 userId: user.id,
-        //             },
-        //         });
-        //     });
-        // },
-
         createAddress: async (
             _: unknown,
             { input }: { input: AddressInput }
@@ -151,32 +137,6 @@ export const addressResolver = {
                 });
             });
         },
-
-        // deleteAddress: async (
-        //     _: unknown,
-        //     { id }: { id: string }
-        // ) => {
-        //     const user = await getCurrentUser();
-
-        //     const existing = await prisma.address.findFirst({
-        //         where: {
-        //             id,
-        //             userId: user.id,
-        //         },
-        //     });
-
-        //     if (!existing) {
-        //         throw new Error("Address not found");
-        //     }
-
-        //     await prisma.address.delete({
-        //         where: {
-        //             id,
-        //         },
-        //     });
-
-        //     return true;
-        // },
 
         deleteAddress: async (
             _: unknown,

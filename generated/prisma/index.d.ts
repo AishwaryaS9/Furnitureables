@@ -7477,14 +7477,15 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     fullName: string | null
+    phoneCode: string | null
     phone: string | null
     addressLine1: string | null
     addressLine2: string | null
+    landmark: string | null
     city: string | null
     state: string | null
     postalCode: string | null
     country: string | null
-    landmark: string | null
     isDefault: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7494,14 +7495,15 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     fullName: string | null
+    phoneCode: string | null
     phone: string | null
     addressLine1: string | null
     addressLine2: string | null
+    landmark: string | null
     city: string | null
     state: string | null
     postalCode: string | null
     country: string | null
-    landmark: string | null
     isDefault: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7511,14 +7513,15 @@ export namespace Prisma {
     id: number
     userId: number
     fullName: number
+    phoneCode: number
     phone: number
     addressLine1: number
     addressLine2: number
+    landmark: number
     city: number
     state: number
     postalCode: number
     country: number
-    landmark: number
     isDefault: number
     createdAt: number
     updatedAt: number
@@ -7530,14 +7533,15 @@ export namespace Prisma {
     id?: true
     userId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
+    landmark?: true
     city?: true
     state?: true
     postalCode?: true
     country?: true
-    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7547,14 +7551,15 @@ export namespace Prisma {
     id?: true
     userId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
+    landmark?: true
     city?: true
     state?: true
     postalCode?: true
     country?: true
-    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7564,14 +7569,15 @@ export namespace Prisma {
     id?: true
     userId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
+    landmark?: true
     city?: true
     state?: true
     postalCode?: true
     country?: true
-    landmark?: true
     isDefault?: true
     createdAt?: true
     updatedAt?: true
@@ -7654,14 +7660,15 @@ export namespace Prisma {
     id: string
     userId: string
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2: string | null
+    landmark: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark: string | null
     isDefault: boolean
     createdAt: Date
     updatedAt: Date
@@ -7688,14 +7695,15 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
+    landmark?: boolean
     city?: boolean
     state?: boolean
     postalCode?: boolean
     country?: boolean
-    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7708,14 +7716,15 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
+    landmark?: boolean
     city?: boolean
     state?: boolean
     postalCode?: boolean
     country?: boolean
-    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7726,14 +7735,15 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
+    landmark?: boolean
     city?: boolean
     state?: boolean
     postalCode?: boolean
     country?: boolean
-    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7744,20 +7754,21 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
+    landmark?: boolean
     city?: boolean
     state?: boolean
     postalCode?: boolean
     country?: boolean
-    landmark?: boolean
     isDefault?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fullName" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "landmark" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
+  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fullName" | "phoneCode" | "phone" | "addressLine1" | "addressLine2" | "landmark" | "city" | "state" | "postalCode" | "country" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
   export type AddressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     orders?: boolean | Address$ordersArgs<ExtArgs>
@@ -7780,14 +7791,15 @@ export namespace Prisma {
       id: string
       userId: string
       fullName: string
+      phoneCode: string
       phone: string
       addressLine1: string
       addressLine2: string | null
+      landmark: string | null
       city: string
       state: string
       postalCode: string
       country: string
-      landmark: string | null
       isDefault: boolean
       createdAt: Date
       updatedAt: Date
@@ -8219,14 +8231,15 @@ export namespace Prisma {
     readonly id: FieldRef<"Address", 'String'>
     readonly userId: FieldRef<"Address", 'String'>
     readonly fullName: FieldRef<"Address", 'String'>
+    readonly phoneCode: FieldRef<"Address", 'String'>
     readonly phone: FieldRef<"Address", 'String'>
     readonly addressLine1: FieldRef<"Address", 'String'>
     readonly addressLine2: FieldRef<"Address", 'String'>
+    readonly landmark: FieldRef<"Address", 'String'>
     readonly city: FieldRef<"Address", 'String'>
     readonly state: FieldRef<"Address", 'String'>
     readonly postalCode: FieldRef<"Address", 'String'>
     readonly country: FieldRef<"Address", 'String'>
-    readonly landmark: FieldRef<"Address", 'String'>
     readonly isDefault: FieldRef<"Address", 'Boolean'>
     readonly createdAt: FieldRef<"Address", 'DateTime'>
     readonly updatedAt: FieldRef<"Address", 'DateTime'>
@@ -11373,14 +11386,15 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     fullName: 'fullName',
+    phoneCode: 'phoneCode',
     phone: 'phone',
     addressLine1: 'addressLine1',
     addressLine2: 'addressLine2',
+    landmark: 'landmark',
     city: 'city',
     state: 'state',
     postalCode: 'postalCode',
     country: 'country',
-    landmark: 'landmark',
     isDefault: 'isDefault',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -11945,14 +11959,15 @@ export namespace Prisma {
     id?: StringFilter<"Address"> | string
     userId?: StringFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
+    phoneCode?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     addressLine1?: StringFilter<"Address"> | string
     addressLine2?: StringNullableFilter<"Address"> | string | null
+    landmark?: StringNullableFilter<"Address"> | string | null
     city?: StringFilter<"Address"> | string
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
-    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -11964,14 +11979,15 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
     city?: SortOrder
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
-    landmark?: SortOrderInput | SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11986,14 +12002,15 @@ export namespace Prisma {
     NOT?: AddressWhereInput | AddressWhereInput[]
     userId?: StringFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
+    phoneCode?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     addressLine1?: StringFilter<"Address"> | string
     addressLine2?: StringNullableFilter<"Address"> | string | null
+    landmark?: StringNullableFilter<"Address"> | string | null
     city?: StringFilter<"Address"> | string
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
-    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -12005,14 +12022,15 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
     city?: SortOrder
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
-    landmark?: SortOrderInput | SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12028,14 +12046,15 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Address"> | string
     userId?: StringWithAggregatesFilter<"Address"> | string
     fullName?: StringWithAggregatesFilter<"Address"> | string
+    phoneCode?: StringWithAggregatesFilter<"Address"> | string
     phone?: StringWithAggregatesFilter<"Address"> | string
     addressLine1?: StringWithAggregatesFilter<"Address"> | string
     addressLine2?: StringNullableWithAggregatesFilter<"Address"> | string | null
+    landmark?: StringNullableWithAggregatesFilter<"Address"> | string | null
     city?: StringWithAggregatesFilter<"Address"> | string
     state?: StringWithAggregatesFilter<"Address"> | string
     postalCode?: StringWithAggregatesFilter<"Address"> | string
     country?: StringWithAggregatesFilter<"Address"> | string
-    landmark?: StringNullableWithAggregatesFilter<"Address"> | string | null
     isDefault?: BoolWithAggregatesFilter<"Address"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Address"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Address"> | Date | string
@@ -12671,14 +12690,15 @@ export namespace Prisma {
   export type AddressCreateInput = {
     id?: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12690,14 +12710,15 @@ export namespace Prisma {
     id?: string
     userId: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12707,14 +12728,15 @@ export namespace Prisma {
   export type AddressUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12726,14 +12748,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12744,14 +12767,15 @@ export namespace Prisma {
     id?: string
     userId: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12760,14 +12784,15 @@ export namespace Prisma {
   export type AddressUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12777,14 +12802,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13511,14 +13537,15 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
+    landmark?: SortOrder
     city?: SortOrder
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
-    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13528,14 +13555,15 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
+    landmark?: SortOrder
     city?: SortOrder
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
-    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13545,14 +13573,15 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
+    landmark?: SortOrder
     city?: SortOrder
     state?: SortOrder
     postalCode?: SortOrder
     country?: SortOrder
-    landmark?: SortOrder
     isDefault?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14559,14 +14588,15 @@ export namespace Prisma {
   export type AddressCreateWithoutUserInput = {
     id?: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14576,14 +14606,15 @@ export namespace Prisma {
   export type AddressUncheckedCreateWithoutUserInput = {
     id?: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14714,14 +14745,15 @@ export namespace Prisma {
     id?: StringFilter<"Address"> | string
     userId?: StringFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
+    phoneCode?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     addressLine1?: StringFilter<"Address"> | string
     addressLine2?: StringNullableFilter<"Address"> | string | null
+    landmark?: StringNullableFilter<"Address"> | string | null
     city?: StringFilter<"Address"> | string
     state?: StringFilter<"Address"> | string
     postalCode?: StringFilter<"Address"> | string
     country?: StringFilter<"Address"> | string
-    landmark?: StringNullableFilter<"Address"> | string | null
     isDefault?: BoolFilter<"Address"> | boolean
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
@@ -15444,14 +15476,15 @@ export namespace Prisma {
   export type AddressCreateWithoutOrdersInput = {
     id?: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15462,14 +15495,15 @@ export namespace Prisma {
     id?: string
     userId: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15553,14 +15587,15 @@ export namespace Prisma {
   export type AddressUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15571,14 +15606,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15866,14 +15902,15 @@ export namespace Prisma {
   export type AddressCreateManyUserInput = {
     id?: string
     fullName: string
+    phoneCode?: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
+    landmark?: string | null
     city: string
     state: string
     postalCode: string
     country: string
-    landmark?: string | null
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15912,14 +15949,15 @@ export namespace Prisma {
   export type AddressUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15929,14 +15967,15 @@ export namespace Prisma {
   export type AddressUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15946,14 +15985,15 @@ export namespace Prisma {
   export type AddressUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
-    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
