@@ -21,13 +21,16 @@ export function useUpdateAddress() {
             id,
             input,
         }: Variables) => {
-            return graphqlClient.request<UpdateAddressResponse>(
-                UPDATE_ADDRESS,
-                {
-                    id,
-                    input,
-                }
-            );
+            const response =
+                await graphqlClient.request<UpdateAddressResponse>(
+                    UPDATE_ADDRESS,
+                    {
+                        id,
+                        input,
+                    }
+                );
+
+            return response.updateAddress;
         },
 
         onSuccess() {

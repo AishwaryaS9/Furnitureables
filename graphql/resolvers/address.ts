@@ -24,35 +24,22 @@ async function getCurrentUser() {
 
 export const addressResolver = {
     Query: {
-        // addresses: async () => {
-        //     const user = await getCurrentUser();
-
-        //     return prisma.address.findMany({
-        //         where: {
-        //             userId: user.id,
-        //         },
-        //         orderBy: [
-        //             {
-        //                 isDefault: "desc",
-        //             },
-        //             {
-        //                 createdAt: "desc",
-        //             },
-        //         ],
-        //     });
-        // },
         addresses: async () => {
             const user = await getCurrentUser();
 
-            const addresses = await prisma.address.findMany({
+            return prisma.address.findMany({
                 where: {
                     userId: user.id,
                 },
+                orderBy: [
+                    {
+                        isDefault: "desc",
+                    },
+                    {
+                        createdAt: "desc",
+                    },
+                ],
             });
-
-            console.log(addresses);
-
-            return addresses;
         },
     },
 

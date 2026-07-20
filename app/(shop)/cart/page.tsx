@@ -4,7 +4,7 @@ import { useCartStore } from "@/store/cart";
 import Link from "next/link";
 import { ShoppingBag, ArrowLeft } from "lucide-react";
 import CartItem from "@/components/cart/CartItem";
-import OrderSummary from "@/components/cart/OrderSummary";
+import CartSummary from "@/components/cart/CartSummary";
 
 export default function CartPage() {
   const items = useCartStore((s) => s.items);
@@ -62,7 +62,7 @@ export default function CartPage() {
 
             {/* Right Column */}
             <div className="lg:col-span-5 xl:col-span-4">
-              <OrderSummary />
+              <CartSummary />
 
               <div className="mt-4 text-center sm:hidden">
                 <Link

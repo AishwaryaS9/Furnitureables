@@ -20,30 +20,31 @@ interface AddressDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   address?: Address;
+  onSuccess?: (address: Address) => void;
 }
 
-export default function AddressDialog({
-  open,
-  onOpenChange,
-  address,
-}: AddressDialogProps) {
+export default function AddressDialog({ open, onOpenChange, address, onSuccess }: AddressDialogProps) {
   const createAddress = useCreateAddress();
   const updateAddress = useUpdateAddress();
 
   async function handleSubmit(values: AddressInput) {
     try {
+      let savedAddress: Address;
+
       if (address) {
-        await updateAddress.mutateAsync({
+        savedAddress = await updateAddress.mutateAsync({
           id: address.id,
           input: values,
         });
 
         toast.success("Address updated successfully.");
       } else {
-        await createAddress.mutateAsync(values);
+        savedAddress = await createAddress.mutateAsync(values);
 
         toast.success("Address added successfully.");
       }
+
+      onSuccess?.(savedAddress);
 
       onOpenChange(false);
     } catch (err) {
