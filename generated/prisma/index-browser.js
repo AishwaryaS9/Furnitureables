@@ -206,6 +206,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   razorpayOrderId: 'razorpayOrderId',
   razorpayPaymentId: 'razorpayPaymentId',
   fullName: 'fullName',
+  phoneCode: 'phoneCode',
   phone: 'phone',
   addressLine1: 'addressLine1',
   addressLine2: 'addressLine2',

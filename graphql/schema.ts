@@ -305,6 +305,11 @@ input UpdateAddressInput {
   isDefault: Boolean
 }
 
+input PlaceOrderInput {
+  addressId: String!
+  paymentMethod: PaymentMethod!
+}
+
 
   ############################
   ## QUERIES
@@ -373,5 +378,7 @@ input UpdateAddressInput {
     setDefaultAddress(
       id: String!
     ): Address!
+
+    placeOrder(input: PlaceOrderInput!): Order!
   }
 `;

@@ -2,16 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import { Cart } from "@/types/cart";
+import { useCheckoutStore } from "@/store/checkout";
 
 interface OrderSummaryProps {
     cart?: Cart | null;
+
     selectedAddressId?: string;
+
+    onCheckout: () => void | Promise<void>;
+
+    loading?: boolean;
 }
 
-export default function OrderSummary({
-    cart,
-    selectedAddressId,
-}: OrderSummaryProps) {
+export default function OrderSummary({ cart, selectedAddressId, onCheckout, loading }: OrderSummaryProps) {
+
+    const { paymentMethod } = useCheckoutStore();
+
     const items = cart?.items ?? [];
 
     const subtotal = items.reduce(
@@ -94,13 +100,30 @@ export default function OrderSummary({
                     </span>
                 </div>
 
+                <div className="border-t pt-4 text-sm">
+                    <div className="flex justify-between">
+                        <span>Payment</span>
+
+                        <span>
+                            {paymentMethod === "COD"
+                                ? "Cash on Delivery"
+                                : "Card"}
+                        </span>
+                    </div>
+                </div>
+
             </div>
 
             <Button
                 className="mt-8 w-full"
-                disabled={!selectedAddressId || items.length === 0}
+                onClick={onCheckout}
+                disabled={
+                    loading ||
+                    !selectedAddressId ||
+                    items.length === 0
+                }
             >
-                Place Order
+                {loading ? "Placing Order..." : "Place Order"}
             </Button>
 
             {!selectedAddressId && (
