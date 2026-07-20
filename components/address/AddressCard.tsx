@@ -4,46 +4,44 @@ import { Address } from "@/types/address";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, CheckCircle2, MapPin, Phone, User } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AddressCardProps {
     address: Address;
-
-    onEdit?: () => void;
-
-    onDelete?: () => void;
-
-    onSetDefault?: () => void;
-
-    selectable?: boolean;
-
+    mode?: "manage" | "select";
     selected?: boolean;
-
     onSelect?: () => void;
+    onEdit?: () => void;
+    onDelete?: () => void;
+    onSetDefault?: () => void;
 }
 
 export default function AddressCard({
     address,
+    mode,
     onEdit,
     onDelete,
     onSetDefault,
-    selectable = false,
     selected = false,
     onSelect,
 }: AddressCardProps) {
+
+    const isSelectMode = mode === "select";
+
     return (
+
         <div
-            onClick={selectable ? onSelect : undefined}
-            className={`rounded-2xl border bg-white p-6 transition-all 
-                ${selected
+            onClick={isSelectMode ? onSelect : undefined}
+            className={cn(
+                "rounded-2xl border bg-white p-6 transition-all",
+
+                isSelectMode &&
+                "cursor-pointer hover:border-zinc-900",
+
+                selected
                     ? "border-zinc-900 ring-2 ring-zinc-900/10"
                     : "border-zinc-200"
-                }
-
-                ${selectable
-                    ? "cursor-pointer hover:border-zinc-900"
-                    : ""
-                }
-            `}
+            )}
         >
             <div className="flex items-start justify-between">
                 <div className="space-y-1">
@@ -68,10 +66,18 @@ export default function AddressCard({
 
                 </div>
 
-                {address.isDefault && (
-                    <Badge>
-                        Default
-                    </Badge>
+                {isSelectMode ? (
+                    selected && (
+                        <Badge>
+                            Selected
+                        </Badge>
+                    )
+                ) : (
+                    address.isDefault && (
+                        <Badge>
+                            Default
+                        </Badge>
+                    )
                 )}
             </div>
 
@@ -103,43 +109,57 @@ export default function AddressCard({
 
             </div>
 
-            {!selectable && (
-                <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-6 flex flex-wrap gap-2">
 
-                    {!address.isDefault && (
-                        <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={onSetDefault}
-                        >
-                            <CheckCircle2 className="mr-2 h-4 w-4" />
-
-                            Set Default
-                        </Button>
-                    )}
+                {isSelectMode ? (
 
                     <Button
                         size="sm"
                         variant="outline"
-                        onClick={onEdit}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit?.();
+                        }}
                     >
                         <Pencil className="mr-2 h-4 w-4" />
-
                         Edit
                     </Button>
 
-                    <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={onDelete}
-                    >
-                        <Trash2 className="mr-2 h-4 w-4" />
+                ) : (
 
-                        Delete
-                    </Button>
+                    <>
 
-                </div>
-            )}
+                        {!address.isDefault && (
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={onSetDefault}
+                            >
+                                <CheckCircle2 className="mr-2 h-4 w-4" />
+                                Set Default
+                            </Button>
+                        )}
+
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={onEdit}
+                        >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                        </Button>
+
+                        <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={onDelete}
+                        >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                        </Button>
+                    </>
+                )}
+            </div>
         </div>
     );
 }

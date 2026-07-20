@@ -13,12 +13,15 @@ export function useCreateAddress() {
 
     return useMutation({
         mutationFn: async (input: AddressInput) => {
-            return graphqlClient.request<AddressMutationResponse>(
-                CREATE_ADDRESS,
-                {
-                    input,
-                }
-            );
+            const response =
+                await graphqlClient.request<AddressMutationResponse>(
+                    CREATE_ADDRESS,
+                    {
+                        input,
+                    }
+                );
+
+            return response.createAddress;
         },
 
         onSuccess() {

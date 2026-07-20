@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useCartStore } from "@/store/cart";
 import { ShieldCheck, Truck, Tag } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
-
-export default function OrderSummary() {
+export default function CartSummary() {
     const items = useCartStore((s) => s.items);
     const { user } = useUser();
     const { openSignIn } = useClerk();
+    const router = useRouter();
     const [couponCode, setCouponCode] = useState("");
     const [isApplied, setIsApplied] = useState(false);
 
@@ -40,12 +41,14 @@ export default function OrderSummary() {
         }
 
         // Proceed to your actual checkout logic (e.g., Stripe redirect)
-        console.log("Proceeding to checkout...");
+        router.push("/checkout")
+        // console.log("Proceeding to checkout...");
+
     };
 
     return (
         <div className="bg-white border border-zinc-200/80 rounded-2xl p-6 lg:p-8 shadow-xs space-y-6 sticky top-28">
-            <h2 className="text-lg font-normal tracking-tight font-serif text-zinc-900">Order Summary</h2>
+            <h2 className="text-lg font-normal tracking-tight font-serif text-zinc-900">Cart Summary</h2>
 
             {/* Free Delivery Banner */}
             {subtotal > 0 && subtotal < shippingThreshold && (
@@ -147,7 +150,7 @@ export default function OrderSummary() {
             {/* Checkout Button */}
             <button
                 disabled={items.length === 0}
-                onClick={handleCheckout} 
+                onClick={handleCheckout}
                 className="w-full bg-zinc-900 text-white hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 font-semibold text-xs uppercase tracking-widest py-4 rounded-xl shadow-xs active:scale-[0.99] transition-all cursor-pointer disabled:cursor-not-allowed"
             >
                 {user ? "Proceed to Secure Checkout" : "Login to Checkout"}
