@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Country } from "country-state-city";
-
+import ReactCountryFlag from "react-country-flag";
 import {
     Popover,
     PopoverContent,
@@ -71,7 +71,22 @@ export default function PhoneCodeSelect({
                     />
                 }
             >
-                {selected ? selected.phoneCode : "Code"}
+                <div className="flex items-center gap-2">
+                    {selected && (
+                        <ReactCountryFlag
+                            countryCode={selected.isoCode}
+                            svg
+                            style={{
+                                width: "1.25rem",
+                                height: "1.25rem",
+                            }}
+                        />
+                    )}
+
+                    <span>
+                        {selected ? selected.phoneCode : "Code"}
+                    </span>
+                </div>
 
                 <ChevronsUpDown className="h-4 w-4 opacity-50" />
             </PopoverTrigger>
@@ -97,14 +112,25 @@ export default function PhoneCodeSelect({
                             }}
                             className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left hover:bg-muted transition-colors"
                         >
-                            <div>
-                                <p className="text-sm font-medium">
-                                    {country.name}
-                                </p>
+                            <div className="flex items-center gap-3">
+                                <ReactCountryFlag
+                                    countryCode={country.isoCode}
+                                    svg
+                                    style={{
+                                        width: "1.25rem",
+                                        height: "1.25rem",
+                                    }}
+                                />
 
-                                <p className="text-xs text-muted-foreground">
-                                    {country.phoneCode}
-                                </p>
+                                <div>
+                                    <p className="text-sm font-medium">
+                                        {country.name}
+                                    </p>
+
+                                    <p className="text-xs text-muted-foreground">
+                                        {country.phoneCode}
+                                    </p>
+                                </div>
                             </div>
 
                             <Check
