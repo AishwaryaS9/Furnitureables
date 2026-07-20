@@ -8732,6 +8732,7 @@ export namespace Prisma {
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
     fullName: string | null
+    phoneCode: string | null
     phone: string | null
     addressLine1: string | null
     addressLine2: string | null
@@ -8763,6 +8764,7 @@ export namespace Prisma {
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
     fullName: string | null
+    phoneCode: string | null
     phone: string | null
     addressLine1: string | null
     addressLine2: string | null
@@ -8794,6 +8796,7 @@ export namespace Prisma {
     razorpayOrderId: number
     razorpayPaymentId: number
     fullName: number
+    phoneCode: number
     phone: number
     addressLine1: number
     addressLine2: number
@@ -8843,6 +8846,7 @@ export namespace Prisma {
     razorpayOrderId?: true
     razorpayPaymentId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
@@ -8874,6 +8878,7 @@ export namespace Prisma {
     razorpayOrderId?: true
     razorpayPaymentId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
@@ -8905,6 +8910,7 @@ export namespace Prisma {
     razorpayOrderId?: true
     razorpayPaymentId?: true
     fullName?: true
+    phoneCode?: true
     phone?: true
     addressLine1?: true
     addressLine2?: true
@@ -9023,6 +9029,7 @@ export namespace Prisma {
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2: string | null
@@ -9073,6 +9080,7 @@ export namespace Prisma {
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
@@ -9108,6 +9116,7 @@ export namespace Prisma {
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
@@ -9141,6 +9150,7 @@ export namespace Prisma {
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
@@ -9174,6 +9184,7 @@ export namespace Prisma {
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
     fullName?: boolean
+    phoneCode?: boolean
     phone?: boolean
     addressLine1?: boolean
     addressLine2?: boolean
@@ -9187,7 +9198,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "subtotal" | "shipping" | "tax" | "discount" | "total" | "currency" | "status" | "paymentStatus" | "paymentMethod" | "stripePaymentIntentId" | "razorpayOrderId" | "razorpayPaymentId" | "fullName" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "couponCode" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "subtotal" | "shipping" | "tax" | "discount" | "total" | "currency" | "status" | "paymentStatus" | "paymentMethod" | "stripePaymentIntentId" | "razorpayOrderId" | "razorpayPaymentId" | "fullName" | "phoneCode" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "couponCode" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     address?: boolean | Order$addressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -9228,6 +9239,7 @@ export namespace Prisma {
       razorpayOrderId: string | null
       razorpayPaymentId: string | null
       fullName: string
+      phoneCode: string
       phone: string
       addressLine1: string
       addressLine2: string | null
@@ -9682,6 +9694,7 @@ export namespace Prisma {
     readonly razorpayOrderId: FieldRef<"Order", 'String'>
     readonly razorpayPaymentId: FieldRef<"Order", 'String'>
     readonly fullName: FieldRef<"Order", 'String'>
+    readonly phoneCode: FieldRef<"Order", 'String'>
     readonly phone: FieldRef<"Order", 'String'>
     readonly addressLine1: FieldRef<"Order", 'String'>
     readonly addressLine2: FieldRef<"Order", 'String'>
@@ -11421,6 +11434,7 @@ export namespace Prisma {
     razorpayOrderId: 'razorpayOrderId',
     razorpayPaymentId: 'razorpayPaymentId',
     fullName: 'fullName',
+    phoneCode: 'phoneCode',
     phone: 'phone',
     addressLine1: 'addressLine1',
     addressLine2: 'addressLine2',
@@ -12081,6 +12095,7 @@ export namespace Prisma {
     razorpayOrderId?: StringNullableFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableFilter<"Order"> | string | null
     fullName?: StringFilter<"Order"> | string
+    phoneCode?: StringFilter<"Order"> | string
     phone?: StringFilter<"Order"> | string
     addressLine1?: StringFilter<"Order"> | string
     addressLine2?: StringNullableFilter<"Order"> | string | null
@@ -12115,6 +12130,7 @@ export namespace Prisma {
     razorpayOrderId?: SortOrderInput | SortOrder
     razorpayPaymentId?: SortOrderInput | SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrderInput | SortOrder
@@ -12152,6 +12168,7 @@ export namespace Prisma {
     razorpayOrderId?: StringNullableFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableFilter<"Order"> | string | null
     fullName?: StringFilter<"Order"> | string
+    phoneCode?: StringFilter<"Order"> | string
     phone?: StringFilter<"Order"> | string
     addressLine1?: StringFilter<"Order"> | string
     addressLine2?: StringNullableFilter<"Order"> | string | null
@@ -12186,6 +12203,7 @@ export namespace Prisma {
     razorpayOrderId?: SortOrderInput | SortOrder
     razorpayPaymentId?: SortOrderInput | SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrderInput | SortOrder
@@ -12225,6 +12243,7 @@ export namespace Prisma {
     razorpayOrderId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     fullName?: StringWithAggregatesFilter<"Order"> | string
+    phoneCode?: StringWithAggregatesFilter<"Order"> | string
     phone?: StringWithAggregatesFilter<"Order"> | string
     addressLine1?: StringWithAggregatesFilter<"Order"> | string
     addressLine2?: StringNullableWithAggregatesFilter<"Order"> | string | null
@@ -12832,6 +12851,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -12866,6 +12886,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -12896,6 +12917,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12930,6 +12952,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12962,6 +12985,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -12991,6 +13015,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13022,6 +13047,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13639,6 +13665,7 @@ export namespace Prisma {
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
@@ -13678,6 +13705,7 @@ export namespace Prisma {
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
@@ -13709,6 +13737,7 @@ export namespace Prisma {
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
     fullName?: SortOrder
+    phoneCode?: SortOrder
     phone?: SortOrder
     addressLine1?: SortOrder
     addressLine2?: SortOrder
@@ -14666,6 +14695,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -14698,6 +14728,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -14821,6 +14852,7 @@ export namespace Prisma {
     razorpayOrderId?: StringNullableFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableFilter<"Order"> | string | null
     fullName?: StringFilter<"Order"> | string
+    phoneCode?: StringFilter<"Order"> | string
     phone?: StringFilter<"Order"> | string
     addressLine1?: StringFilter<"Order"> | string
     addressLine2?: StringNullableFilter<"Order"> | string | null
@@ -15366,6 +15398,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -15398,6 +15431,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -15687,6 +15721,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -15720,6 +15755,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -15806,6 +15842,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15839,6 +15876,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15933,6 +15971,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -16015,6 +16054,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16047,6 +16087,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16078,6 +16119,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16232,6 +16274,7 @@ export namespace Prisma {
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
     fullName: string
+    phoneCode: string
     phone: string
     addressLine1: string
     addressLine2?: string | null
@@ -16261,6 +16304,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16293,6 +16337,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16324,6 +16369,7 @@ export namespace Prisma {
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    phoneCode?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     addressLine1?: StringFieldUpdateOperationsInput | string
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null

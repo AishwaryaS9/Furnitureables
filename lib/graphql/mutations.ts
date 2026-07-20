@@ -71,3 +71,19 @@ export const SET_DEFAULT_ADDRESS = gql`
     }
   }
 `;
+
+export const PLACE_ORDER = gql`
+  mutation PlaceOrder(
+    $input: PlaceOrderInput!
+  ) {
+    placeOrder(input: $input) {
+      id
+      orderNumber
+      total
+      status
+      paymentStatus
+      paymentMethod
+      createdAt
+    }
+  }
+`;

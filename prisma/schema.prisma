@@ -113,6 +113,7 @@ model Order {
   razorpayOrderId       String?
   razorpayPaymentId     String?
   fullName              String
+  phoneCode             String
   phone                 String
   addressLine1          String
   addressLine2          String?
