@@ -160,9 +160,14 @@ export const orderResolver = {
 
                             paymentMethod: input.paymentMethod,
 
-                            status: "PENDING",
+                            // status: "PENDING",
+                            status: "CONFIRMED",
 
-                            paymentStatus: "PENDING",
+                            // paymentStatus: "PENDING",
+                            paymentStatus:
+                                input.paymentMethod === "COD"
+                                    ? "PENDING"
+                                    : "PAID",
 
                             fullName: address.fullName,
 
@@ -236,6 +241,62 @@ export const orderResolver = {
                 console.error(error);
                 throw error;
             }
+        },
+
+        cancelOrder: async (
+            _: unknown,
+            {
+                id,
+            }: {
+                id: string;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            return prisma.$transaction(async (tx) => {
+                const order = await tx.order.findFirst({
+                    where: {
+                        id,
+                        userId: user.id,
+                    },
+                    include: {
+                        items: true,
+                    },
+                });
+
+                if (!order) {
+                    throw new Error("Order not found.");
+                }
+
+                if (order.status !== "CONFIRMED") {
+                    throw new Error(
+                        "Only confirmed orders can be cancelled."
+                    );
+                }
+
+                // Restore stock
+                for (const item of order.items) {
+                    await tx.product.update({
+                        where: {
+                            id: item.productId,
+                        },
+                        data: {
+                            stock: {
+                                increment: item.quantity,
+                            },
+                        },
+                    });
+                }
+
+                return tx.order.update({
+                    where: {
+                        id: order.id,
+                    },
+                    data: {
+                        status: "CANCELLED",
+                    },
+                });
+            });
         },
     },
 };

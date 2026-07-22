@@ -382,5 +382,7 @@ input PlaceOrderInput {
     ): Address!
 
     placeOrder(input: PlaceOrderInput!): Order!
+
+    cancelOrder(id: String!): Order!
   }
 `;

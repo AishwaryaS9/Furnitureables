@@ -30,13 +30,16 @@ export default function OrderStatusBadge({
     status,
 }: Props) {
     return (
-        <span
-            className={cn(
-                "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
-                statusStyles[status]
-            )}
-        >
-            {status}
-        </span>
+        <>
+            <h3 className="text-sm text-muted-foreground">Order Status:</h3>
+            <span
+                className={cn(
+                    "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
+                    statusStyles[status]
+                )}
+            >
+                {status}
+            </span>
+        </>
     );
 }

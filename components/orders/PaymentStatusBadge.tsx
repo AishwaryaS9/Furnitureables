@@ -26,13 +26,16 @@ export default function PaymentStatusBadge({
     status,
 }: Props) {
     return (
-        <span
-            className={cn(
-                "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
-                styles[status]
-            )}
-        >
-            {status}
-        </span>
+        <>
+            <h3 className="text-sm text-muted-foreground">Payment Status:</h3>
+            <span
+                className={cn(
+                    "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
+                    styles[status]
+                )}
+            >
+                {status}
+            </span>
+        </>
     );
 }

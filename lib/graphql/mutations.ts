@@ -87,3 +87,12 @@ export const PLACE_ORDER = gql`
     }
   }
 `;
+
+export const CANCEL_ORDER = gql`
+  mutation CancelOrder($id: String!) {
+      cancelOrder(id: $id) {
+          id
+          status
+      }
+  }
+`;

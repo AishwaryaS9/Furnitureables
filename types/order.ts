@@ -63,3 +63,7 @@ export interface Order {
 export interface PlaceOrderResponse {
   placeOrder: Order;
 }
+
+export interface CancelOrderResponse {
+  cancelOrder: Order;
+}
