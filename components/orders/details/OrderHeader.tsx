@@ -36,6 +36,10 @@ export default function OrderHeader({
                     <p className="text-sm text-muted-foreground">
                         Placed on {formatOrderDate(order.createdAt)}
                     </p>
+
+                    <p className="text-sm text-muted-foreground">
+                        Payment type: {order.paymentMethod}
+                    </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
