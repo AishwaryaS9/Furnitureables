@@ -137,3 +137,65 @@ export const GET_ADDRESSES = gql`
     }
   }
 `;
+
+export const GET_ORDERS = gql`
+  query Orders {
+    orders {
+      id
+      orderNumber
+      total
+      currency
+      status
+      paymentStatus
+      paymentMethod
+      createdAt
+
+      items {
+        id
+        title
+        image
+        quantity
+        price
+      }
+    }
+  }
+`;
+
+export const GET_ORDER = gql`
+  query Order($id: String!) {
+    order(id: $id) {
+      id
+      orderNumber
+      subtotal
+      shipping
+      tax
+      discount
+      total
+      currency
+      status
+      paymentStatus
+      paymentMethod
+      fullName
+      phone
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      country
+      createdAt
+
+      items {
+        id
+        title
+        image
+        sku
+        quantity
+        price
+        product {
+          id
+        }
+      }
+    }
+  }
+`;

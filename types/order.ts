@@ -5,6 +5,19 @@ export interface PlaceOrderInput {
   paymentMethod: PaymentMethod;
 }
 
+export interface OrderItem {
+  id: string;
+  title: string;
+  image?: string;
+  sku?: string;
+  price: number;
+  quantity: number;
+
+  product?: {
+    id: string;
+  };
+}
+
 export interface Order {
   id: string;
 
@@ -30,8 +43,21 @@ export interface Order {
   tax: number;
   discount: number;
   total: number;
+  currency: string;
+  fullName: string;
+  phone: string;
+
+  addressLine1: string;
+  addressLine2?: string;
+
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
 
   createdAt: string;
+
+  items: OrderItem[];
 }
 
 export interface PlaceOrderResponse {
