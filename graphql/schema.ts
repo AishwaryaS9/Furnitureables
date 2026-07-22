@@ -129,6 +129,8 @@ export const typeDefs = /* GraphQL */ `
     product: Product!
   }
 
+  scalar DateTime
+
   type Order {
     id: String!
 
@@ -167,7 +169,7 @@ export const typeDefs = /* GraphQL */ `
     couponCode: String
     notes: String
 
-    createdAt: String!
+    createdAt: DateTime!
     updatedAt: String!
   }
 
