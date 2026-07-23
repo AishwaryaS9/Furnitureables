@@ -1,20 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { graphqlServerClient } from "@/lib/graphql/server-client";
+import { PRODUCT_BY_ID } from "@/lib/graphql/queries";
+import { ProductResponse } from "@/types/graphql";
 import ProductClient from "./ProductClient";
-
-async function getProduct(id: string) {
-  return prisma.product.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      media: {
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
-    },
-  });
-}
 
 export default async function ProductPage({
   params,
@@ -23,7 +10,14 @@ export default async function ProductPage({
 }) {
   const { id } = await params;
 
-  const product = await getProduct(id);
+  const client = await graphqlServerClient();
+
+  const { product } =
+    await client.request<ProductResponse>(
+      PRODUCT_BY_ID,
+      { id }
+    );
+
   if (!product) {
     return <p className="text-center mt-10">Product not found</p>;
   }

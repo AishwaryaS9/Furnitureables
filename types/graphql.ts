@@ -10,6 +10,10 @@ export interface OrderResponse {
     order: Order;
 }
 
+export interface ProductResponse {
+    product: Product | null;
+}
+
 export interface ProductList {
     items: Product[];
     total: number;

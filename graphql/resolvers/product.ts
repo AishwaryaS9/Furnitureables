@@ -141,7 +141,10 @@ export const productResolvers = {
 
     Product: {
         isWishlisted: async (parent: { id: string }) => {
+            console.log("Resolving isWishlisted for:", parent.id);
+
             const { userId } = await auth();
+            console.log("userId:", userId);
 
             if (!userId) return false;
 
@@ -153,6 +156,8 @@ export const productResolvers = {
                     id: true,
                 },
             });
+
+            console.log("user:", user);
 
             if (!user) return false;
 
@@ -167,6 +172,8 @@ export const productResolvers = {
                     id: true,
                 },
             });
+
+            console.log("exists:", exists);
 
             return !!exists;
         },
