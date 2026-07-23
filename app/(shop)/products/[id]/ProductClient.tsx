@@ -6,6 +6,7 @@ import { Check, Truck } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import { Product } from "@/types/product";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import WishlistButton from "@/components/wishlist/WishlistButton";
 
 export default function ProductClient({ product }: { product: Product }) {
     const addToCart = useAddToCart();
@@ -157,6 +158,10 @@ export default function ProductClient({ product }: { product: Product }) {
                                 >
                                     Add to Bag
                                 </button>
+                                <WishlistButton
+                                    productId={product.id}
+                                    isWishlisted={product.isWishlisted}
+                                />
                             </div>
                         </div>
 

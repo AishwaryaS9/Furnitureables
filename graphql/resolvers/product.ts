@@ -1,5 +1,6 @@
 import { Prisma } from "@/generated/prisma/index";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import { CreateProductArgs, ProductsArgs, UpdateProductArgs } from "@/types/product";
 
 export const productResolvers = {
@@ -138,6 +139,45 @@ export const productResolvers = {
         },
     },
 
+    Product: {
+        isWishlisted: async (parent: { id: string }) => {
+            console.log("Resolving isWishlisted for:", parent.id);
+
+            const { userId } = await auth();
+            console.log("userId:", userId);
+
+            if (!userId) return false;
+
+            const user = await prisma.user.findUnique({
+                where: {
+                    clerkId: userId,
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            console.log("user:", user);
+
+            if (!user) return false;
+
+            const exists = await prisma.wishlist.findUnique({
+                where: {
+                    userId_productId: {
+                        userId: user.id,
+                        productId: parent.id,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            console.log("exists:", exists);
+
+            return !!exists;
+        },
+    },
     Mutation: {
         createProduct: async (
             _parent: unknown,

@@ -96,3 +96,17 @@ export const CANCEL_ORDER = gql`
       }
   }
 `;
+
+export const ADD_TO_WISHLIST = gql`
+    mutation AddToWishlist($productId: String!) {
+        addToWishlist(productId: $productId) {
+            id
+        }
+    }
+`;
+
+export const REMOVE_FROM_WISHLIST = gql`
+    mutation RemoveFromWishlist($productId: String!) {
+        removeFromWishlist(productId: $productId)
+    }
+`;

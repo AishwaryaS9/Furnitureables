@@ -12,6 +12,7 @@ export const GET_PRODUCTS = gql`
         type
         material
         createdAt
+        isWishlisted
 
         media {
           id
@@ -65,6 +66,7 @@ export const PRODUCT_BY_ID = gql`
       room
       dimensions
       sku
+      isWishlisted
 
       media {
         id
@@ -85,6 +87,7 @@ query ($filter: ProductFilterInput) {
       price
       createdAt
       material
+      isWishlisted
       media {
         id
         url
@@ -196,6 +199,35 @@ export const GET_ORDER = gql`
           id
         }
       }
+    }
+  }
+`;
+
+export const GET_WISHLIST = gql`
+    query Wishlist {
+        wishlist {
+            id
+            createdAt
+
+            product {
+                id
+                title
+                price
+                stock
+
+                media {
+                    id
+                    url
+                }
+            }
+        }
+    }
+`;
+
+export const GET_WISHLIST_COUNT = gql`
+  query GetWishlistCount {
+    wishlist {
+      id
     }
   }
 `;

@@ -5,6 +5,7 @@ import { QueryProvider } from "@/providers/query-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import CartSync from "@/components/cart/CartSync";
 import { Toaster } from "@/components/ui/sonner";
+import WishlistSync from "@/components/wishlist/WishlistSync";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <body>
           <QueryProvider>
             <CartSync />
+            <WishlistSync />
             {children}
             <Toaster position="top-right" richColors />
           </QueryProvider>

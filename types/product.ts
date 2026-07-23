@@ -34,6 +34,8 @@ export interface Product {
   room: string;
   dimensions: string;
 
+  isWishlisted: boolean;
+
   createdAt: string | Date;
   updatedAt: string | Date;
 }

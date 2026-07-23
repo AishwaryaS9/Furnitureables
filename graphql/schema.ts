@@ -62,6 +62,8 @@ export const typeDefs = /* GraphQL */ `
 
     sku: String!
 
+    isWishlisted: Boolean!
+
     createdAt: String!
     updatedAt: String!
   }
@@ -171,6 +173,16 @@ export const typeDefs = /* GraphQL */ `
 
     createdAt: DateTime!
     updatedAt: String!
+  }
+
+  ############################
+  ## WHISHLIST
+  ############################
+ 
+  type Wishlist {
+    id: String!
+    createdAt: String!
+    product: Product!
   }
 
   ############################
@@ -336,6 +348,8 @@ input PlaceOrderInput {
     orders: [Order!]!
 
     order(id: String!): Order
+
+    wishlist: [Wishlist!]!
   }
 
   ############################
@@ -384,5 +398,9 @@ input PlaceOrderInput {
     placeOrder(input: PlaceOrderInput!): Order!
 
     cancelOrder(id: String!): Order!
+
+    addToWishlist(productId: String!): Wishlist!
+
+    removeFromWishlist(productId: String!): Boolean!
   }
 `;
