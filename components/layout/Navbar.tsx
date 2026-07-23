@@ -2,19 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  ShoppingCart,
-  Heart,
-  Search,
-  Menu,
-  X,
-  ChevronDown,
-  PackageIcon,
-  MapPinned
-} from "lucide-react";
+import { ShoppingCart, Heart, Search, Menu, X, ChevronDown, PackageIcon, MapPinned } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useUser, useClerk, UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useWishlist } from "@/hooks/useWishlist";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +19,10 @@ export default function Navbar() {
 
   const items = useCartStore((s) => s.items);
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
+
+  const { data } = useWishlist(!!user);
+
+  const wishlistCount = user ? data?.wishlist.length ?? 0 : 0;
 
   const categories = [
     { name: "Living Room", href: "/categories/living-room" },
@@ -136,12 +133,26 @@ export default function Navbar() {
               )}
             </div>
 
-            <Link href="/wishlist" aria-label="Wishlist" className="p-2 hover:text-foreground transition-colors relative">
+            <Link
+              href="/wishlist"
+              aria-label="Wishlist"
+              className="p-2 hover:text-foreground transition-colors relative"
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  toast.info("Please sign in to view your wishlist.");
+                  openSignIn();
+                }
+              }}
+            >
               <Heart size={22} />
-              <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
-                0
-              </span>
+              {wishlistCount > 0 && (
+                <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
+
             <Link href="/cart" aria-label="Cart" className="p-2 hover:text-foreground transition-colors relative">
               <ShoppingCart size={22} />
               {totalItems > 0 && (
@@ -211,7 +222,15 @@ export default function Navbar() {
           <Link href="/about" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
             Our Story
           </Link>
-          <Link href="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+          <Link href="/wishlist"
+            onClick={(e) => {
+              if (!user) {
+                e.preventDefault();
+                toast.info("Please sign in to view your wishlist.");
+                openSignIn();
+              }
+            }}
+            className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
             Wishlist
           </Link>
           <Link href="/account" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">

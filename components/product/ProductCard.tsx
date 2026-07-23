@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useCartStore } from "@/store/cart";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { Product } from "@/types/product";
 import { getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import WishlistButton from "../wishlist/WishlistButton";
 
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -39,6 +39,16 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
+
+        <div
+          className="absolute top-3 right-3 z-20"
+          onClick={(e) => e.preventDefault()}
+        >
+          <WishlistButton
+            productId={product.id}
+            isWishlisted={product.isWishlisted}
+          />
+        </div>
 
         <Image
           src={getProductThumbnail(product)}
