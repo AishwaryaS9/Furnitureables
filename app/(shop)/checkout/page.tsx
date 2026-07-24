@@ -3,10 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAddresses } from "@/hooks/useAddresses";
 import { useCart } from "@/hooks/useCart";
 import { usePlaceOrder } from "@/hooks/usePlaceOrder";
 import { useCheckoutStore } from "@/store/checkout";
+import { useCartStore } from "@/store/cart";
 import CheckoutSkeleton from "@/components/checkout/CheckoutSkeleton";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import OrderSummary from "@/components/checkout/OrderSummary";
@@ -16,6 +18,7 @@ import { useCreateRazorpayOrder } from "@/hooks/useCreateRazorpayOrder";
 
 import Script from "next/script";
 import { RazorpayOptions, RazorpayResponse } from "@/types/razorpay";
+import { useVerifyRazorpayPayment } from "@/hooks/useVerifyRazorpayPayment";
 
 export default function CheckoutPage() {
     const { user } = useUser();
@@ -24,12 +27,16 @@ export default function CheckoutPage() {
 
     const placeOrder = usePlaceOrder();
     const createRazorpayOrder = useCreateRazorpayOrder();
+    const verifyRazorpayPayment = useVerifyRazorpayPayment();
 
     const { selectedAddressId, setSelectedAddress, paymentMethod, setPaymentMethod, clearCheckout } = useCheckoutStore();
+    const clearCart = useCartStore((s) => s.clearCart);
 
     const { data: addresses, isLoading: addressesLoading } = useAddresses(user?.id);
 
     const { data: cart, isLoading: cartLoading } = useCart(user?.id);
+
+    const queryClient = useQueryClient();
 
     async function handlePlaceOrder() {
         if (!selectedAddressId) {
@@ -46,6 +53,8 @@ export default function CheckoutPage() {
 
                 toast.success("Order placed successfully!");
 
+                clearCart();
+                queryClient.invalidateQueries({ queryKey: ["cart"] });
                 clearCheckout();
 
                 router.push(`/orders/${result.placeOrder.id}`);
@@ -72,9 +81,31 @@ export default function CheckoutPage() {
                     order_id: razorpayOrder.razorpayOrderId,
 
                     handler: async (response: RazorpayResponse) => {
-                        console.log("Razorpay response", response);
+                        try {
+                            const verifyResult = await verifyRazorpayPayment.mutateAsync({
+                                orderId: razorpayOrder.orderId,
+                                razorpayOrderId: response.razorpay_order_id,
+                                razorpayPaymentId: response.razorpay_payment_id,
+                                razorpaySignature: response.razorpay_signature,
+                            });
 
-                        // We'll verify payment here next.
+                            // Payment confirmed - clear the cart immediately
+                            clearCart();
+                            queryClient.invalidateQueries({ queryKey: ["cart"] });
+
+                            toast.success("Payment successful! Order confirmed.");
+
+                            clearCheckout();
+
+                            router.push(
+                                `/orders/${verifyResult.verifyRazorpayPayment.id}`
+                            );
+                        } catch (error) {
+                            console.error("Payment verification failed", error);
+                            toast.error(
+                                "We couldn't verify your payment. Please contact support if the amount was debited."
+                            );
+                        }
                     },
 
                     prefill: {

@@ -12,6 +12,22 @@ export interface CreateRazorpayOrderResponse {
     };
 }
 
+export interface VerifyRazorpayPaymentInput {
+    orderId: string;
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+}
+
+export interface VerifyRazorpayPaymentResponse {
+    verifyRazorpayPayment: {
+        id: string;
+        orderNumber: string;
+        status: string;
+        paymentStatus: string;
+    };
+}
+
 export interface RazorpayResponse {
     razorpay_payment_id: string;
     razorpay_order_id: string;
