@@ -55,9 +55,9 @@ export default function OrderActions({
         <div className="flex justify-end">
             <AlertDialog>
                 <AlertDialogTrigger>
-                    <Button variant="destructive">
-                        Cancel Order
-                    </Button>
+                    {/* <Button variant="destructive"> */}
+                    Cancel Order
+                    {/* </Button> */}
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>

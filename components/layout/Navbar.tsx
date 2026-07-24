@@ -8,6 +8,7 @@ import { useUser, useClerk, UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useWishlist } from "@/hooks/useWishlist";
 import { toast } from "sonner";
+import { useCart } from "@/hooks/useCart";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +18,15 @@ export default function Navbar() {
   const { openSignIn } = useClerk();
   const router = useRouter();
 
-  const items = useCartStore((s) => s.items);
-  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
+  // const items = useCartStore((s) => s.items);
+  const { data: cart } = useCart(user?.id);
+
+  const totalItems =
+    cart?.items.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    ) ?? 0;
+  // const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   const { data } = useWishlist(!!user);
 

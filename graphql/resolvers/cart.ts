@@ -90,6 +90,160 @@ export const cartResolver = {
     },
 
     Mutation: {
+        addToCart: async (
+            _: unknown,
+            {
+                productId,
+                quantity,
+            }: {
+                productId: string;
+                quantity: number;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            let cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (!cart) {
+                cart = await prisma.cart.create({
+                    data: {
+                        userId: user.id,
+                    },
+                });
+            }
+
+            const existing = await prisma.cartItem.findFirst({
+                where: {
+                    cartId: cart.id,
+                    productId,
+                },
+            });
+
+            if (existing) {
+                await prisma.cartItem.update({
+                    where: {
+                        id: existing.id,
+                    },
+                    data: {
+                        quantity: {
+                            increment: quantity,
+                        },
+                    },
+                });
+            } else {
+                await prisma.cartItem.create({
+                    data: {
+                        cartId: cart.id,
+                        productId,
+                        quantity,
+                    },
+                });
+            }
+
+            return true;
+        },
+
+        updateCartItem: async (
+            _: unknown,
+            {
+                productId,
+                quantity,
+            }: {
+                productId: string;
+                quantity: number;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            const cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (!cart) {
+                throw new Error("Cart not found");
+            }
+
+            if (quantity <= 0) {
+                await prisma.cartItem.deleteMany({
+                    where: {
+                        cartId: cart.id,
+                        productId,
+                    },
+                });
+
+                return true;
+            }
+
+            await prisma.cartItem.updateMany({
+                where: {
+                    cartId: cart.id,
+                    productId,
+                },
+                data: {
+                    quantity,
+                },
+            });
+
+            return true;
+        },
+
+        removeCartItem: async (
+            _: unknown,
+            {
+                productId,
+            }: {
+                productId: string;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            const cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (!cart) {
+                return true;
+            }
+
+            await prisma.cartItem.deleteMany({
+                where: {
+                    cartId: cart.id,
+                    productId,
+                },
+            });
+
+            return true;
+        },
+        clearCart: async () => {
+            const user = await getCurrentUser();
+
+            const cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (!cart) {
+                return true;
+            }
+
+            await prisma.cartItem.deleteMany({
+                where: {
+                    cartId: cart.id,
+                },
+            });
+
+            return true;
+        },
+
         saveCart: async (_: unknown, { items }: SaveCartArgs) => {
             const user = await getCurrentUser();
 

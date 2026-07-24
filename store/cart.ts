@@ -37,6 +37,7 @@ export const useCartStore = create<CartStore>()(
             setSyncedUserId: (id) => set({ syncedUserId: id }),
             addToCart: (product) =>
                 set((state) => {
+                    console.log("ZUSTAND", product);
                     const quantityToAdd = product.quantity ?? 1;
 
                     const existing = state.items.find((i) => i.id === product.id);

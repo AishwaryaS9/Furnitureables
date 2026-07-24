@@ -47,3 +47,16 @@ export interface RazorpayInstance {
     open(): void;
     on(event: string, callback: (...args: unknown[]) => void): void;
 }
+
+export interface VerifyRazorpayPaymentInput {
+    orderId: string;
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+}
+
+export interface VerifyRazorpayPaymentResponse {
+    verifyRazorpayPayment: {
+        id: string;
+    };
+}

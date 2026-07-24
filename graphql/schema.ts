@@ -335,6 +335,13 @@ input PlaceOrderInput {
   paymentMethod: PaymentMethod!
 }
 
+input VerifyRazorpayPaymentInput {
+  orderId: String!
+  razorpayOrderId: String!
+  razorpayPaymentId: String!
+  razorpaySignature: String!
+}
+
 
   ############################
   ## QUERIES
@@ -368,9 +375,26 @@ input PlaceOrderInput {
   ############################
 
   type Mutation {
-    saveCart(
-      items: [CartItemInput!]!
-    ): Cart!
+
+  saveCart(
+    items: [CartItemInput!]!
+  ): Cart!
+
+  addToCart(
+    productId: String!
+    quantity: Int!
+  ): Boolean!
+
+  updateCartItem(
+    productId: String!
+    quantity: Int!
+  ): Boolean!
+
+  removeCartItem(
+    productId: String!
+  ): Boolean!
+
+  clearCart: Boolean!
 
     uploadProducts(
       products: [ProductUploadInput!]!
@@ -419,10 +443,7 @@ input PlaceOrderInput {
     ): RazorpayOrder!
 
     verifyRazorpayPayment(
-      orderId: String!
-      razorpayOrderId: String!
-      razorpayPaymentId: String!
-      razorpaySignature: String!
+      input: VerifyRazorpayPaymentInput!
     ): Order!
   }
 `;

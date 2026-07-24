@@ -27,97 +27,163 @@ export const DELETE_PRODUCT = gql`
   }
 `;
 
-export const SAVE_CART = gql`
-  mutation SaveCart($items: [CartItemInput!]!) {
-    saveCart(items: $items) {
-      id
-    }
-  }
-`;
 
-export const CREATE_ADDRESS = gql`
-  mutation CreateAddress($input: AddressInput!) {
-    createAddress(input: $input) {
-      id
-    }
-  }
-`;
-
-export const UPDATE_ADDRESS = gql`
-  mutation UpdateAddress(
-    $id: String!
-    $input: AddressInput!
+// export const ADD_TO_CART = gql`
+// mutation AddToCart(
+//     $productId:String!,
+//     $quantity:Int!
+// ){
+//     addToCart(
+//         productId:$productId,
+//         quantity:$quantity
+//     ){
+//         id
+//     }
+// }
+// `;
+export const ADD_TO_CART = gql`
+  mutation AddToCart(
+    $productId: String!
+    $quantity: Int!
   ) {
-    updateAddress(
-      id: $id
-      input: $input
+    addToCart(
+      productId: $productId
+      quantity: $quantity
+    )
+  }
+`;
+
+export const UPDATE_CART_ITEM = gql`
+  mutation UpdateCartItem(
+    $productId: String!
+    $quantity: Int!
+  ) {
+    updateCartItem(
+      productId: $productId
+      quantity: $quantity
     ) {
       id
     }
   }
 `;
 
+export const REMOVE_CART_ITEM = gql`
+  mutation RemoveCartItem(
+    $productId: String!
+  ) {
+    removeCartItem(
+      productId: $productId
+    )
+  }
+`;
+
+export const SAVE_CART = gql`
+  mutation SaveCart($items: [CartItemInput!]!) {
+  saveCart(items: $items) {
+    id
+  }
+}
+`;
+
+export const CLEAR_CART = gql`
+    mutation ClearCart {
+        clearCart
+    }
+`;
+
+export const CREATE_ADDRESS = gql`
+  mutation CreateAddress($input: AddressInput!) {
+  createAddress(input: $input) {
+    id
+  }
+}
+`;
+
+export const UPDATE_ADDRESS = gql`
+  mutation UpdateAddress(
+  $id: String!
+    $input: AddressInput!
+) {
+  updateAddress(
+    id: $id
+      input: $input
+  ) {
+    id
+  }
+}
+`;
+
 export const DELETE_ADDRESS = gql`
   mutation DeleteAddress($id: String!) {
-    deleteAddress(id: $id)
-  }
+  deleteAddress(id: $id)
+}
 `;
 
 export const SET_DEFAULT_ADDRESS = gql`
   mutation SetDefaultAddress($id: String!) {
-    setDefaultAddress(id: $id) {
-      id
-      isDefault
-    }
+  setDefaultAddress(id: $id) {
+    id
+    isDefault
   }
+}
 `;
 
 export const PLACE_ORDER = gql`
   mutation PlaceOrder(
-    $input: PlaceOrderInput!
-  ) {
-    placeOrder(input: $input) {
-      id
-      orderNumber
-      total
-      status
-      paymentStatus
-      paymentMethod
-      createdAt
-    }
+  $input: PlaceOrderInput!
+) {
+  placeOrder(input: $input) {
+    id
+    orderNumber
+    total
+    status
+    paymentStatus
+    paymentMethod
+    createdAt
   }
+}
 `;
 
 export const CANCEL_ORDER = gql`
   mutation CancelOrder($id: String!) {
-      cancelOrder(id: $id) {
-          id
-          status
-      }
+  cancelOrder(id: $id) {
+    id
+    status
   }
+}
 `;
 
 export const ADD_TO_WISHLIST = gql`
     mutation AddToWishlist($productId: String!) {
-        addToWishlist(productId: $productId) {
-            id
-        }
-    }
+  addToWishlist(productId: $productId) {
+    id
+  }
+}
 `;
 
 export const REMOVE_FROM_WISHLIST = gql`
     mutation RemoveFromWishlist($productId: String!) {
-        removeFromWishlist(productId: $productId)
-    }
+  removeFromWishlist(productId: $productId)
+}
 `;
 
 export const CREATE_RAZORPAY_ORDER = gql`
     mutation CreateRazorpayOrder($input: PlaceOrderInput!) {
-      createRazorpayOrder(input: $input) {
-        orderId
-        razorpayOrderId
-        amount
-        currency
-      }
-    }
+  createRazorpayOrder(input: $input) {
+    orderId
+    razorpayOrderId
+    amount
+    currency
+  }
+}
+`;
+
+export const VERIFY_RAZORPAY_PAYMENT = gql`
+  mutation VerifyRazorpayPayment(
+  $input: VerifyRazorpayPaymentInput!
+) {
+  verifyRazorpayPayment(input: $input) {
+    id
+  }
+}
 `;
