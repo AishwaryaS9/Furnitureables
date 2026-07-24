@@ -114,6 +114,7 @@ model Order {
   stripePaymentIntentId String?
   razorpayOrderId       String?
   razorpayPaymentId     String?
+  razorpaySignature     String?
   fullName              String
   phoneCode             String
   phone                 String

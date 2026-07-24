@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import CartSync from "@/components/cart/CartSync";
 import { Toaster } from "@/components/ui/sonner";
 import WishlistSync from "@/components/wishlist/WishlistSync";
+import RazorpayProvider from "@/components/providers/RazorpayProvider";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -41,6 +42,7 @@ export default function RootLayout({
           <QueryProvider>
             <CartSync />
             <WishlistSync />
+            <RazorpayProvider />
             {children}
             <Toaster position="top-right" richColors />
           </QueryProvider>

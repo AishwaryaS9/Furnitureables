@@ -110,3 +110,14 @@ export const REMOVE_FROM_WISHLIST = gql`
         removeFromWishlist(productId: $productId)
     }
 `;
+
+export const CREATE_RAZORPAY_ORDER = gql`
+    mutation CreateRazorpayOrder($input: PlaceOrderInput!) {
+      createRazorpayOrder(input: $input) {
+        orderId
+        razorpayOrderId
+        amount
+        currency
+      }
+    }
+`;
