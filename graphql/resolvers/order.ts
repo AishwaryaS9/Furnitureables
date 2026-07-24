@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { PaymentMethod } from "@/generated/prisma";
-import { generateOrderNumber } from "@/lib/order";
+import { buildOrder } from "@/lib/order/buildOrder";
+import { razorpay } from "@/lib/razorpay";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -73,6 +74,113 @@ export const orderResolver = {
     },
 
     Mutation: {
+        createRazorpayOrder: async (
+            _: unknown,
+            {
+                input,
+            }: {
+                input: PlaceOrderInput;
+            }
+        ) => {
+            const user = await getCurrentUser();
+            console.log("Current Prisma user:", user);
+            console.log("GraphQL input:", input);
+            console.log("Passing to buildOrder", {
+                userId: user.id,
+                addressId: input.addressId,
+            });
+            const {
+                cart,
+                address,
+                subtotal,
+                shipping,
+                tax,
+                discount,
+                total,
+                orderNumber,
+            } = await buildOrder(
+                user.id,
+                input.addressId
+            );
+
+            // Create Razorpay Order
+            const razorpayOrder = await razorpay.orders.create({
+                amount: Math.round(total * 100),
+                currency: "INR",
+                receipt: orderNumber,
+            });
+
+            const order = await prisma.$transaction(async (tx) => {
+
+                // Create Order
+                const order = await tx.order.create({
+                    data: {
+                        orderNumber,
+
+                        userId: user.id,
+                        addressId: address.id,
+
+                        subtotal,
+                        shipping,
+                        tax,
+                        discount,
+                        total,
+
+                        currency: "INR",
+
+                        paymentMethod: "RAZORPAY",
+
+                        status: "PENDING",
+
+                        paymentStatus: "PENDING",
+
+                        razorpayOrderId: razorpayOrder.id,
+
+                        fullName: address.fullName,
+
+                        phoneCode: address.phoneCode,
+                        phone: address.phone,
+
+                        addressLine1: address.addressLine1,
+                        addressLine2: address.addressLine2,
+
+                        city: address.city,
+                        state: address.state,
+
+                        postalCode: address.postalCode,
+                        country: address.country,
+                    },
+                });
+
+                // Create Order Items
+                await tx.orderItem.createMany({
+                    data: cart.items.map((item) => ({
+                        orderId: order.id,
+
+                        productId: item.product.id,
+
+                        title: item.product.title,
+
+                        image: item.product.media[0]?.url,
+
+                        sku: item.product.sku,
+
+                        price: item.product.price,
+
+                        quantity: item.quantity,
+                    })),
+                });
+
+                return order;
+            });
+
+            return {
+                orderId: order.id,
+                razorpayOrderId: razorpayOrder.id,
+                amount: total,
+                currency: "INR",
+            };
+        },
         placeOrder: async (
             _: unknown,
             {
@@ -84,60 +192,19 @@ export const orderResolver = {
             try {
                 const user = await getCurrentUser();
 
-                // Load cart
-                const cart = await prisma.cart.findUnique({
-                    where: {
-                        userId: user.id,
-                    },
-                    include: {
-                        items: {
-                            include: {
-                                product: {
-                                    include: {
-                                        media: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                });
-
-                if (!cart || cart.items.length === 0) {
-                    throw new Error("Cart is empty.");
-                }
-
-                // Load selected address
-                const address = await prisma.address.findFirst({
-                    where: {
-                        id: input.addressId,
-                        userId: user.id,
-                    },
-                });
-
-                if (!address) {
-                    throw new Error("Address not found.");
-                }
-
-                // Calculate totals
-                const subtotal = cart.items.reduce(
-                    (sum, item) =>
-                        sum + item.product.price * item.quantity,
-                    0
+                const {
+                    cart,
+                    address,
+                    subtotal,
+                    shipping,
+                    tax,
+                    discount,
+                    total,
+                    orderNumber,
+                } = await buildOrder(
+                    user.id,
+                    input.addressId
                 );
-
-                const shipping = subtotal >= 5000 ? 0 : 499;
-
-                const tax = 0;
-                const discount = 0;
-
-                const total =
-                    subtotal +
-                    shipping +
-                    tax -
-                    discount;
-
-                // Generate order number
-                const orderNumber = generateOrderNumber();
 
                 // return prisma.$transaction(async (tx) => {
                 return await prisma.$transaction(async (tx) => {

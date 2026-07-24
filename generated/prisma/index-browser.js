@@ -205,6 +205,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   stripePaymentIntentId: 'stripePaymentIntentId',
   razorpayOrderId: 'razorpayOrderId',
   razorpayPaymentId: 'razorpayPaymentId',
+  razorpaySignature: 'razorpaySignature',
   fullName: 'fullName',
   phoneCode: 'phoneCode',
   phone: 'phone',

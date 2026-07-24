@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import { graphqlClient } from "@/lib/graphql/client";
 import { CANCEL_ORDER } from "@/lib/graphql/mutations";
 import { Order, CancelOrderResponse } from "@/types/order";
-import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -54,10 +53,8 @@ export default function OrderActions({
     return (
         <div className="flex justify-end">
             <AlertDialog>
-                <AlertDialogTrigger>
-                    <Button variant="destructive">
-                        Cancel Order
-                    </Button>
+                <AlertDialogTrigger className="p-1 bg-red-300 rounded-md">
+                    Cancel Order
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>

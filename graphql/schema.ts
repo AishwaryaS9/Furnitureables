@@ -186,6 +186,17 @@ export const typeDefs = /* GraphQL */ `
   }
 
   ############################
+  ## RAZORPAY
+  ############################
+
+  type RazorpayOrder {
+    orderId: String!
+    razorpayOrderId: String!
+    amount: Float!
+    currency: String!
+  }
+
+  ############################
   ## RESPONSE TYPES
   ############################
 
@@ -402,5 +413,16 @@ input PlaceOrderInput {
     addToWishlist(productId: String!): Wishlist!
 
     removeFromWishlist(productId: String!): Boolean!
+
+    createRazorpayOrder(
+      input: PlaceOrderInput!
+    ): RazorpayOrder!
+
+    verifyRazorpayPayment(
+      orderId: String!
+      razorpayOrderId: String!
+      razorpayPaymentId: String!
+      razorpaySignature: String!
+    ): Order!
   }
 `;

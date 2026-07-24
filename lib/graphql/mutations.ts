@@ -110,3 +110,35 @@ export const REMOVE_FROM_WISHLIST = gql`
         removeFromWishlist(productId: $productId)
     }
 `;
+
+export const CREATE_RAZORPAY_ORDER = gql`
+    mutation CreateRazorpayOrder($input: PlaceOrderInput!) {
+      createRazorpayOrder(input: $input) {
+        orderId
+        razorpayOrderId
+        amount
+        currency
+      }
+    }
+`;
+
+export const VERIFY_RAZORPAY_PAYMENT = gql`
+    mutation VerifyRazorpayPayment(
+      $orderId: String!
+      $razorpayOrderId: String!
+      $razorpayPaymentId: String!
+      $razorpaySignature: String!
+    ) {
+      verifyRazorpayPayment(
+        orderId: $orderId
+        razorpayOrderId: $razorpayOrderId
+        razorpayPaymentId: $razorpayPaymentId
+        razorpaySignature: $razorpaySignature
+      ) {
+        id
+        orderNumber
+        status
+        paymentStatus
+      }
+    }
+`;
