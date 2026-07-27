@@ -38,23 +38,49 @@ export default function CheckoutPage() {
 
     const queryClient = useQueryClient();
 
+    useEffect(() => {
+        if (!addresses?.length) return;
+
+        const stillExists = addresses.some(
+            (a) => a.id === selectedAddressId
+        );
+
+        if (!stillExists) {
+            const defaultAddress =
+                addresses.find((a) => a.isDefault) ??
+                addresses[0];
+
+            setSelectedAddress(defaultAddress.id);
+        }
+    }, [addresses, selectedAddressId, setSelectedAddress]);
+
     async function handlePlaceOrder() {
-        if (!selectedAddressId) {
+        const addressId =
+            selectedAddressId ||
+            addresses?.find((a) => a.isDefault)?.id ||
+            addresses?.[0]?.id;
+
+        if (!addressId) {
             toast.error("Please select a delivery address.");
             return;
         }
-
         try {
             if (paymentMethod === "COD") {
                 const result = await placeOrder.mutateAsync({
-                    addressId: selectedAddressId,
+                    addressId,
                     paymentMethod,
                 });
 
                 toast.success("Order placed successfully!");
 
+                await queryClient.invalidateQueries({
+                    queryKey: ["cart", user?.id],
+                });
+
+                await queryClient.refetchQueries({
+                    queryKey: ["cart", user?.id],
+                });
                 clearCart();
-                queryClient.invalidateQueries({ queryKey: ["cart"] });
                 clearCheckout();
 
                 router.push(`/orders/${result.placeOrder.id}`);
@@ -63,7 +89,7 @@ export default function CheckoutPage() {
             }
             if (paymentMethod === "RAZORPAY") {
                 const result = await createRazorpayOrder.mutateAsync({
-                    addressId: selectedAddressId,
+                    addressId,
                     paymentMethod: "RAZORPAY",
                 });
 
@@ -89,17 +115,22 @@ export default function CheckoutPage() {
                                 razorpaySignature: response.razorpay_signature,
                             });
 
-                            // Payment confirmed - clear the cart immediately
-                            clearCart();
-                            queryClient.invalidateQueries({ queryKey: ["cart"] });
+                            await queryClient.invalidateQueries({
+                                queryKey: ["cart", user?.id],
+                            });
+
+                            await queryClient.refetchQueries({
+                                queryKey: ["cart", user?.id],
+                            });
 
                             toast.success("Payment successful! Order confirmed.");
-
+                            clearCart();
                             clearCheckout();
 
                             router.push(
                                 `/orders/${verifyResult.verifyRazorpayPayment.id}`
                             );
+                            return;
                         } catch (error) {
                             console.error("Payment verification failed", error);
                             toast.error(
@@ -128,7 +159,6 @@ export default function CheckoutPage() {
                 const razorpay = new window.Razorpay(options);
 
                 razorpay.open();
-                // Open Razorpay
                 return;
             }
 
@@ -138,22 +168,9 @@ export default function CheckoutPage() {
 
         } catch (error) {
             console.error(error);
-
             toast.error("Unable to place order.");
         }
     }
-
-    useEffect(() => {
-        if (!addresses?.length) return;
-
-        if (!selectedAddressId) {
-            const defaultAddress =
-                addresses.find((a) => a.isDefault) ??
-                addresses[0];
-
-            setSelectedAddress(defaultAddress.id);
-        }
-    }, [addresses, selectedAddressId, setSelectedAddress]);
 
     if (addressesLoading || cartLoading) {
         return <CheckoutSkeleton />;

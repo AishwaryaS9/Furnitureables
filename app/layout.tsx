@@ -7,6 +7,8 @@ import CartSync from "@/components/cart/CartSync";
 import { Toaster } from "@/components/ui/sonner";
 import WishlistSync from "@/components/wishlist/WishlistSync";
 import RazorpayProvider from "@/components/providers/RazorpayProvider";
+import CartLiveSync from "@/components/cart/CartLiveSync";
+import CartLogoutSync from "@/components/cart/CartLogoutSync";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -40,7 +42,9 @@ export default function RootLayout({
       >
         <body>
           <QueryProvider>
+            <CartLogoutSync />
             <CartSync />
+            <CartLiveSync />
             <WishlistSync />
             <RazorpayProvider />
             {children}
