@@ -20,6 +20,7 @@ type CartStore = {
     clearCart: () => void;
 
     setCart: (items: CartItem[]) => void;
+    resetStore: () => void;
 
     cartReady: boolean;
     setCartReady: (ready: boolean) => void;
@@ -110,9 +111,11 @@ export const useCartStore = create<CartStore>()(
                     items: state.items.filter((item) => item.id !== id),
                 })),
 
-            clearCart: () => set({
-                items: [],
-            }),
+            clearCart: () =>
+                set({
+                    items: [],
+                    syncedUserId: null,
+                }),
 
 
             setCart: (items) => set({ items }),
@@ -120,6 +123,12 @@ export const useCartStore = create<CartStore>()(
             setCartReady: (ready) =>
                 set({
                     cartReady: ready,
+                }),
+            resetStore: () =>
+                set({
+                    items: [],
+                    cartReady: true,
+                    syncedUserId: null,
                 }),
         }),
         {
