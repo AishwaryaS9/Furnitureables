@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProductThumbnail from "../ProductThumbnail";
 import { formatCurrency } from "@/lib/order";
 import { OrderItem } from "@/types/order";
+import Link from "next/link";
 
 interface OrderItemsProps {
     items: OrderItem[];
@@ -24,12 +25,13 @@ export default function OrderItems({
                         key={item.id}
                         className="flex gap-4 border-b pb-5 last:border-b-0 last:pb-0"
                     >
-                        <ProductThumbnail
-                            image={item.image}
-                            title={item.title}
-                            size="md"
-                        />
-
+                        <Link href={`/products/${item.product?.id}`}>
+                            <ProductThumbnail
+                                image={item.image}
+                                title={item.title}
+                                size="md"
+                            />
+                        </Link>
                         <div className="flex-1 space-y-2">
                             <div>
                                 <h3 className="font-semibold">

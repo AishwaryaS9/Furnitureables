@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import OrderStatusBadge from "../OrderStatusBadge";
 import PaymentStatusBadge from "../PaymentStatusBadge";
-import { formatOrderDate } from "@/lib/order";
+import { formatOrderDate, getPaymentMethodLabel } from "@/lib/order";
 import { Order } from "@/types/order";
 
 interface OrderHeaderProps {
@@ -38,7 +37,8 @@ export default function OrderHeader({
                     </p>
 
                     <p className="text-sm text-muted-foreground">
-                        Payment type: {order.paymentMethod}
+                        {/* Payment type: {order.paymentMethod} */}
+                        Payment Method: {getPaymentMethodLabel(order.paymentMethod)}
                     </p>
                 </div>
 

@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Truck, PackageCheck, XCircle } from "lucide-react";
+import { CheckCircle2, Package, Truck, PackageCheck, XCircle } from "lucide-react";
 import { Order } from "@/types/order";
 
 interface Props {
@@ -8,15 +8,21 @@ interface Props {
 const steps = [
     {
         key: "CONFIRMED",
-        title: "Order Confirmed",
+        title: "Order Placed",
+        description: "We've received your order.",
+        icon: Package,
     },
     {
         key: "SHIPPED",
         title: "Shipped",
+        description: "Your package is on its way.",
+        icon: Truck,
     },
     {
         key: "DELIVERED",
         title: "Delivered",
+        description: "Package delivered successfully.",
+        icon: PackageCheck,
     },
 ] as const;
 
@@ -37,7 +43,7 @@ export default function OrderTimeline({ order }: Props) {
                 </h2>
 
                 <div className="flex items-center gap-3 text-red-600">
-                    <XCircle className="h-6 w-6 fill-current text-white" />
+                    <XCircle className="h-6 w-6" />
 
                     <div>
                         <p className="font-medium">
@@ -45,7 +51,7 @@ export default function OrderTimeline({ order }: Props) {
                         </p>
 
                         <p className="text-sm text-muted-foreground">
-                            This order has been cancelled.
+                            This order has been cancelled and will not be processed.
                         </p>
                     </div>
                 </div>
@@ -65,6 +71,8 @@ export default function OrderTimeline({ order }: Props) {
                 {steps.map((step, index) => {
                     const completed = index <= current;
 
+                    const Icon = step.icon;
+
                     return (
                         <div
                             key={step.key}
@@ -72,7 +80,7 @@ export default function OrderTimeline({ order }: Props) {
                         >
                             {index !== steps.length - 1 && (
                                 <div
-                                    className={`absolute left-2.75 top-7 h-10 w-0.5 ${completed
+                                    className={`absolute left-3 top-7 h-10 w-0.5 ${completed
                                         ? "bg-primary"
                                         : "bg-border"
                                         }`}
@@ -83,7 +91,7 @@ export default function OrderTimeline({ order }: Props) {
                                 {completed ? (
                                     <CheckCircle2 className="h-6 w-6 text-primary" />
                                 ) : (
-                                    <Circle className="h-6 w-6 text-muted-foreground" />
+                                    <Icon className="h-6 w-6 text-muted-foreground" />
                                 )}
                             </div>
 
@@ -94,7 +102,7 @@ export default function OrderTimeline({ order }: Props) {
 
                                 <p className="text-sm text-muted-foreground">
                                     {completed
-                                        ? "Completed"
+                                        ? step.description
                                         : "Pending"}
                                 </p>
                             </div>
