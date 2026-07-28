@@ -16,6 +16,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface Props {
     order: Order;
@@ -41,6 +42,9 @@ export default function OrderActions({
             );
 
             router.refresh();
+            toast.success("Order cancelled successfully.");
+        } catch (error) {
+            toast.error("Unable to cancel order.");
         } finally {
             setLoading(false);
         }
