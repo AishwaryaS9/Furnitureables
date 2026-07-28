@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { CartItem, ServerCartItem } from "@/types/cart";
 
 export async function getUserByClerkId(clerkId: string) {
     return prisma.user.findUnique({
@@ -64,4 +65,14 @@ export async function replaceCart(
             })),
         });
     });
+}
+
+export function mapServerCart(items: ServerCartItem[]): CartItem[] {
+    return items.map((item) => ({
+        id: item.product.id,
+        title: item.product.title,
+        price: item.product.price,
+        image: item.product.media[0]?.url,
+        quantity: item.quantity,
+    }));
 }

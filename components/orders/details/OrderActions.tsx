@@ -1,3 +1,5 @@
+//buy again - zustand
+
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,6 +19,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { ShoppingCart } from "lucide-react";
+import { BUY_AGAIN } from "@/lib/graphql/mutations";
+import { BuyAgainResponse } from "@/types/order";
+import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import { GET_CART } from "@/lib/graphql/queries";
+import { CartQueryResponse } from "@/types/cart";
+import { useCartStore } from "@/store/cart";
 
 interface Props {
     order: Order;
@@ -26,9 +36,11 @@ export default function OrderActions({
     order,
 }: Props) {
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const [loading, setLoading] =
-        useState(false);
+    const [loading, setLoading] = useState(false);
+    const [buyAgainLoading, setBuyAgainLoading] = useState(false);
+    const setCart = useCartStore((s) => s.setCart);
 
     async function handleCancel() {
         try {
@@ -50,12 +62,47 @@ export default function OrderActions({
         }
     }
 
+    async function handleBuyAgain() {
+        try {
+            setBuyAgainLoading(true);
+
+            await graphqlClient.request<BuyAgainResponse>(
+                BUY_AGAIN,
+                {
+                    orderId: order.id,
+                }
+            );
+            await queryClient.invalidateQueries({
+                queryKey: ["cart"],
+            });
+            // router.refresh();
+            router.push("/cart");
+        } finally {
+            setBuyAgainLoading(false);
+        }
+    }
+
     if (order.status !== "CONFIRMED") {
         return null;
     }
 
+
     return (
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-3">
+            <Button
+                variant="outline"
+                onClick={handleBuyAgain}
+                disabled={buyAgainLoading}
+            >
+                {buyAgainLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                )}
+
+                Buy Again
+            </Button>
+
             <AlertDialog>
                 <AlertDialogTrigger className="p-1 bg-red-300 rounded-md">
                     Cancel Order
@@ -69,9 +116,8 @@ export default function OrderActions({
 
                         <AlertDialogDescription>
                             This action cannot be undone.
-                            The order will be cancelled
-                            and the reserved stock will
-                            be restored.
+                            The order will be cancelled and the reserved stock
+                            will be restored.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 

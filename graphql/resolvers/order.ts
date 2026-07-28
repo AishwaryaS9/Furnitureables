@@ -365,5 +365,108 @@ export const orderResolver = {
                 });
             });
         },
+
+        buyAgain: async (
+            _: unknown,
+            {
+                orderId,
+            }: {
+                orderId: string;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: orderId,
+                    userId: user.id,
+                },
+                include: {
+                    items: true,
+                },
+            });
+
+            if (!order) {
+                throw new Error("Order not found.");
+            }
+
+            let cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (!cart) {
+                cart = await prisma.cart.create({
+                    data: {
+                        userId: user.id,
+                    },
+                });
+            }
+
+            for (const item of order.items) {
+                const product = await prisma.product.findUnique({
+                    where: {
+                        id: item.productId,
+                    },
+                });
+
+                if (!product || product.stock <= 0) {
+                    continue;
+                }
+
+                const quantity = Math.min(
+                    item.quantity,
+                    product.stock
+                );
+
+                const existing = await prisma.cartItem.findFirst({
+                    where: {
+                        cartId: cart.id,
+                        productId: item.productId,
+                    },
+                });
+
+                if (existing) {
+                    await prisma.cartItem.update({
+                        where: {
+                            id: existing.id,
+                        },
+                        data: {
+                            // quantity: existing.quantity + quantity,
+                            quantity: Math.min(
+                                existing.quantity + quantity,
+                                product.stock
+                            ),
+                        },
+                    });
+                } else {
+                    await prisma.cartItem.create({
+                        data: {
+                            cartId: cart.id,
+                            productId: item.productId,
+                            quantity,
+                        },
+                    });
+                }
+            }
+
+            return await prisma.cart.findUnique({
+                where: {
+                    id: cart.id,
+                },
+                include: {
+                    items: {
+                        include: {
+                            product: {
+                                include: {
+                                    media: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        },
     },
 };

@@ -67,3 +67,9 @@ export interface PlaceOrderResponse {
 export interface CancelOrderResponse {
   cancelOrder: Order;
 }
+
+export interface BuyAgainResponse {
+  buyAgain: {
+    id: string;
+  };
+}

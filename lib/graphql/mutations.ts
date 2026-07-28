@@ -142,3 +142,12 @@ export const VERIFY_RAZORPAY_PAYMENT = gql`
       }
     }
 `;
+
+
+export const BUY_AGAIN = gql`
+mutation BuyAgain($orderId: String!) {
+  buyAgain(orderId: $orderId) {
+    id
+  }
+}
+`;

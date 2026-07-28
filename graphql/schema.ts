@@ -410,6 +410,8 @@ input PlaceOrderInput {
 
     cancelOrder(id: String!): Order!
 
+    buyAgain(orderId: String!): Cart!
+
     addToWishlist(productId: String!): Wishlist!
 
     removeFromWishlist(productId: String!): Boolean!
