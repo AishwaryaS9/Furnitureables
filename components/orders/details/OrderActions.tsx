@@ -1,5 +1,3 @@
-//buy again - zustand
-
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -24,9 +22,12 @@ import { BUY_AGAIN } from "@/lib/graphql/mutations";
 import { BuyAgainResponse } from "@/types/order";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
-import { GET_CART } from "@/lib/graphql/queries";
-import { CartQueryResponse } from "@/types/cart";
 import { useCartStore } from "@/store/cart";
+import { useUser } from "@clerk/nextjs";
+import { CartQueryResponse } from "@/types/cart";
+import { mapServerCartItems } from "@/lib/cartMapper";
+import { GET_CART } from "@/lib/graphql/queries";
+import { useHydrateCart } from "@/hooks/useHydrateCart";
 
 interface Props {
     order: Order;
@@ -37,10 +38,11 @@ export default function OrderActions({
 }: Props) {
     const router = useRouter();
     const queryClient = useQueryClient();
+    const hydrateCart = useHydrateCart();
+    const { user } = useUser();
 
     const [loading, setLoading] = useState(false);
     const [buyAgainLoading, setBuyAgainLoading] = useState(false);
-    const setCart = useCartStore((s) => s.setCart);
 
     async function handleCancel() {
         try {
@@ -72,10 +74,13 @@ export default function OrderActions({
                     orderId: order.id,
                 }
             );
+
             await queryClient.invalidateQueries({
-                queryKey: ["cart"],
+                queryKey: ["cart", user?.id],
             });
-            // router.refresh();
+
+            await hydrateCart();
+
             router.push("/cart");
         } finally {
             setBuyAgainLoading(false);
@@ -85,7 +90,6 @@ export default function OrderActions({
     if (order.status !== "CONFIRMED") {
         return null;
     }
-
 
     return (
         <div className="flex items-center justify-end gap-3">

@@ -6,6 +6,7 @@ import { useCart } from "@/hooks/useCart";
 import { useSaveCart } from "@/hooks/useSaveCart";
 import { useCartStore } from "@/store/cart";
 import { mergeCart } from "@/lib/mergeCart";
+import { mapServerCartItems } from "@/lib/cartMapper";
 
 export default function CartSync() {
     const { user } = useUser();
@@ -19,34 +20,41 @@ export default function CartSync() {
     const setCart = useCartStore((s) => s.setCart);
 
     useEffect(() => {
-        if (!user) return;
-        if (!cart) return;
+        async function syncCart() {
+            if (!user) return;
+            if (!cart) return;
 
-        if (syncedUserId === user.id) return;
+            if (syncedUserId === user.id) return;
 
-        const serverItems = cart.items.map((item) => ({
-            id: item.product.id,
-            title: item.product.title,
-            price: item.product.price,
-            image: item.product.media[0]?.url,
-            quantity: item.quantity,
-        }));
+            const serverItems = mapServerCartItems(cart.items);
 
-        const guestItems = useCartStore.getState().items;
+            const guestItems = useCartStore.getState().items;
 
-        const merged = mergeCart(guestItems, serverItems);
+            const merged = mergeCart(guestItems, serverItems);
 
-        setCart(merged);
+            setCart(merged);
 
-        setSyncedUserId(user.id);
+            await saveCart.mutateAsync(
+                merged.map((item) => ({
+                    productId: item.id,
+                    quantity: item.quantity,
+                }))
+            );
 
-        saveCart.mutate(
-            merged.map((i) => ({
-                productId: i.id,
-                quantity: i.quantity,
-            }))
-        );
-    }, [user, cart, syncedUserId, saveCart, setCart, setSyncedUserId]);
+            setSyncedUserId(user.id);
+        }
+
+        syncCart().catch((error) => {
+            console.error("Cart sync failed:", error);
+        });
+    }, [
+        user,
+        cart,
+        syncedUserId,
+        saveCart,
+        setCart,
+        setSyncedUserId,
+    ]);
 
     return null;
 }
