@@ -3,6 +3,7 @@ import { PaymentMethod } from "@/generated/prisma";
 export interface PlaceOrderInput {
   addressId: string;
   paymentMethod: PaymentMethod;
+  couponId?: string;
 }
 
 export interface OrderItem {

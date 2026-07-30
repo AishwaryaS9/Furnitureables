@@ -172,8 +172,7 @@ export const typeDefs = /* GraphQL */ `
     state: String!
     postalCode: String!
     country: String!
-
-    couponCode: String
+ 
     notes: String
 
     createdAt: DateTime!
@@ -372,6 +371,7 @@ input UpdateAddressInput {
 input PlaceOrderInput {
   addressId: String!
   paymentMethod: PaymentMethod!
+  couponId: String
 }
 
 
@@ -401,7 +401,7 @@ input PlaceOrderInput {
 
     wishlist: [Wishlist!]!
 
-      validateCoupon(
+    validateCoupon(
       code: String!
       subtotal: Float!
     ): CouponValidationResult!

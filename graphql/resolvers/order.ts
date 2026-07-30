@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { PaymentMethod } from "@/generated/prisma";
 import { buildOrder } from "@/lib/order/buildOrder";
 import { razorpay } from "@/lib/razorpay";
+import { PlaceOrderInput } from "@/types/order";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -24,11 +24,6 @@ async function getCurrentUser() {
     return user;
 }
 
-interface PlaceOrderInput {
-    addressId: string;
-    paymentMethod: PaymentMethod;
-}
-
 export const orderResolver = {
     Query: {
         orders: async () => {
@@ -39,6 +34,7 @@ export const orderResolver = {
                     userId: user.id,
                 },
                 include: {
+                    coupon: true,
                     items: true,
                 },
                 orderBy: {
@@ -63,6 +59,7 @@ export const orderResolver = {
                     userId: user.id,
                 },
                 include: {
+                    coupon: true,
                     items: {
                         include: {
                             product: true,
@@ -83,12 +80,6 @@ export const orderResolver = {
             }
         ) => {
             const user = await getCurrentUser();
-            console.log("Current Prisma user:", user);
-            console.log("GraphQL input:", input);
-            console.log("Passing to buildOrder", {
-                userId: user.id,
-                addressId: input.addressId,
-            });
             const {
                 cart,
                 address,
@@ -98,9 +89,11 @@ export const orderResolver = {
                 discount,
                 total,
                 orderNumber,
+                coupon,
             } = await buildOrder(
                 user.id,
-                input.addressId
+                input.addressId,
+                input.couponId
             );
 
             // Create Razorpay Order
@@ -149,6 +142,8 @@ export const orderResolver = {
 
                         postalCode: address.postalCode,
                         country: address.country,
+                        couponId: coupon?.id,
+                        // couponCode: coupon?.code,
                     },
                 });
 
@@ -201,9 +196,11 @@ export const orderResolver = {
                     discount,
                     total,
                     orderNumber,
+                    coupon,
                 } = await buildOrder(
                     user.id,
-                    input.addressId
+                    input.addressId,
+                    input.couponId
                 );
 
                 // return prisma.$transaction(async (tx) => {
@@ -253,6 +250,8 @@ export const orderResolver = {
                             postalCode: address.postalCode,
 
                             country: address.country,
+                            couponId: coupon?.id,
+                            // couponCode: coupon?.code,
                         },
                     });
 
@@ -277,10 +276,30 @@ export const orderResolver = {
 
                     // 3. Reduce Stock
                     for (const item of cart.items) {
-                        if (item.product.stock < item.quantity) {
-                            throw new Error(
-                                `${item.product.title} is out of stock`
-                            );
+                        // if (item.product.stock < item.quantity) {
+                        //     throw new Error(
+                        //         `${item.product.title} is out of stock`
+                        //     );
+                        // }
+
+                        // await tx.product.update({
+                        //     where: {
+                        //         id: item.product.id,
+                        //     },
+                        //     data: {
+                        //         stock: {
+                        //             decrement: item.quantity,
+                        //         },
+                        //     },
+                        // });
+                        const latestProduct = await tx.product.findUnique({
+                            where: {
+                                id: item.product.id,
+                            },
+                        });
+
+                        if (!latestProduct || latestProduct.stock < item.quantity) {
+                            throw new Error(`${item.product.title} is out of stock`);
                         }
 
                         await tx.product.update({
@@ -295,7 +314,21 @@ export const orderResolver = {
                         });
                     }
 
-                    // 4. Delete Cart Items
+                    //4. Increment coupon usage (once)
+                    if (coupon) {
+                        await tx.coupon.update({
+                            where: {
+                                id: coupon.id,
+                            },
+                            data: {
+                                usedCount: {
+                                    increment: 1,
+                                },
+                            },
+                        });
+                    }
+
+                    // 5. Delete Cart Items
                     await tx.cartItem.deleteMany({
                         where: {
                             cartId: cart.id,

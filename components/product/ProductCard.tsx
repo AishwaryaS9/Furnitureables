@@ -13,7 +13,6 @@ import WishlistButton from "../wishlist/WishlistButton";
 export default function ProductCard({ product }: { product: Product }) {
 
   const addToCart = useAddToCart();
-
   const isNewProduct = (() => {
     const rawDate = product.createdAt;
     if (!rawDate) return false;
@@ -29,50 +28,58 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group relative flex flex-col bg-card border border-border/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-border">
+      <div className="relative w-full aspect-4/5 overflow-hidden bg-muted/30">
 
-      <Link href={`/products/${product.id}`} className="relative w-full aspect-4/5 overflow-hidden bg-muted/30 block">
+        <Link
+          href={`/products/${product.id}`}
+          className="block h-full w-full"
+        >
+          {isNewProduct && (
+            <div className="absolute top-3 left-3 z-10 pointer-events-none">
+              <span className="inline-flex items-center rounded-md bg-zinc-950/90 text-white text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 backdrop-blur-xs shadow-xs ring-1 ring-white/10">
+                New
+              </span>
+            </div>
+          )}
 
-        {isNewProduct && (
-          <div className="absolute top-3 left-3 z-10 pointer-events-none">
-            <span className="inline-flex items-center rounded-md bg-zinc-950/90 text-white text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 backdrop-blur-xs shadow-xs ring-1 ring-white/10">
-              New
-            </span>
+          <div
+            className="absolute top-3 right-3 z-20"
+            onClick={(e) => e.preventDefault()}
+          >
+            <WishlistButton
+              productId={product.id}
+              isWishlisted={product.isWishlisted}
+            />
           </div>
-        )}
+
+          <Image
+            src={getProductThumbnail(product)}
+            alt={product.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            priority={false}
+          />
+        </Link>
 
         <div
-          className="absolute top-3 right-3 z-20"
-          onClick={(e) => e.preventDefault()}
+          className={`absolute inset-x-4 bottom-4 z-30 transition-all duration-300 ease-out ${product.stock <= 0
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
+            }`}
         >
-          <WishlistButton
-            productId={product.id}
-            isWishlisted={product.isWishlisted}
-          />
-        </div>
-
-        <Image
-          src={getProductThumbnail(product)}
-          alt={product.title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          priority={false}
-        />
-
-        <div className="absolute inset-x-4 bottom-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
           <Button
-            className="w-full bg-primary/95 text-primary-foreground backdrop-blur-xs shadow-md rounded-xl py-5 text-xs font-semibold uppercase tracking-wider hover:bg-primary gap-2"
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart(product);
-            }}
+            disabled={product.stock <= 0}
+            className="w-full rounded-xl py-5 text-xs font-semibold uppercase tracking-wider gap-2 shadow-md bg-primary/95 text-primary-foreground backdrop-blur-xs hover:bg-primary 
+            disabled:bg-zinc-200 disabled:text-zinc-500 disabled:border disabled:border-zinc-300 disabled:shadow-none disabled:backdrop-blur-none disabled:cursor-not-allowed"
+            onClick={() => addToCart(product)}
           >
             <ShoppingBag size={14} />
-            Quick Add
+            {product.stock <= 0 ? "Out of Stock" : "Quick Add"}
           </Button>
         </div>
-      </Link>
 
+      </div>
       <div className="p-5 flex-1 flex flex-col justify-between text-center space-y-3">
         <div className="space-y-1">
           {/* Attributes */}
@@ -105,6 +112,6 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }

@@ -7,14 +7,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAddresses } from "@/hooks/useAddresses";
 import { useCart } from "@/hooks/useCart";
 import { usePlaceOrder } from "@/hooks/usePlaceOrder";
+import { useCreateRazorpayOrder } from "@/hooks/useCreateRazorpayOrder";
 import { useCheckoutStore } from "@/store/checkout";
 import { useCartStore } from "@/store/cart";
+import { useCouponStore } from "@/store/coupon";
 import CheckoutSkeleton from "@/components/checkout/CheckoutSkeleton";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import OrderSummary from "@/components/checkout/OrderSummary";
-import { toast } from "sonner";
 import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector.tsx";
-import { useCreateRazorpayOrder } from "@/hooks/useCreateRazorpayOrder";
+import { toast } from "sonner";
 
 import Script from "next/script";
 import { RazorpayOptions, RazorpayResponse } from "@/types/razorpay";
@@ -30,7 +31,10 @@ export default function CheckoutPage() {
     const verifyRazorpayPayment = useVerifyRazorpayPayment();
 
     const { selectedAddressId, setSelectedAddress, paymentMethod, setPaymentMethod, clearCheckout } = useCheckoutStore();
+
     const clearCart = useCartStore((s) => s.clearCart);
+    const coupon = useCouponStore((s) => s.coupon);
+    const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
     const { data: addresses, isLoading: addressesLoading } = useAddresses(user?.id);
 
@@ -69,6 +73,7 @@ export default function CheckoutPage() {
                 const result = await placeOrder.mutateAsync({
                     addressId,
                     paymentMethod,
+                    couponId: coupon?.id,
                 });
 
                 toast.success("Order placed successfully!");
@@ -82,7 +87,7 @@ export default function CheckoutPage() {
                 });
                 clearCart();
                 clearCheckout();
-
+                clearCoupon();
                 router.push(`/orders/${result.placeOrder.id}`);
 
                 return;
@@ -91,6 +96,7 @@ export default function CheckoutPage() {
                 const result = await createRazorpayOrder.mutateAsync({
                     addressId,
                     paymentMethod: "RAZORPAY",
+                    couponId: coupon?.id,
                 });
 
                 const razorpayOrder = result.createRazorpayOrder;
@@ -126,7 +132,7 @@ export default function CheckoutPage() {
                             toast.success("Payment successful! Order confirmed.");
                             clearCart();
                             clearCheckout();
-
+                            clearCoupon();
                             router.push(
                                 `/orders/${verifyResult.verifyRazorpayPayment.id}`
                             );
