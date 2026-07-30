@@ -13,6 +13,7 @@ export const GET_PRODUCTS = gql`
         material
         createdAt
         isWishlisted
+        stock
 
         media {
           id

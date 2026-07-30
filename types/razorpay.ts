@@ -1,6 +1,7 @@
 export interface CreateRazorpayOrderInput {
     addressId: string;
     paymentMethod: "RAZORPAY";
+    couponId?: string;
 }
 
 export interface CreateRazorpayOrderResponse {

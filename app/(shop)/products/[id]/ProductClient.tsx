@@ -7,6 +7,7 @@ import RelatedProducts from "@/components/product/RelatedProducts";
 import { Product } from "@/types/product";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import WishlistButton from "@/components/wishlist/WishlistButton";
+import { Button } from "@/components/ui/button";
 
 export default function ProductClient({ product }: { product: Product }) {
     const addToCart = useAddToCart();
@@ -152,12 +153,14 @@ export default function ProductClient({ product }: { product: Product }) {
                                 </div>
 
                                 {/* Bold Flat Black Capsule Button */}
-                                <button
+                                <Button
+                                    disabled={product.stock <= 0}
                                     onClick={handleAddToCart}
-                                    className="flex-1 h-11 bg-zinc-900 text-white hover:bg-zinc-800 font-medium rounded-lg text-sm transition-colors shadow-sm"
+                                    className="flex-1 h-11 bg-zinc-900 text-white hover:bg-zinc-800 font-medium rounded-lg text-sm transition-colors shadow-sm
+                                    disabled:bg-zinc-200 disabled:text-zinc-500 disabled:cursor-not-allowed"
                                 >
-                                    Add to Bag
-                                </button>
+                                    {product.stock <= 0 ? "Out of Stock" : "Add to Bag"}
+                                </Button>
                                 <WishlistButton
                                     productId={product.id}
                                     isWishlisted={product.isWishlisted}

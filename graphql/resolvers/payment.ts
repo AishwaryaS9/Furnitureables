@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { VerifyRazorpayPaymentInput } from "@/types/razorpay";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -20,13 +21,6 @@ async function getCurrentUser() {
     return user;
 }
 
-interface VerifyRazorpayPaymentArgs {
-    orderId: string;
-    razorpayOrderId: string;
-    razorpayPaymentId: string;
-    razorpaySignature: string;
-}
-
 export const paymentResolver = {
     Mutation: {
         verifyRazorpayPayment: async (
@@ -36,7 +30,7 @@ export const paymentResolver = {
                 razorpayOrderId,
                 razorpayPaymentId,
                 razorpaySignature,
-            }: VerifyRazorpayPaymentArgs
+            }: VerifyRazorpayPaymentInput
         ) => {
             const user = await getCurrentUser();
 
@@ -57,8 +51,17 @@ export const paymentResolver = {
             // Already verified (avoid double-processing on retries)
             if (order.paymentStatus === "PAID") {
                 return prisma.order.findUnique({
-                    where: { id: order.id },
-                    include: { items: { include: { product: true } } },
+                    where: {
+                        id: order.id
+                    },
+                    include: {
+                        coupon: true,
+                        items: {
+                            include: {
+                                product: true
+                            }
+                        }
+                    },
                 });
             }
 
@@ -90,6 +93,20 @@ export const paymentResolver = {
                         data: {
                             stock: {
                                 decrement: item.quantity,
+                            },
+                        },
+                    });
+                }
+
+                // Increment coupon usage
+                if (order.couponId) {
+                    await tx.coupon.update({
+                        where: {
+                            id: order.couponId,
+                        },
+                        data: {
+                            usedCount: {
+                                increment: 1,
                             },
                         },
                     });

@@ -1,9 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { generateOrderNumber } from "@/lib/order";
+import { validateCoupon } from "@/lib/coupon/validateCoupon";
+import { calculateDiscount } from "@/lib/coupon/calculateDiscount";
 
 export async function buildOrder(
     userId: string,
-    addressId: string
+    addressId: string,
+    couponId?: string
 ) {
     // Load cart
     const cart = await prisma.cart.findUnique({
@@ -48,9 +51,32 @@ export async function buildOrder(
 
     const shipping = subtotal >= 5000 ? 0 : 499;
 
-    const tax = 0;
+    let coupon = null;
+    let discount = 0;
 
-    const discount = 0;
+    if (couponId) {
+        coupon = await prisma.coupon.findUnique({
+            where: {
+                id: couponId,
+            },
+        });
+
+        if (!coupon) {
+            throw new Error("Coupon not found.");
+        }
+
+        await validateCoupon(
+            coupon.code,
+            subtotal
+        );
+
+        discount = calculateDiscount(
+            subtotal,
+            coupon
+        );
+    }
+
+    const tax = 0;
 
     const total =
         subtotal +
@@ -69,5 +95,6 @@ export async function buildOrder(
         discount,
         total,
         orderNumber,
+        coupon,
     };
 }
