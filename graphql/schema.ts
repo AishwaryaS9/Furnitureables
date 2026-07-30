@@ -29,6 +29,11 @@ export const typeDefs = /* GraphQL */ `
     VIDEO
   }
 
+  enum DiscountType {
+    PERCENTAGE
+    FIXED
+  }
+
   ############################
   ## PRODUCT
   ############################
@@ -184,6 +189,40 @@ export const typeDefs = /* GraphQL */ `
     createdAt: String!
     product: Product!
   }
+
+  ############################
+  ## COUPON
+  ############################
+ 
+  type Coupon {
+    id: String!
+    code: String!
+    description: String
+
+    discountType: DiscountType!
+    discountValue: Float!
+
+    minimumOrder: Float
+    maximumDiscount: Float
+
+    usageLimit: Int
+    usedCount: Int
+
+    expiresAt: DateTime
+    isActive: Boolean!
+
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
+  type CouponValidationResult {
+    success: Boolean!
+    message: String!
+    discount: Float!
+    coupon: Coupon
+  }
+
+
 
   ############################
   ## RAZORPAY
@@ -361,6 +400,12 @@ input PlaceOrderInput {
     order(id: String!): Order
 
     wishlist: [Wishlist!]!
+
+      validateCoupon(
+      code: String!
+      subtotal: Float!
+    ): CouponValidationResult!
+  
   }
 
   ############################
@@ -426,5 +471,6 @@ input PlaceOrderInput {
       razorpayPaymentId: String!
       razorpaySignature: String!
     ): Order!
+
   }
 `;

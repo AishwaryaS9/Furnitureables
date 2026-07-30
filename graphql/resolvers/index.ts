@@ -5,6 +5,7 @@ import { addressResolver } from "./address";
 import { orderResolver } from "./order";
 import { wishlistResolver } from "./wishlist";
 import { paymentResolver } from "./payment";
+import { couponResolvers } from './coupon';
 
 export const resolvers = {
     Query: {
@@ -13,6 +14,7 @@ export const resolvers = {
         ...addressResolver.Query,
         ...orderResolver.Query,
         ...wishlistResolver.Query,
+        ...couponResolvers.Query,
     },
 
     Mutation: {

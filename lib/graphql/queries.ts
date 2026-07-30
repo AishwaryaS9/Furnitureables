@@ -231,3 +231,26 @@ export const GET_WISHLIST_COUNT = gql`
     }
   }
 `;
+
+export const VALIDATE_COUPON = gql`
+  query ValidateCoupon(
+    $code: String!
+    $subtotal: Float!
+  ) {
+    validateCoupon(
+      code: $code
+      subtotal: $subtotal
+    ) {
+      success
+      message
+      discount
+
+      coupon {
+        id
+        code
+        discountType
+        discountValue
+      }
+    }
+  }
+`;

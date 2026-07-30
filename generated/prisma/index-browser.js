@@ -215,7 +215,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   state: 'state',
   postalCode: 'postalCode',
   country: 'country',
-  couponCode: 'couponCode',
+  couponId: 'couponId',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -237,6 +237,22 @@ exports.Prisma.WishlistScalarFieldEnum = {
   userId: 'userId',
   productId: 'productId',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.CouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  minimumOrder: 'minimumOrder',
+  maximumDiscount: 'maximumDiscount',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -279,6 +295,11 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   RAZORPAY: 'RAZORPAY'
 };
 
+exports.DiscountType = exports.$Enums.DiscountType = {
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED: 'FIXED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Product: 'Product',
@@ -288,7 +309,8 @@ exports.Prisma.ModelName = {
   Address: 'Address',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  Wishlist: 'Wishlist'
+  Wishlist: 'Wishlist',
+  Coupon: 'Coupon'
 };
 
 /**
