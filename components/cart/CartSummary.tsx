@@ -5,45 +5,92 @@ import { useCartStore } from "@/store/cart";
 import { ShieldCheck, Truck, Tag } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useCouponStore } from "@/store/coupon";
+import { useValidateCoupon } from "@/hooks/useValidateCoupon";
+import { toast } from "sonner";
 
 export default function CartSummary() {
-    const items = useCartStore((s) => s.items);
     const { user } = useUser();
     const { openSignIn } = useClerk();
+
+    const items = useCartStore((s) => s.items);
+
     const router = useRouter();
+
     const [couponCode, setCouponCode] = useState("");
-    const [isApplied, setIsApplied] = useState(false);
+    const coupon = useCouponStore((s) => s.coupon);
+    const setCoupon = useCouponStore((s) => s.setCoupon);
+    const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
-    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const validateCoupon = useValidateCoupon();
+
+    const subtotal = items.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+    );
+
     const shippingThreshold = 1500;
-    const shippingCost = subtotal >= shippingThreshold || subtotal === 0 ? 0 : 150;
 
-    const discount = isApplied ? subtotal * 0.1 : 0;
-    const estimatedTax = (subtotal - discount) * 0.08;
-    const grandTotal = subtotal - discount + shippingCost + estimatedTax;
+    const shippingCost =
+        subtotal >= shippingThreshold || subtotal === 0
+            ? 0
+            : 150;
 
-    const handleApplyPromo = (e: React.FormEvent) => {
+    const discount = coupon?.discount ?? 0;
+
+    const taxableAmount = Math.max(subtotal - discount, 0);
+
+    const estimatedTax = taxableAmount * 0.08;
+
+    const grandTotal =
+        taxableAmount +
+        shippingCost +
+        estimatedTax;
+
+    const handleApplyCoupon = async (
+        e: React.FormEvent
+    ) => {
         e.preventDefault();
-        if (couponCode.trim().toUpperCase() === "FURNISH10") {
-            setIsApplied(true);
-        } else {
-            alert("Invalid design collective code. Try 'FURNISH10'");
+
+        if (!couponCode.trim()) return;
+
+        try {
+            const result = await validateCoupon.mutateAsync({
+                code: couponCode.trim().toUpperCase(),
+                subtotal,
+            });
+
+            const response = result.validateCoupon;
+
+            if (!response.success || !response.coupon) {
+                toast.error(response.message);
+                return;
+            }
+
+            setCoupon({
+                id: response.coupon.id,
+                code: response.coupon.code,
+                discount: response.discount,
+            });
+
+            toast.success(response.message);
+        } catch {
+            toast.error("Failed to validate coupon.");
         }
+    };
+
+    const handleRemoveCoupon = () => {
+        clearCoupon();
+        setCouponCode("");
+        toast.success("Coupon removed.");
     };
 
     const handleCheckout = () => {
         if (!user) {
-            // Option: Open sign-in modal
             openSignIn();
-            // Optional: You could also add a toast library here (like sonner/react-hot-toast)
-            // alert("Please login to continue shopping");
             return;
         }
-
-        // Proceed to your actual checkout logic (e.g., Stripe redirect)
         router.push("/checkout")
-        // console.log("Proceeding to checkout...");
-
     };
 
     return (
@@ -68,8 +115,8 @@ export default function CartSummary() {
 
             {/* PREMIUM COUPON ENTRY PANEL */}
             <div className="border-t border-b border-zinc-100 py-4">
-                {!isApplied ? (
-                    <form onSubmit={handleApplyPromo} className="space-y-2">
+                {!coupon ? (
+                    <form onSubmit={handleApplyCoupon} className="space-y-2">
                         <label className="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold block pl-1">
                             Have an Furnisheables Code?
                         </label>
@@ -86,10 +133,10 @@ export default function CartSummary() {
                             </div>
                             <button
                                 type="submit"
-                                disabled={!couponCode.trim()}
+                                disabled={!couponCode.trim() || validateCoupon.isPending}
                                 className="bg-zinc-900 text-white disabled:bg-zinc-100 disabled:text-zinc-400 text-xs font-medium px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition-all cursor-pointer disabled:cursor-not-allowed"
                             >
-                                Apply
+                                {validateCoupon.isPending ? "Applying..." : "Apply"}
                             </button>
                         </div>
                     </form>
@@ -97,10 +144,11 @@ export default function CartSummary() {
                     <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-3 flex items-center justify-between animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex items-center gap-2">
                             <Tag className="w-3.5 h-3.5 text-emerald-600" />
-                            <span className="text-xs font-medium text-emerald-800 tracking-wider font-mono">FURNISH10 APPLIED</span>
+                            <span className="text-xs font-medium text-emerald-800 tracking-wider font-mono">{coupon?.code} APPLIED</span>
                         </div>
                         <button
-                            onClick={() => { setIsApplied(false); setCouponCode(""); }}
+                            type="button"
+                            onClick={handleRemoveCoupon}
                             className="text-xs font-semibold text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-wider cursor-pointer pl-2"
                         >
                             Remove
@@ -116,9 +164,9 @@ export default function CartSummary() {
                     <span className="font-medium text-zinc-900 tabular-nums">${subtotal.toLocaleString()}</span>
                 </div>
 
-                {isApplied && (
+                {coupon && (
                     <div className="flex justify-between items-center text-emerald-600 font-light animate-in fade-in duration-200">
-                        <span>Furnisheables Collective Discount (10%)</span>
+                        <span>Coupon ({coupon?.code})</span>
                         <span className="font-semibold tabular-nums">-${discount.toLocaleString()}</span>
                     </div>
                 )}
