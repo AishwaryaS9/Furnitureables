@@ -276,35 +276,12 @@ export const orderResolver = {
 
                     // 3. Reduce Stock
                     for (const item of cart.items) {
-                        // if (item.product.stock < item.quantity) {
-                        //     throw new Error(
-                        //         `${item.product.title} is out of stock`
-                        //     );
-                        // }
-
-                        // await tx.product.update({
-                        //     where: {
-                        //         id: item.product.id,
-                        //     },
-                        //     data: {
-                        //         stock: {
-                        //             decrement: item.quantity,
-                        //         },
-                        //     },
-                        // });
-                        const latestProduct = await tx.product.findUnique({
+                        const updated = await tx.product.updateMany({
                             where: {
                                 id: item.product.id,
-                            },
-                        });
-
-                        if (!latestProduct || latestProduct.stock < item.quantity) {
-                            throw new Error(`${item.product.title} is out of stock`);
-                        }
-
-                        await tx.product.update({
-                            where: {
-                                id: item.product.id,
+                                stock: {
+                                    gte: item.quantity,
+                                },
                             },
                             data: {
                                 stock: {
@@ -312,6 +289,10 @@ export const orderResolver = {
                                 },
                             },
                         });
+
+                        if (updated.count === 0) {
+                            throw new Error(`${item.product.title} is out of stock`);
+                        }
                     }
 
                     //4. Increment coupon usage (once)
