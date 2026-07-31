@@ -174,6 +174,7 @@ export const typeDefs = /* GraphQL */ `
     country: String!
  
     notes: String
+    coupon: Coupon
 
     createdAt: DateTime!
     updatedAt: String!
