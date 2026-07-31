@@ -170,24 +170,35 @@ export const GET_ORDER = gql`
     order(id: $id) {
       id
       orderNumber
+
       subtotal
       shipping
       tax
       discount
       total
       currency
+
       status
       paymentStatus
       paymentMethod
+
       fullName
       phone
+
       addressLine1
       addressLine2
       city
       state
       postalCode
       country
+
       createdAt
+
+      razorpayPaymentId
+
+      coupon {
+        code
+      }
 
       items {
         id
@@ -196,6 +207,7 @@ export const GET_ORDER = gql`
         sku
         quantity
         price
+
         product {
           id
         }

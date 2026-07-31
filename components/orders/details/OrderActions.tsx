@@ -22,12 +22,9 @@ import { BUY_AGAIN } from "@/lib/graphql/mutations";
 import { BuyAgainResponse } from "@/types/order";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCartStore } from "@/store/cart";
 import { useUser } from "@clerk/nextjs";
-import { CartQueryResponse } from "@/types/cart";
-import { mapServerCartItems } from "@/lib/cartMapper";
-import { GET_CART } from "@/lib/graphql/queries";
 import { useHydrateCart } from "@/hooks/useHydrateCart";
+import Link from "next/link";
 
 interface Props {
     order: Order;
@@ -106,6 +103,12 @@ export default function OrderActions({
 
                 Buy Again
             </Button>
+
+            <Link href={`/orders/${order.id}/invoice`}>
+                <Button variant="outline">
+                    View Invoice
+                </Button>
+            </Link>
 
             <AlertDialog>
                 <AlertDialogTrigger className="p-1 bg-red-300 rounded-md">

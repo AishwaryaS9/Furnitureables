@@ -39,6 +39,12 @@ export interface Order {
 
   paymentMethod: PaymentMethod;
 
+  coupon?: {
+    code: string;
+  } | null;
+
+  razorpayPaymentId?: string | null;
+
   subtotal: number;
   shipping: number;
   tax: number;
