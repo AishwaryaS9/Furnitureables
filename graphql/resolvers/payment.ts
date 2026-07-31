@@ -88,14 +88,23 @@ export const paymentResolver = {
             return prisma.$transaction(async (tx) => {
                 // Reduce stock now that payment is confirmed
                 for (const item of order.items) {
-                    await tx.product.update({
-                        where: { id: item.productId },
+                    const updated = await tx.product.updateMany({
+                        where: {
+                            id: item.productId,
+                            stock: {
+                                gte: item.quantity,
+                            },
+                        },
                         data: {
                             stock: {
                                 decrement: item.quantity,
                             },
                         },
                     });
+
+                    if (updated.count === 0) {
+                        throw new Error(`${item.title} is out of stock`);
+                    }
                 }
 
                 // Increment coupon usage
