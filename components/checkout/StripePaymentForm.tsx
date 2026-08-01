@@ -98,8 +98,6 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                     }
                 );
 
-
-
             if (confirmation.error) {
                 toast.error(
                     confirmation.error.message ??
@@ -114,16 +112,16 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                 queryKey: ["cart", user?.id],
             });
 
-            // router.push(`/orders/${payment.orderId}`);
-            await new Promise((resolve) =>
-                setTimeout(resolve, 1000)
-            );
-
-            await queryClient.invalidateQueries({
+            await queryClient.refetchQueries({
                 queryKey: ["cart", user?.id],
             });
 
+            clearCart();
+            clearCheckout();
+            clearCoupon();
+
             router.push(`/orders/${payment.orderId}`);
+
         } catch (error) {
             console.error(error);
             toast.error("Unable to complete payment.");
