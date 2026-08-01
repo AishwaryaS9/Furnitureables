@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/hooks/useCart";
 import { useSaveCart } from "@/hooks/useSaveCart";
@@ -19,34 +19,47 @@ export default function CartSync() {
     const setSyncedUserId = useCartStore((s) => s.setSyncedUserId);
     const setCart = useCartStore((s) => s.setCart);
 
+    const syncing = useRef(false);
+
     useEffect(() => {
         async function syncCart() {
             if (!user) return;
             if (!cart) return;
 
             if (syncedUserId === user.id) return;
+            if (syncing.current) return;
 
-            const serverItems = mapServerCartItems(cart.items);
+            syncing.current = true;
 
-            const guestItems = useCartStore.getState().items;
+            try {
+                const serverItems = mapServerCartItems(cart.items);
+                const guestItems = useCartStore.getState().items;
 
-            const merged = mergeCart(guestItems, serverItems);
+                const merged = mergeCart(guestItems, serverItems);
 
-            setCart(merged);
+                setCart(merged);
 
-            await saveCart.mutateAsync(
-                merged.map((item) => ({
-                    productId: item.id,
-                    quantity: item.quantity,
-                }))
-            );
+                // IMPORTANT:
+                // Mark as synced BEFORE awaiting the mutation.
+                setSyncedUserId(user.id);
 
-            setSyncedUserId(user.id);
+                await saveCart.mutateAsync(
+                    merged.map((item) => ({
+                        productId: item.id,
+                        quantity: item.quantity,
+                    }))
+                );
+            } catch (error) {
+                console.error("Cart sync failed:", error);
+
+                // Allow retry if sync failed.
+                setSyncedUserId(null);
+            } finally {
+                syncing.current = false;
+            }
         }
 
-        syncCart().catch((error) => {
-            console.error("Cart sync failed:", error);
-        });
+        syncCart();
     }, [
         user,
         cart,

@@ -18,6 +18,13 @@ export default function OrderSummary({ cart, selectedAddressId, onCheckout, load
 
     const { paymentMethod } = useCheckoutStore();
 
+    const buttonLabel =
+        paymentMethod === "COD"
+            ? "Place Order"
+            : paymentMethod === "RAZORPAY"
+                ? "Pay with Razorpay"
+                : "Pay Securely";
+
     const items = cart?.items ?? [];
 
     const subtotal = items.reduce(
@@ -123,7 +130,7 @@ export default function OrderSummary({ cart, selectedAddressId, onCheckout, load
                     items.length === 0
                 }
             >
-                {loading ? "Placing Order..." : "Place Order"}
+                {loading ? "Processing..." : buttonLabel}
             </Button>
 
             {!selectedAddressId && (

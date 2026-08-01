@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { buildOrder } from "@/lib/order/buildOrder";
 import { razorpay } from "@/lib/razorpay";
+import { stripe } from "@/lib/stripe";
 import { PlaceOrderInput } from "@/types/order";
 
 async function getCurrentUser() {
@@ -71,6 +72,122 @@ export const orderResolver = {
     },
 
     Mutation: {
+        createStripePaymentIntent: async (
+            _: unknown,
+            {
+                input,
+            }: {
+                input: PlaceOrderInput;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            const {
+                cart,
+                address,
+                subtotal,
+                shipping,
+                tax,
+                discount,
+                total,
+                orderNumber,
+                coupon,
+            } = await buildOrder(
+                user.id,
+                input.addressId,
+                input.couponId
+            );
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: Math.round(total * 100),
+                currency: "inr",
+
+                automatic_payment_methods: {
+                    enabled: true,
+                },
+
+                metadata: {
+                    orderNumber,
+                    userId: user.id,
+                },
+            });
+
+            if (!paymentIntent.client_secret) {
+                throw new Error(
+                    "Unable to create Stripe Payment Intent."
+                );
+            }
+
+            const order = await prisma.$transaction(async (tx) => {
+
+                const order = await tx.order.create({
+                    data: {
+                        orderNumber,
+
+                        userId: user.id,
+                        addressId: address.id,
+
+                        subtotal,
+                        shipping,
+                        tax,
+                        discount,
+                        total,
+
+                        currency: "INR",
+
+                        paymentMethod: "STRIPE",
+
+                        status: "PENDING",
+                        paymentStatus: "PENDING",
+
+                        stripePaymentIntentId:
+                            paymentIntent.id,
+
+                        fullName: address.fullName,
+                        phoneCode: address.phoneCode,
+                        phone: address.phone,
+
+                        addressLine1: address.addressLine1,
+                        addressLine2: address.addressLine2,
+
+                        city: address.city,
+                        state: address.state,
+
+                        postalCode: address.postalCode,
+                        country: address.country,
+
+                        couponId: coupon?.id,
+                    },
+                });
+
+                await tx.orderItem.createMany({
+                    data: cart.items.map((item) => ({
+                        orderId: order.id,
+
+                        productId: item.product.id,
+
+                        title: item.product.title,
+
+                        image:
+                            item.product.media[0]?.url,
+
+                        sku: item.product.sku,
+
+                        price: item.product.price,
+
+                        quantity: item.quantity,
+                    })),
+                });
+
+                return order;
+            });
+
+            return {
+                orderId: order.id,
+                clientSecret: paymentIntent.client_secret,
+            };
+        },
+
         createRazorpayOrder: async (
             _: unknown,
             {
@@ -176,6 +293,7 @@ export const orderResolver = {
                 currency: "INR",
             };
         },
+
         placeOrder: async (
             _: unknown,
             {

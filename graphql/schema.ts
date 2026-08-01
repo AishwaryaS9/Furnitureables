@@ -222,8 +222,6 @@ export const typeDefs = /* GraphQL */ `
     coupon: Coupon
   }
 
-
-
   ############################
   ## RAZORPAY
   ############################
@@ -233,6 +231,17 @@ export const typeDefs = /* GraphQL */ `
     razorpayOrderId: String!
     amount: Float!
     currency: String!
+  }
+
+  
+  ############################
+  ## STRIPE
+  ############################
+
+
+  type StripePaymentIntentResponse {
+    orderId: String!
+    clientSecret: String
   }
 
   ############################
@@ -473,5 +482,8 @@ input PlaceOrderInput {
       razorpaySignature: String!
     ): Order!
 
+    createStripePaymentIntent(
+      input: PlaceOrderInput!
+    ): StripePaymentIntentResponse!
   }
 `;

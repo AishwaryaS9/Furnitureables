@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,9 +21,13 @@ import Script from "next/script";
 import { RazorpayOptions, RazorpayResponse } from "@/types/razorpay";
 import { useVerifyRazorpayPayment } from "@/hooks/useVerifyRazorpayPayment";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { stripePromise } from "@/lib/stripe-client";
+import StripePaymentForm, { StripePaymentFormRef } from "@/components/checkout/StripePaymentForm";
+
 export default function CheckoutPage() {
     const { user } = useUser();
-
+    const stripeFormRef = useRef<StripePaymentFormRef>(null);
     const router = useRouter();
 
     const placeOrder = usePlaceOrder();
@@ -170,6 +174,8 @@ export default function CheckoutPage() {
 
             if (paymentMethod === "STRIPE") {
                 // Stripe flow
+                await stripeFormRef.current?.submit();
+                return;
             }
 
         } catch (error) {
@@ -205,6 +211,15 @@ export default function CheckoutPage() {
                             value={paymentMethod}
                             onChange={setPaymentMethod}
                         />
+
+                        {paymentMethod === "STRIPE" && (
+                            <Elements stripe={stripePromise}>
+                                <StripePaymentForm
+                                    ref={stripeFormRef}
+                                    addresses={addresses ?? []}
+                                />
+                            </Elements>
+                        )}
 
                     </div>
 

@@ -108,7 +108,7 @@ export const cartResolver = {
                     const existing = map.get(item.productId);
                     map.set(item.productId, {
                         productId: item.productId,
-                        quantity: existing ? existing.quantity + item.quantity : item.quantity,
+                        quantity: item.quantity,
                     });
                     return map;
                 }, new Map<string, { productId: string; quantity: number }>()).values()

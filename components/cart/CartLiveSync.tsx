@@ -11,8 +11,9 @@ export default function CartLiveSync() {
     const items = useCartStore((s) => s.items);
     const syncedUserId = useCartStore((s) => s.syncedUserId);
 
-    const saveCart = useSaveCart();
+    const { mutate, isPending } = useSaveCart();
 
+    const initialized = useRef(false);
     const previousPayload = useRef("");
 
     useEffect(() => {
@@ -20,7 +21,12 @@ export default function CartLiveSync() {
 
         if (syncedUserId !== user.id) return;
 
-        if (saveCart.isPending) return;
+        if (!initialized.current) {
+            initialized.current = true;
+            return;
+        }
+
+        if (isPending) return;
 
         const payload = items.map((item) => ({
             productId: item.id,
@@ -29,12 +35,13 @@ export default function CartLiveSync() {
 
         const serialized = JSON.stringify(payload);
 
+        // Don't sync identical payloads.
         if (serialized === previousPayload.current) return;
 
         previousPayload.current = serialized;
 
-        saveCart.mutate(payload);
-    }, [items, user, syncedUserId, saveCart]);
+        mutate(payload);
+    }, [items, user, syncedUserId, isPending, mutate]);
 
     return null;
 }
