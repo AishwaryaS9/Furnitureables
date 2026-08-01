@@ -111,6 +111,16 @@ export async function POST(req: NextRequest) {
                     },
                 });
 
+                const itemsBefore = await tx.cartItem.findMany({
+                    where: {
+                        cart: {
+                            userId: order.userId,
+                        },
+                    },
+                });
+
+                console.log("Items before delete:", itemsBefore);
+
                 // Clear cart
                 await tx.cartItem.deleteMany({
                     where: {
@@ -119,7 +129,30 @@ export async function POST(req: NextRequest) {
                         },
                     },
                 });
+
+                const deleted = await tx.cartItem.deleteMany({
+                    where: {
+                        cart: {
+                            userId: order.userId,
+                        },
+                    },
+                });
+
+                console.log("Deleted count:", deleted.count);
+
+                const itemsAfter = await tx.cartItem.findMany({
+                    where: {
+                        cart: {
+                            userId: order.userId,
+                        },
+                    },
+                });
+
+                console.log("Items after delete:", itemsAfter);
+
             });
+
+
 
             break;
         }
