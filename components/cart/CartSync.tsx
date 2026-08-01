@@ -39,10 +39,9 @@ export default function CartSync() {
 
                 setCart(merged);
 
-                // IMPORTANT:
                 // Mark as synced BEFORE awaiting the mutation.
                 setSyncedUserId(user.id);
-
+                console.log("🔥 CartSync -> saveCart");
                 await saveCart.mutateAsync(
                     merged.map((item) => ({
                         productId: item.id,
