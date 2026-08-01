@@ -26,3 +26,10 @@ export interface ProductsResponse {
 export interface CartResponse {
     cart: Cart;
 }
+
+export interface StripePaymentIntentResponse {
+    createStripePaymentIntent: {
+        orderId: string;
+        clientSecret: string;
+    };
+}
