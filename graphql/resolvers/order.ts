@@ -97,8 +97,8 @@ export const orderResolver = {
                 input.addressId,
                 input.couponId
             );
-            const stripe = getStripe();
-            const paymentIntent = await stripe.paymentIntents.create({
+            const stripeClient = getStripe();
+            const paymentIntent = await stripeClient.paymentIntents.create({
                 amount: Math.round(total * 100),
                 currency: "inr",
 
@@ -181,6 +181,22 @@ export const orderResolver = {
 
                 return order;
             });
+
+            try {
+                await stripeClient.paymentIntents.update(paymentIntent.id, {
+                    metadata: {
+                        orderId: order.id,
+                        orderNumber,
+                        userId: user.id,
+                    },
+                });
+            } catch (error) {
+                console.error("Failed to attach Stripe metadata", error);
+
+                throw new Error(
+                    "Unable to attach order metadata to Stripe PaymentIntent."
+                );
+            }
 
             return {
                 orderId: order.id,
