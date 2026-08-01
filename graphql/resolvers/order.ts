@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { buildOrder } from "@/lib/order/buildOrder";
 import { razorpay } from "@/lib/razorpay";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { PlaceOrderInput } from "@/types/order";
 
 async function getCurrentUser() {
@@ -97,7 +97,7 @@ export const orderResolver = {
                 input.addressId,
                 input.couponId
             );
-
+            const stripe = getStripe();
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: Math.round(total * 100),
                 currency: "inr",

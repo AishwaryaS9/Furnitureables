@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
@@ -17,6 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     let event: Stripe.Event;
+    const stripe = getStripe();
 
     try {
         event = stripe.webhooks.constructEvent(
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
             const paymentIntent =
                 event.data.object as Stripe.PaymentIntent;
 
-            console.log("payment intend Id",paymentIntent.id);
+            console.log("payment intend Id", paymentIntent.id);
 
             await prisma.$transaction(async (tx) => {
                 const order = await tx.order.findFirst({
