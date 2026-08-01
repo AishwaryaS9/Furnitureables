@@ -91,6 +91,10 @@ export const cartResolver = {
 
     Mutation: {
         saveCart: async (_: unknown, { items }: SaveCartArgs) => {
+            console.log("====== SAVE CART CALLED ======");
+            console.log("save cart items", items);
+            console.trace();
+
             const user = await getCurrentUser();
 
             let cart = await prisma.cart.findUnique({
@@ -105,16 +109,19 @@ export const cartResolver = {
 
             const deduped = Array.from(
                 items.reduce((map, item) => {
-                    const existing = map.get(item.productId);
                     map.set(item.productId, {
                         productId: item.productId,
                         quantity: item.quantity,
                     });
+
                     return map;
-                }, new Map<string, { productId: string; quantity: number }>()).values()
+                }, new Map<string, { productId: string; quantity: number }>())
+                    .values()
             );
 
             await prisma.$transaction(async (tx) => {
+                console.log("User:", user.id);
+                console.log("Cart:", cart.id);
                 await tx.cartItem.deleteMany({
                     where: { cartId: cart.id },
                 });

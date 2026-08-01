@@ -35,11 +35,10 @@ export default function CartLiveSync() {
 
         const serialized = JSON.stringify(payload);
 
-        // Don't sync identical payloads.
         if (serialized === previousPayload.current) return;
 
         previousPayload.current = serialized;
-
+        console.log("CartLiveSync syncing:", payload);
         mutate(payload);
     }, [items, user, syncedUserId, isPending, mutate]);
 
