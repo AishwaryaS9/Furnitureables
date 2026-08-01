@@ -108,6 +108,10 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
 
             toast.success("Payment successful!");
 
+            clearCart();
+            clearCheckout();
+            clearCoupon();
+
             await queryClient.invalidateQueries({
                 queryKey: ["cart", user?.id],
             });
@@ -115,10 +119,6 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
             await queryClient.refetchQueries({
                 queryKey: ["cart", user?.id],
             });
-
-            clearCart();
-            clearCheckout();
-            clearCoupon();
 
             router.push(`/orders/${payment.orderId}`);
 
