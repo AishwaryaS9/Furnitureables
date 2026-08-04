@@ -44,6 +44,7 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
 
     const { selectedAddressId, clearCheckout } = useCheckoutStore();
     const clearCart = useCartStore((s) => s.clearCart);
+    const setSyncedUserId = useCartStore((s) => s.setSyncedUserId);
 
     const coupon = useCouponStore((s) => s.coupon);
 
@@ -70,11 +71,9 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                     couponId: coupon?.id,
                 });
 
-            const payment =
-                result.createStripePaymentIntent;
+            const payment = result.createStripePaymentIntent;
 
-            const card =
-                elements.getElement(CardElement);
+            const card = elements.getElement(CardElement);
 
             if (!card) {
                 toast.error("Card details are missing.");
@@ -110,10 +109,14 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
             });
 
             clearCart();
+            setSyncedUserId(user?.id ?? null);
             clearCheckout();
             clearCoupon();
 
-            router.push(`/orders/${payment.orderId}`);
+            const orderId = payment.orderId;
+            router.push(`/orders/${orderId}`);
+
+            return;
 
         } catch (error) {
             console.error(error);
