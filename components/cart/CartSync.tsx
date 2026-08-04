@@ -36,12 +36,9 @@ export default function CartSync() {
                 const guestItems = useCartStore.getState().items;
 
                 const merged = mergeCart(guestItems, serverItems);
-
                 setCart(merged);
 
-                // Mark as synced BEFORE awaiting the mutation.
                 setSyncedUserId(user.id);
-                console.log("🔥 CartSync -> saveCart");
                 await saveCart.mutateAsync(
                     merged.map((item) => ({
                         productId: item.id,

@@ -122,13 +122,6 @@ export async function POST(req: NextRequest) {
                 console.log("Items before delete:", itemsBefore);
 
                 // Clear cart
-                await tx.cartItem.deleteMany({
-                    where: {
-                        cart: {
-                            userId: order.userId,
-                        },
-                    },
-                });
 
                 const deleted = await tx.cartItem.deleteMany({
                     where: {
@@ -149,11 +142,7 @@ export async function POST(req: NextRequest) {
                 });
 
                 console.log("Items after delete:", itemsAfter);
-
             });
-
-
-
             break;
         }
 
