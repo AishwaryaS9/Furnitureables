@@ -40,21 +40,14 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
 
     const { user } = useUser();
 
-    const createStripePaymentIntent =
-        useCreateStripePaymentIntent();
+    const createStripePaymentIntent = useCreateStripePaymentIntent();
 
-    const {
-        selectedAddressId,
-        clearCheckout,
-    } = useCheckoutStore();
+    const { selectedAddressId, clearCheckout } = useCheckoutStore();
+    const clearCart = useCartStore((s) => s.clearCart);
 
     const coupon = useCouponStore((s) => s.coupon);
 
-    const clearCoupon =
-        useCouponStore((s) => s.clearCoupon);
-
-    const clearCart =
-        useCartStore((s) => s.clearCart);
+    const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
     const handleStripePayment = async () => {
         if (!stripe || !elements) return;
@@ -112,7 +105,7 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                 queryKey: ["cart", user?.id],
             });
 
-            await queryClient.refetchQueries({
+            await queryClient.fetchQuery({
                 queryKey: ["cart", user?.id],
             });
 
