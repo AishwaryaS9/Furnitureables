@@ -7,11 +7,16 @@ export default function ShopLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="relative flex min-h-screen flex-col bg-background">
+      {/* Header & Navigation */}
       <Navbar />
-      <main className="flex-1">
+
+      {/* Main Semantic Content Node */}
+      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
         {children}
       </main>
+
+      {/* Global Shop Footer */}
       <Footer />
     </div>
   );

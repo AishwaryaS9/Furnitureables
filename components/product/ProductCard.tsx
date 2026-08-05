@@ -9,7 +9,6 @@ import { getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import WishlistButton from "../wishlist/WishlistButton";
 
-
 export default function ProductCard({ product }: { product: Product }) {
 
   const addToCart = useAddToCart();
@@ -27,7 +26,7 @@ export default function ProductCard({ product }: { product: Product }) {
   })();
 
   return (
-    <div className="group relative flex flex-col bg-card border border-border/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-border">
+    <div className="group relative flex flex-col bg-card border border-border/60 rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-border">
       <div className="relative w-full aspect-4/5 overflow-hidden bg-muted/30">
 
         <Link
@@ -57,7 +56,7 @@ export default function ProductCard({ product }: { product: Product }) {
             alt={product.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-103"
             priority={false}
           />
         </Link>
