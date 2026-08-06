@@ -1,11 +1,19 @@
 "use client";
 
 import { useFilterStore } from "@/store/useFilterStore";
-import { ChevronDown, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ProductFilters() {
   const { setFilter, resetFilters } = useFilterStore();
-
   const filters = useFilterStore((s) => s.filters);
 
   const hasActiveFilters = Object.values(filters).some(
@@ -13,114 +21,152 @@ export default function ProductFilters() {
   );
 
   return (
-    <div className="flex flex-wrap gap-3 items-center">
-
+    <form
+      onSubmit={(e) => e.preventDefault()}
+      className="space-y-5 w-full"
+      aria-label="Product filters"
+    >
       {/* CATEGORY */}
-      <div className="relative group">
-
-        <select
-          value={filters.category ?? ""}
-          onChange={(e) =>
+      <div className="space-y-1.5">
+        <label
+          htmlFor="filter-category-trigger"
+          className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase block"
+        >
+          Category
+        </label>
+        <Select
+          value={filters.category ?? "all"}
+          onValueChange={(val) =>
             setFilter(
               "category",
-              e.target.value || undefined
+              !val || val === "all" ? undefined : val
             )
           }
-          className="appearance-none bg-white border border-zinc-200 rounded-xl px-4 py-2.5 pr-10 text-xs min-w-40"
         >
-          <option value="">All Categories</option>
-
-          <option value="sofa">Sofas</option>
-          <option value="chair">Chairs</option>
-          <option value="table">Tables</option>
-          <option value="bed">Beds</option>
-          <option value="desk">Desks</option>
-          <option value="storage">Storage</option>
-
-        </select>
-
-        <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2" />
-
+          <SelectTrigger
+            id="filter-category-trigger"
+            aria-label="Filter by Category"
+            className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
+          >
+            <SelectValue placeholder="All Categories" />
+          </SelectTrigger>
+          <SelectContent
+            // position="popper"
+            side="bottom"
+            sideOffset={4}
+            className="rounded-lg"
+          >
+            <SelectItem value="all" className="text-xs">All Categories</SelectItem>
+            <SelectItem value="sofa" className="text-xs">Sofas</SelectItem>
+            <SelectItem value="chair" className="text-xs">Chairs</SelectItem>
+            <SelectItem value="table" className="text-xs">Tables</SelectItem>
+            <SelectItem value="bed" className="text-xs">Beds</SelectItem>
+            <SelectItem value="desk" className="text-xs">Desks</SelectItem>
+            <SelectItem value="storage" className="text-xs">Storage</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* ROOM */}
-
-      <div className="relative group">
-
-        <select
-          value={filters.room ?? ""}
-          onChange={(e) =>
+      {/* ENVIRONMENT / ROOM */}
+      <div className="space-y-1.5">
+        <label
+          htmlFor="filter-room-trigger"
+          className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase block"
+        >
+          Environment
+        </label>
+        <Select
+          value={filters.room ?? "all"}
+          onValueChange={(val) =>
             setFilter(
               "room",
-              e.target.value || undefined
+              !val || val === "all" ? undefined : val
             )
           }
-          className="appearance-none bg-white border border-zinc-200 rounded-xl px-4 py-2.5 pr-10 text-xs min-w-40"
         >
-          <option value="">All Environments</option>
-
-          <option value="living">Living Room</option>
-
-          <option value="bedroom">Bedroom</option>
-
-          <option value="office">Office</option>
-
-          <option value="study">Study Room</option>
-
-          <option value="dining">Dining Room</option>
-
-        </select>
-
-        <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2" />
-
+          <SelectTrigger
+            id="filter-room-trigger"
+            aria-label="Filter by Environment"
+            className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
+          >
+            <SelectValue placeholder="All Environments" />
+          </SelectTrigger>
+          <SelectContent
+            // position="popper"
+            side="bottom"
+            sideOffset={4}
+            className="rounded-lg"
+          >
+            <SelectItem value="all" className="text-xs">All Environments</SelectItem>
+            <SelectItem value="living" className="text-xs">Living Room</SelectItem>
+            <SelectItem value="bedroom" className="text-xs">Bedroom</SelectItem>
+            <SelectItem value="office" className="text-xs">Office</SelectItem>
+            <SelectItem value="study" className="text-xs">Study Room</SelectItem>
+            <SelectItem value="dining" className="text-xs">Dining Room</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* MIN PRICE */}
+      {/* PRICE RANGE */}
+      <fieldset className="space-y-1.5 border-none p-0 m-0">
+        <legend className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase block mb-1">
+          Price Range ($)
+        </legend>
+        <div className="grid grid-cols-2 gap-2.5">
+          <div>
+            <label htmlFor="filter-min-price" className="sr-only">
+              Minimum Price
+            </label>
+            <Input
+              id="filter-min-price"
+              type="number"
+              min="0"
+              placeholder="Min"
+              value={filters.minPrice ?? ""}
+              onChange={(e) =>
+                setFilter(
+                  "minPrice",
+                  e.target.value ? Number(e.target.value) : undefined
+                )
+              }
+              className="bg-card text-xs font-medium rounded-lg h-9 shadow-xs placeholder:text-muted-foreground/70"
+            />
+          </div>
 
-      <input
-        type="number"
-        placeholder="Min Price"
-        value={filters.minPrice ?? ""}
-        onChange={(e) =>
-          setFilter(
-            "minPrice",
-            e.target.value
-              ? Number(e.target.value)
-              : undefined
-          )
-        }
-        className="border border-zinc-200 rounded-xl px-4 py-2.5 text-xs w-28"
-      />
+          <div>
+            <label htmlFor="filter-max-price" className="sr-only">
+              Maximum Price
+            </label>
+            <Input
+              id="filter-max-price"
+              type="number"
+              min="0"
+              placeholder="Max"
+              value={filters.maxPrice ?? ""}
+              onChange={(e) =>
+                setFilter(
+                  "maxPrice",
+                  e.target.value ? Number(e.target.value) : undefined
+                )
+              }
+              className="bg-card text-xs font-medium rounded-lg h-9 shadow-xs placeholder:text-muted-foreground/70"
+            />
+          </div>
+        </div>
+      </fieldset>
 
-      {/* MAX PRICE */}
-
-      <input
-        type="number"
-        placeholder="Max Price"
-        value={filters.maxPrice ?? ""}
-        onChange={(e) =>
-          setFilter(
-            "maxPrice",
-            e.target.value
-              ? Number(e.target.value)
-              : undefined
-          )
-        }
-        className="border border-zinc-200 rounded-xl px-4 py-2.5 text-xs w-28"
-      />
-
+      {/* RESET BUTTON */}
       {hasActiveFilters && (
-        <button
+        <Button
+          type="button"
+          variant="outline"
           onClick={resetFilters}
-          className="inline-flex items-center gap-2 px-3 py-2.5 text-xs font-semibold"
+          className="w-full justify-center gap-2 my-4 text-xs font-semibold rounded-lg h-9 text-muted-foreground hover:text-foreground border-border bg-secondary/50 hover:bg-secondary transition-all"
         >
-          <RotateCcw className="w-4 h-4" />
-
-          RESET
-
-        </button>
+          <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+          <span>Reset Filters</span>
+        </Button>
       )}
-
-    </div>
+    </form>
   );
 }
