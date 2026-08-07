@@ -2,28 +2,26 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { useUser } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddresses } from "@/hooks/useAddresses";
 import { useCart } from "@/hooks/useCart";
 import { usePlaceOrder } from "@/hooks/usePlaceOrder";
 import { useCreateRazorpayOrder } from "@/hooks/useCreateRazorpayOrder";
+import { useVerifyRazorpayPayment } from "@/hooks/useVerifyRazorpayPayment";
 import { useCheckoutStore } from "@/store/checkout";
 import { useCartStore } from "@/store/cart";
 import { useCouponStore } from "@/store/coupon";
-import CheckoutSkeleton from "@/components/checkout/CheckoutSkeleton";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import OrderSummary from "@/components/checkout/OrderSummary";
-import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector.tsx";
-import { toast } from "sonner";
-
-import Script from "next/script";
+import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector";
+import StripePaymentForm, { StripePaymentFormRef } from "@/components/checkout/StripePaymentForm";
 import { RazorpayOptions, RazorpayResponse } from "@/types/razorpay";
-import { useVerifyRazorpayPayment } from "@/hooks/useVerifyRazorpayPayment";
-
+import { toast } from "sonner";
+import { ShieldCheck, Lock, MapPin, CreditCard, ShoppingBag } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/lib/stripe-client";
-import StripePaymentForm, { StripePaymentFormRef } from "@/components/checkout/StripePaymentForm";
 
 export default function CheckoutPage() {
     const { user } = useUser();
@@ -40,9 +38,9 @@ export default function CheckoutPage() {
     const coupon = useCouponStore((s) => s.coupon);
     const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
-    const { data: addresses, isLoading: addressesLoading } = useAddresses(user?.id);
+    const { data: addresses } = useAddresses(user?.id);
 
-    const { data: cart, isLoading: cartLoading } = useCart(user?.id);
+    const { data: cart } = useCart(user?.id);
 
     const queryClient = useQueryClient();
 
@@ -184,54 +182,121 @@ export default function CheckoutPage() {
         }
     }
 
-    if (addressesLoading || cartLoading) {
-        return <CheckoutSkeleton />;
-    }
-
     return (
         <>
             <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-            <div className="mx-auto max-w-7xl px-4 py-10">
 
-                <h1 className="mb-8 text-4xl font-serif">
-                    Checkout
-                </h1>
+            <main
+                id="main-content"
+                tabIndex={-1}
+                className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background transition-colors duration-200"
+            >
+                <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16">
 
-                <div className="grid gap-10 lg:grid-cols-3">
+                    {/* Page Header with Trust Security Badge */}
+                    <header className="border-b border-border/60 pb-6 mb-8 sm:mb-10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
+                        <div className="space-y-2">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal tracking-tight text-foreground">
+                                Secure Checkout
+                            </h1>
+                            <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
+                                Complete your order matrix & architectural delivery configuration
+                            </p>
+                        </div>
 
-                    <div className="space-y-8 lg:col-span-2">
+                        <div className="inline-flex items-center gap-2 bg-secondary/80 border border-border/60 rounded-full px-3.5 py-1.5 backdrop-blur-md shadow-xs self-start sm:self-auto">
+                            <Lock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                            <span className="text-xs font-semibold text-foreground/90 tracking-tight">
+                                Secure Payment Gateway
+                            </span>
+                        </div>
+                    </header>
 
-                        <AddressSelector
-                            addresses={addresses ?? []}
-                            selectedAddressId={selectedAddressId}
-                            onSelect={setSelectedAddress}
-                        />
+                    {/* Step Visual Guide Bar */}
+                    <nav aria-label="Checkout process steps" className="mb-8">
+                        <ol className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl text-xs font-medium">
+                            <li className="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border shadow-xs text-foreground">
+                                <div className="w-6 h-6 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-semibold text-[10px] shrink-0">
+                                    1
+                                </div>
+                                <span className="hidden sm:inline font-serif truncate">Shipping Address</span>
+                                <MapPin className="w-3.5 h-3.5 sm:hidden shrink-0 text-muted-foreground" aria-hidden="true" />
+                            </li>
 
-                        <PaymentMethodSelector
-                            value={paymentMethod}
-                            onChange={setPaymentMethod}
-                        />
+                            <li className="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border shadow-xs text-foreground">
+                                <div className="w-6 h-6 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-semibold text-[10px] shrink-0">
+                                    2
+                                </div>
+                                <span className="hidden sm:inline font-serif truncate">Payment Method</span>
+                                <CreditCard className="w-3.5 h-3.5 sm:hidden shrink-0 text-muted-foreground" aria-hidden="true" />
+                            </li>
 
-                        {paymentMethod === "STRIPE" && (
-                            <Elements stripe={stripePromise}>
-                                <StripePaymentForm
-                                    ref={stripeFormRef}
+                            <li className="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border shadow-xs text-foreground">
+                                <div className="w-6 h-6 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-semibold text-[10px] shrink-0">
+                                    3
+                                </div>
+                                <span className="hidden sm:inline font-serif truncate">Order Summary</span>
+                                <ShoppingBag className="w-3.5 h-3.5 sm:hidden shrink-0 text-muted-foreground" aria-hidden="true" />
+                            </li>
+                        </ol>
+                    </nav>
+
+                    {/* Main Checkout Split */}
+                    <div className="grid gap-8 lg:gap-10 lg:grid-cols-12 items-start">
+
+                        {/* Left Column: Delivery Address & Payment Selector */}
+                        <div className="space-y-8 lg:col-span-7 xl:col-span-8">
+
+                            <section aria-label="Shipping Address Selection" className="space-y-4">
+                                <AddressSelector
                                     addresses={addresses ?? []}
+                                    selectedAddressId={selectedAddressId}
+                                    onSelect={setSelectedAddress}
                                 />
-                            </Elements>
-                        )}
+                            </section>
+
+                            <section aria-label="Payment Method Selection" className="space-y-4">
+                                <PaymentMethodSelector
+                                    value={paymentMethod}
+                                    onChange={setPaymentMethod}
+                                />
+
+                                {paymentMethod === "STRIPE" && (
+                                    <div className="pt-4 border-t border-border/60">
+                                        <Elements stripe={stripePromise}>
+                                            <StripePaymentForm
+                                                ref={stripeFormRef}
+                                                addresses={addresses ?? []}
+                                            />
+                                        </Elements>
+                                    </div>
+                                )}
+                            </section>
+
+                        </div>
+
+                        {/* Right Column: Order Ledger & Final Checkout Action */}
+                        <aside aria-label="Order Summary" className="lg:col-span-5 xl:col-span-4 sticky top-28">
+                            <OrderSummary
+                                cart={cart}
+                                selectedAddressId={selectedAddressId}
+                                onCheckout={handlePlaceOrder}
+                                loading={placeOrder.isPending || createRazorpayOrder.isPending}
+                            />
+
+                            {/* Trust Guarantee Card */}
+                            <div className="mt-4 p-4 rounded-2xl bg-card border border-border/60 shadow-xs flex items-center gap-3 text-xs text-muted-foreground">
+                                <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true" />
+                                <p className="font-light leading-relaxed">
+                                    Your personal & billing details are guarded under official SSL encrypted protocols.
+                                </p>
+                            </div>
+                        </aside>
 
                     </div>
 
-                    <OrderSummary
-                        cart={cart}
-                        selectedAddressId={selectedAddressId}
-                        onCheckout={handlePlaceOrder}
-                        loading={placeOrder.isPending}
-                    />
                 </div>
-
-            </div>
+            </main>
         </>
     );
 }

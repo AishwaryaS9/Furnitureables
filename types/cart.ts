@@ -12,6 +12,7 @@ export interface CartItem {
 /** Server cart (GraphQL) */
 export interface ServerCartItem {
     quantity: number;
+    id?: number;
 
     product: {
         id: string;

@@ -47,8 +47,6 @@ export default function CartSync() {
                 );
             } catch (error) {
                 console.error("Cart sync failed:", error);
-
-                // Allow retry if sync failed.
                 setSyncedUserId(null);
             } finally {
                 syncing.current = false;

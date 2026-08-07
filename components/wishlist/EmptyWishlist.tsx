@@ -1,48 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ArrowRight } from "lucide-react";
-
+import { Heart, ArrowRight, Bookmark, Sparkles, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function EmptyWishlist() {
     return (
-        <section className="flex min-h-[65vh] items-center justify-center px-4">
-            <div className="mx-auto max-w-md text-center">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-                    <Heart className="h-10 w-10 text-muted-foreground" />
+        <section
+            role="region"
+            aria-label="Empty wishlist status"
+            className="flex min-h-[65vh] items-center justify-center px-4 py-12 sm:py-16 text-foreground antialiased"
+        >
+            <div className="mx-auto max-w-lg text-center space-y-6">
+
+                {/* Decorative Header Icon */}
+                <div
+                    className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary border border-border/80 text-muted-foreground shadow-xs"
+                    aria-hidden="true"
+                >
+                    <Heart className="h-9 w-9 stroke-[1.5]" />
                 </div>
 
-                <h2 className="text-3xl font-semibold tracking-tight">
-                    Your wishlist is empty
-                </h2>
+                {/* Heading & Subtitle */}
+                <div className="space-y-2.5">
+                    <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-foreground">
+                        Your wishlist is empty
+                    </h1>
 
-                <p className="mt-3 text-muted-foreground">
-                    Save your favorite furniture so you can easily find it later.
-                    Start exploring our collections and add the pieces you love.
-                </p>
-                <div className="mt-10 grid gap-4 text-sm text-muted-foreground sm:grid-cols-3">
-                    <div>
-                        ❤️
-                        <p className="mt-2">Save favorites</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed max-w-md mx-auto">
+                        Save your favorite solid wood pieces so you can easily reference them later. Start exploring our collections and save the items you love.
+                    </p>
+                </div>
+
+                {/* Feature Highlights Grid */}
+                <div
+                    role="list"
+                    aria-label="Wishlist benefits"
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-xs font-medium text-muted-foreground"
+                >
+                    <div
+                        role="listitem"
+                        className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/60 bg-card/60 backdrop-blur-xs shadow-xs"
+                    >
+                        <Bookmark className="w-4 h-4 text-foreground/80 mb-2" aria-hidden="true" />
+                        <span>Save Favorites</span>
                     </div>
 
-                    <div>
-                        🛋️
-                        <p className="mt-2">Compare products</p>
+                    <div
+                        role="listitem"
+                        className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/60 bg-card/60 backdrop-blur-xs shadow-xs"
+                    >
+                        <Scale className="w-4 h-4 text-foreground/80 mb-2" aria-hidden="true" />
+                        <span>Compare Specs</span>
                     </div>
 
-                    <div>
-                        ✨
-                        <p className="mt-2">Shop anytime</p>
+                    <div
+                        role="listitem"
+                        className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/60 bg-card/60 backdrop-blur-xs shadow-xs"
+                    >
+                        <Sparkles className="w-4 h-4 text-foreground/80 mb-2" aria-hidden="true" />
+                        <span>Shop Anytime</span>
                     </div>
                 </div>
-                <Button className="mt-8 p-6">
-                    <Link href="/products">
-                        Browse Products
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                </Button>
+
+                {/* CTA Button */}
+                <div className="pt-2">
+                    <Button
+                        // asChild
+                        className="h-11 px-6 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs"
+                    >
+                        <Link href="/products" className="inline-flex items-center gap-2 group">
+                            <span>Browse Catalog</span>
+                            <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                        </Link>
+                    </Button>
+                </div>
+
             </div>
         </section>
     );
