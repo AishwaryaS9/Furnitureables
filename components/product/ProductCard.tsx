@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowUpRight } from "lucide-react";
 import { Product } from "@/types/product";
-import { getProductThumbnail } from "@/lib/utils";
+import { formatPrice, getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import WishlistButton from "../wishlist/WishlistButton";
 
@@ -31,11 +31,11 @@ export default function ProductCard({ product }: { product: Product }) {
     .filter(Boolean)
     .join(", ");
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(product.price);
+  // const formattedPrice = new Intl.NumberFormat("en-US", {
+  //   style: "currency",
+  //   currency: "USD",
+  //   maximumFractionDigits: 0,
+  // }).format(product.price);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -113,7 +113,7 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
 
           <div className="mt-0.5 flex items-start justify-between gap-2">
-            <h3 className="text-sm font-medium text-stone-900 line-clamp-1">
+            <h3 className="text-sm font-medium text-foreground line-clamp-1">
               <Link href={`/products/${product.id}`} className="hover:underline underline-offset-4">
                 {product.title}
               </Link>
@@ -121,7 +121,7 @@ export default function ProductCard({ product }: { product: Product }) {
             <Link
               href={`/products/${product.id}`}
               aria-label={`View ${product.title}`}
-              className="text-stone-400 hover:text-stone-900"
+              className="text-stone-400 hover:text-foreground"
             >
               <ArrowUpRight className="h-4 w-4 shrink-0" />
             </Link>
@@ -129,8 +129,9 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         <div className="flex items-center justify-between border-t border-stone-200/50 pt-1">
-          <p className="text-sm font-semibold tracking-tight text-stone-900">
-            {formattedPrice}
+          <p className="text-sm font-semibold tracking-tight text-foreground">
+            {/* {formattedPrice} */}
+            {formatPrice(product.price, "USD")}
           </p>
 
           {product.color && (

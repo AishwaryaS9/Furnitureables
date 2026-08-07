@@ -11,6 +11,7 @@ import { useFilterStore } from "@/store/useFilterStore";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { SORT_OPTIONS } from "@/lib/data";
 
 export default function ProductsPage() {
     const { data: products, isLoading } = useProducts();
@@ -174,7 +175,10 @@ export default function ProductsPage() {
                                             aria-label="Sort products catalog"
                                             className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
                                         >
-                                            <SelectValue placeholder="Sort By (Default)" />
+                                            {/* <SelectValue placeholder="Sort By (Default)" /> */}
+                                            <SelectValue placeholder="Sort By (Default)">
+                                                {SORT_OPTIONS.find((opt) => opt.value === (filters.sortBy ?? "all"))?.label}
+                                            </SelectValue>
                                         </SelectTrigger>
                                         <SelectContent
                                             side="bottom"
@@ -182,12 +186,11 @@ export default function ProductsPage() {
                                             align="end"
                                             className="rounded-lg"
                                         >
-                                            <SelectItem value="all" className="text-xs">Sort By (Default)</SelectItem>
-                                            <SelectItem value="latest" className="text-xs">Newest Additions</SelectItem>
-                                            <SelectItem value="priceAsc" className="text-xs">Price: Low → High</SelectItem>
-                                            <SelectItem value="priceDesc" className="text-xs">Price: High → Low</SelectItem>
-                                            <SelectItem value="nameAsc" className="text-xs">Name: A → Z</SelectItem>
-                                            <SelectItem value="nameDesc" className="text-xs">Name: Z → A</SelectItem>
+                                            {SORT_OPTIONS.map((opt) => (
+                                                <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                                                    {opt.label}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>

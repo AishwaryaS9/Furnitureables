@@ -38,8 +38,6 @@ export default function CartLiveSync() {
         if (serialized === previousPayload.current) return;
 
         previousPayload.current = serialized;
-        console.log("CartLiveSync syncing:", payload);
-        console.log("🔥 CartLiveSync -> saveCart");
         mutate(payload);
     }, [items, user, syncedUserId, isPending, mutate]);
 

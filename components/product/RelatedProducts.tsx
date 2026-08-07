@@ -4,6 +4,7 @@ import ProductCard from "./ProductCard";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useRelatedProducts } from "@/hooks/useRelatedProducts";
+import { Button } from "@/components/ui/button";
 
 interface RelatedProductsProps {
     type: string;
@@ -16,15 +17,21 @@ export default function RelatedProducts({ type, id }: RelatedProductsProps) {
         id,
     });
 
+    // Skeleton Loading State
     if (isLoading) {
         return (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div
+                role="status"
+                aria-label="Loading related products"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+            >
+                <span className="sr-only">Loading related products...</span>
                 {[...Array(4)].map((_, index) => (
-                    <div key={index} className="space-y-4 animate-pulse">
-                        <div className="aspect-4/3 sm:aspect-[1.6] w-full rounded-2xl bg-zinc-100" />
-                        <div className="space-y-2">
-                            <div className="h-4 bg-zinc-100 rounded w-2/3" />
-                            <div className="h-4 bg-zinc-100 rounded w-1/3" />
+                    <div key={index} className="space-y-4 animate-pulse rounded-2xl border border-border/50 p-3 bg-card">
+                        <div className="aspect-square w-full rounded-xl bg-muted" />
+                        <div className="space-y-2 px-1">
+                            <div className="h-4 bg-muted rounded-md w-2/3" />
+                            <div className="h-3.5 bg-muted rounded-md w-1/3" />
                         </div>
                     </div>
                 ))}
@@ -32,31 +39,48 @@ export default function RelatedProducts({ type, id }: RelatedProductsProps) {
         );
     }
 
+    // Empty State (No related items found)
     if (!data || data.length === 0) {
         return (
-            <div className="w-full rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/50 p-8 text-center flex flex-col items-center justify-center max-w-xl mx-auto">
-                <div className="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-400 mb-3">
+            <div
+                role="region"
+                aria-label="No related products found"
+                className="w-full rounded-3xl border border-dashed border-border bg-card/50 backdrop-blur-xs p-6 sm:p-10 text-center flex flex-col items-center justify-center max-w-xl mx-auto shadow-xs"
+            >
+                <div
+                    className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-muted-foreground mb-3 border border-border shadow-xs"
+                    aria-hidden="true"
+                >
                     <ShoppingBag className="w-5 h-5 stroke-[1.5]" />
                 </div>
-                <h3 className="text-sm font-semibold text-zinc-900">Unique Item</h3>
-                <p className="text-xs text-zinc-500 max-w-xs mt-1 mb-4 leading-relaxed">
+                <h3 className="text-sm font-semibold text-foreground tracking-tight">Unique Item</h3>
+                <p className="text-xs text-muted-foreground font-light max-w-xs mt-1 mb-5 leading-relaxed">
                     This item is part of an exclusive collection, but you can find more amazing alternatives in our main catalog.
                 </p>
-                <Link
-                    href="/products"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-900 hover:text-zinc-700 transition-colors group"
+                <Button
+                    variant="outline"
+                    size="sm"
+                    // asChild
+                    className="rounded-xl text-xs font-semibold h-9 px-4 border-border bg-card hover:bg-secondary text-foreground transition-all"
                 >
-                    Explore all furniture
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
+                    <Link href="/products" className="inline-flex items-center gap-2 group">
+                        <span>Explore all furniture</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-muted-foreground group-hover:text-foreground" aria-hidden="true" />
+                    </Link>
+                </Button>
             </div>
         );
     }
 
+    // Product Showcase Feed
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div
+            role="region"
+            aria-label="Related products feed"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+        >
             {data.map((p) => (
-                <div key={p.id} className="transition-all duration-300 hover:-translate-y-1">
+                <div key={p.id} className="transition-transform duration-300 hover:-translate-y-1 focus-within:-translate-y-1 rounded-2xl">
                     <ProductCard product={p} />
                 </div>
             ))}

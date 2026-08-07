@@ -148,7 +148,7 @@ export default function Shop() {
                             href="/products"
                             className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-xl bg-primary text-white text-xs sm:text-sm font-semibold tracking-widest uppercase hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-md shadow-zinc-950/10 hover:shadow-lg hover:shadow-zinc-950/15"
                         >
-                            View Full Architectural Catalog
+                            View Full Catalog
                         </Link>
                     </div>
                 </div>
