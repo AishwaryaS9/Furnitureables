@@ -6,6 +6,7 @@ import { ShoppingBag, ArrowLeft, ArrowRight } from "lucide-react";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
 import { Button } from "@/components/ui/button";
+import BreadcrumbNavigation from "@/components/common/BreadcrumbNavigation";
 
 export default function CartPage() {
   const items = useCartStore((s) => s.items);
@@ -18,6 +19,8 @@ export default function CartPage() {
       className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background transition-colors duration-200"
     >
       <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16">
+        {/* Breadcrumb Navigation */}
+        <BreadcrumbNavigation value="Cart" />
 
         {/* Header Section */}
         <header className="border-b border-border/60 pb-6 mb-8 sm:mb-10 flex flex-row items-center justify-between gap-4">
@@ -28,7 +31,8 @@ export default function CartPage() {
             <p
               role="status"
               aria-live="polite"
-              className="text-[10px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest truncate"
+              // className="text-[10px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest truncate"
+              className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed"
             >
               Review your items ({totalItemCount} {totalItemCount === 1 ? 'item' : 'items'})
             </p>

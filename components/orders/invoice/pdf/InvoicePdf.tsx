@@ -6,398 +6,463 @@ interface InvoicePdfProps {
 }
 
 const COLORS = {
-    primary: "#8B5E3C",
-    dark: "#111827",
-    gray: "#6B7280",
-    light: "#F9FAFB",
+    primary: "#111827",
+    secondary: "#4B5563",
+    muted: "#6B7280",
+    lightBg: "#F9FAFB",
     border: "#E5E7EB",
-    success: "#16A34A",
-    warning: "#F59E0B",
+    paidBg: "#DCFCE7",
+    paidText: "#15803D",
+    pendingBg: "#FEF3C7",
+    pendingText: "#B45309",
 };
 
 const styles = StyleSheet.create({
     page: {
-        padding: 40,
-        fontSize: 11,
+        padding: 36,
+        fontSize: 10,
+        fontFamily: "Helvetica",
         color: "#111827",
+        backgroundColor: "#FFFFFF",
     },
 
+    // Header Section
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: 30,
-        borderBottom: 1,
-        borderBottomColor: "#E5E7EB",
-        paddingBottom: 15,
+        alignItems: "flex-start",
+        marginBottom: 24,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
+        paddingBottom: 16,
     },
 
-    brand: {
-        fontSize: 28,
-        fontWeight: "bold",
+    brandGroup: {
+        maxWidth: 240,
+    },
+
+    brandTitle: {
+        fontSize: 22,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.primary,
+        letterSpacing: -0.5,
+    },
+
+    brandSubtitle: {
+        marginTop: 3,
+        fontSize: 9,
+        color: COLORS.muted,
+    },
+
+    brandMeta: {
+        marginTop: 8,
+        fontSize: 8,
+        color: COLORS.muted,
+        lineHeight: 1.3,
+    },
+
+    invoiceMetaGroup: {
+        alignItems: "flex-end",
+    },
+
+    invoiceHeaderRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+        marginBottom: 8,
+    },
+
+    invoiceTitle: {
+        fontSize: 22,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.primary,
+        letterSpacing: 2,
+    },
+
+    statusBadge: {
+        paddingVertical: 3,
+        paddingHorizontal: 8,
+        borderRadius: 4,
+        fontSize: 8,
+        fontFamily: "Helvetica-Bold",
+        textTransform: "uppercase",
+    },
+
+    invoiceDetailText: {
+        fontSize: 9,
+        color: COLORS.secondary,
+        marginBottom: 2,
+    },
+
+    boldText: {
+        fontFamily: "Helvetica-Bold",
         color: COLORS.primary,
     },
 
-
-    subtitle: {
-        marginTop: 4,
-        color: COLORS.gray,
-        fontSize: 10,
-    },
-    invoiceTitle: {
-        fontSize: 26,
-        fontWeight: "bold",
-        color: COLORS.dark,
-    },
-
-    section: {
-        marginTop: 20,
+    // Customer & Payment Grid Section
+    sectionGrid: {
         flexDirection: "row",
         justifyContent: "space-between",
+        marginBottom: 24,
     },
 
-    column: {
-        width: "47%",
-        border: 1,
+    columnBox: {
+        width: "48%",
+        borderWidth: 1,
         borderColor: COLORS.border,
-        borderRadius: 6,
+        borderRadius: 8,
         padding: 12,
-        backgroundColor: COLORS.light,
+        backgroundColor: COLORS.lightBg,
     },
 
-    heading: {
-        fontSize: 12,
-        fontWeight: "bold",
+    sectionHeading: {
+        fontSize: 8,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.muted,
+        textTransform: "uppercase",
+        letterSpacing: 0.8,
+        marginBottom: 8,
+    },
+
+    columnContent: {
+        fontSize: 9,
+        color: COLORS.secondary,
+        lineHeight: 1.4,
+    },
+
+    recipientName: {
+        fontSize: 11,
+        fontFamily: "Helvetica-Bold",
         color: COLORS.primary,
-        marginBottom: 10,
+        marginBottom: 3,
     },
 
-    row: {
-        marginBottom: 4,
+    keyValRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingVertical: 3,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
     },
 
+    // Table Section
     table: {
-        marginTop: 30,
+        marginBottom: 24,
     },
 
     tableHeader: {
         flexDirection: "row",
-        backgroundColor: "#F3F4F6",
-        paddingVertical: 10,
+        backgroundColor: COLORS.lightBg,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
+        paddingVertical: 8,
         paddingHorizontal: 8,
-        borderRadius: 4,
-        marginBottom: 6,
+        fontSize: 8,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.muted,
+        textTransform: "uppercase",
+        letterSpacing: 0.5,
     },
 
     tableRow: {
         flexDirection: "row",
-        borderBottom: 1,
-        borderBottomColor: "#F3F4F6",
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
         paddingVertical: 8,
+        paddingHorizontal: 8,
+        alignItems: "center",
     },
 
-    product: {
+    colProduct: {
         width: "50%",
     },
 
-    qty: {
-        width: "15%",
+    colQty: {
+        width: "12%",
         textAlign: "center",
     },
 
-    price: {
-        width: "15%",
+    colPrice: {
+        width: "18%",
         textAlign: "right",
     },
 
-    total: {
+    colTotal: {
         width: "20%",
         textAlign: "right",
     },
 
-    totals: {
-        marginTop: 25,
-        marginLeft: "50%",
-        border: 1,
+    productTitle: {
+        fontSize: 9,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.primary,
+    },
+
+    productSku: {
+        fontSize: 8,
+        color: COLORS.muted,
+        marginTop: 2,
+    },
+
+    // Summary Totals Section
+    summaryContainer: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        marginBottom: 24,
+    },
+
+    totalsBox: {
+        width: 220,
+        borderWidth: 1,
         borderColor: COLORS.border,
-        borderRadius: 6,
-        padding: 14,
-        backgroundColor: COLORS.light,
+        borderRadius: 8,
+        padding: 12,
+        backgroundColor: COLORS.lightBg,
     },
 
     totalRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: 6,
+        marginBottom: 5,
+        fontSize: 9,
+        color: COLORS.secondary,
     },
 
-    grandTotal: {
-        marginTop: 10,
-        paddingTop: 10,
-        borderTop: 1,
+    grandTotalRow: {
+        marginTop: 6,
+        paddingTop: 8,
+        borderTopWidth: 1,
         borderTopColor: COLORS.border,
-        fontSize: 14,
-        fontWeight: "bold",
+        fontSize: 11,
+        fontFamily: "Helvetica-Bold",
         color: COLORS.primary,
     },
 
+    // Footer Section
     footer: {
-        marginTop: 40,
-        borderTop: 1,
-        borderTopColor: "#E5E7EB",
-        paddingTop: 15,
-        textAlign: "center",
-        color: "#6B7280",
-        fontSize: 10,
+        marginTop: "auto",
+        borderTopWidth: 1,
+        borderTopColor: COLORS.border,
+        paddingTop: 12,
+        alignItems: "center",
+    },
+
+    footerTitle: {
+        fontSize: 9,
+        fontFamily: "Helvetica-Bold",
+        color: COLORS.primary,
+        marginBottom: 3,
+    },
+
+    footerSubtitle: {
+        fontSize: 8,
+        color: COLORS.muted,
     },
 });
 
-export default function InvoicePdf({
-    order,
-}: InvoicePdfProps) {
+export default function InvoicePdf({ order }: InvoicePdfProps) {
+    const isPaid = order.paymentStatus === "PAID";
+    const currencySymbol = order.currency === "INR" ? "₹" : "$";
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-
-                {/* Header */}
+                {/* Header Block */}
                 <View style={styles.header}>
-                    <View>
-                        <View style={{ flexDirection: "row", alignItems: "baseline" }}>
-                            <Text
-                                style={{
-                                    fontFamily: "Times-Bold",
-                                    fontSize: 28,
-                                    color: "#1A1A1A",
-                                }}
-                            >
-                                Furniture
-                            </Text>
-
-                            <Text
-                                style={{
-                                    fontFamily: "Helvetica",
-                                    fontSize: 28,
-                                    color: "#6B7280",
-                                }}
-                            >
-                                ables
-                            </Text>
-                        </View>
-                        <Text style={styles.subtitle}>
+                    <View style={styles.brandGroup}>
+                        <Text style={styles.brandTitle}>Furnitureables</Text>
+                        <Text style={styles.brandSubtitle}>
                             Premium Furniture for Modern Living
                         </Text>
+                        <View style={styles.brandMeta}>
+                            <Text>support@furnitureables.com</Text>
+                            <Text>www.furnitureables.com</Text>
+                        </View>
                     </View>
 
-                    <View>
-                        <Text style={styles.invoiceTitle}>
-                            INVOICE
-                        </Text>
-
-                        <Text>
-                            Invoice #{order.orderNumber}
-                        </Text>
-                        <View
-                            style={{
-                                marginTop: 8,
-                                backgroundColor:
-                                    order.paymentStatus === "PAID"
-                                        ? "#DCFCE7"
-                                        : "#FEF3C7",
-                                paddingVertical: 4,
-                                paddingHorizontal: 8,
-                                borderRadius: 4,
-                                alignSelf: "flex-end",
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 9,
-                                    fontWeight: "bold",
-                                    color:
-                                        order.paymentStatus === "PAID"
-                                            ? "#166534"
-                                            : "#92400E",
-                                }}
+                    <View style={styles.invoiceMetaGroup}>
+                        <View style={styles.invoiceHeaderRow}>
+                            <Text style={styles.invoiceTitle}>INVOICE</Text>
+                            <View
+                                style={[
+                                    styles.statusBadge,
+                                    {
+                                        backgroundColor: isPaid ? COLORS.paidBg : COLORS.pendingBg,
+                                    },
+                                ]}
                             >
-                                {order.paymentStatus}
+                                <Text
+                                    style={{
+                                        color: isPaid ? COLORS.paidText : COLORS.pendingText,
+                                    }}
+                                >
+                                    {order.paymentStatus}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <Text style={styles.invoiceDetailText}>
+                            Invoice No: <Text style={styles.boldText}>#{order.orderNumber}</Text>
+                        </Text>
+                        <Text style={styles.invoiceDetailText}>
+                            Issued Date:{" "}
+                            <Text style={styles.boldText}>
+                                {new Date(order.createdAt).toLocaleDateString()}
+                            </Text>
+                        </Text>
+                    </View>
+                </View>
+
+                {/* Billed To & Payment Meta */}
+                <View style={styles.sectionGrid}>
+                    <View style={styles.columnBox}>
+                        <Text style={styles.sectionHeading}>Billed To</Text>
+                        <View style={styles.columnContent}>
+                            <Text style={styles.recipientName}>{order.fullName}</Text>
+                            <Text style={{ marginBottom: 2 }}>{order.phone}</Text>
+                            <Text>{order.addressLine1}</Text>
+                            {order.addressLine2 ? <Text>{order.addressLine2}</Text> : null}
+                            <Text>
+                                {order.city}, {order.state} - {order.postalCode}
+                            </Text>
+                            <Text style={{ fontFamily: "Helvetica-Bold", marginTop: 2 }}>
+                                {order.country}
                             </Text>
                         </View>
-                        <Text>
-                            {new Date(order.createdAt).toLocaleDateString()}
-                        </Text>
                     </View>
 
+                    <View style={styles.columnBox}>
+                        <Text style={styles.sectionHeading}>Payment Details</Text>
+                        <View style={styles.columnContent}>
+                            <View style={styles.keyValRow}>
+                                <Text style={{ color: COLORS.muted }}>Method</Text>
+                                <Text style={styles.boldText}>{order.paymentMethod}</Text>
+                            </View>
+                            <View style={styles.keyValRow}>
+                                <Text style={{ color: COLORS.muted }}>Payment Status</Text>
+                                <Text style={styles.boldText}>{order.paymentStatus}</Text>
+                            </View>
+                            <View style={[styles.keyValRow, { borderBottomWidth: 0 }]}>
+                                <Text style={{ color: COLORS.muted }}>Fulfillment</Text>
+                                <Text style={styles.boldText}>{order.status}</Text>
+                            </View>
+                            {order.razorpayPaymentId ? (
+                                <View style={[styles.keyValRow, { borderBottomWidth: 0, marginTop: 4 }]}>
+                                    <Text style={{ color: COLORS.muted }}>Txn ID</Text>
+                                    <Text style={{ fontSize: 7, fontFamily: "Helvetica-Bold" }}>
+                                        {order.razorpayPaymentId}
+                                    </Text>
+                                </View>
+                            ) : null}
+                        </View>
+                    </View>
                 </View>
 
-                {/* Customer */}
-
-                <View style={styles.section}>
-
-                    <View style={styles.column}>
-                        <Text style={styles.heading}>
-                            Bill To
-                        </Text>
-
-                        <Text style={styles.row}>{order.fullName}</Text>
-                        <Text style={styles.row}>{order.phone}</Text>
-                        <Text style={styles.row}>{order.addressLine1}</Text>
-
-                        {order.addressLine2 && (
-                            <Text style={styles.row}>
-                                {order.addressLine2}
-                            </Text>
-                        )}
-
-                        <Text style={styles.row}>
-                            {order.city}, {order.state}
-                        </Text>
-
-                        <Text style={styles.row}>
-                            {order.postalCode}
-                        </Text>
-
-                        <Text style={styles.row}>
-                            {order.country}
-                        </Text>
-                    </View>
-
-                    <View style={styles.column}>
-
-                        <Text style={styles.heading}>
-                            Payment
-                        </Text>
-
-                        <Text style={styles.row}>
-                            Method: {order.paymentMethod}
-                        </Text>
-
-                        <Text style={styles.row}>
-                            Status: {order.paymentStatus}
-                        </Text>
-
-                        <Text style={styles.row}>
-                            Order: {order.status}
-                        </Text>
-
-                    </View>
-
-                </View>
-
-                {/* Items */}
-
+                {/* Line Items Table */}
                 <View style={styles.table}>
-
                     <View style={styles.tableHeader}>
-                        <Text style={styles.product}>Product</Text>
-                        <Text style={styles.qty}>Qty</Text>
-                        <Text style={styles.price}>Price</Text>
-                        <Text style={styles.total}>Total</Text>
+                        <Text style={styles.colProduct}>Product Description</Text>
+                        <Text style={styles.colQty}>Qty</Text>
+                        <Text style={styles.colPrice}>Unit Price</Text>
+                        <Text style={styles.colTotal}>Subtotal</Text>
                     </View>
 
-                    {order.items.map((item, index) => (
-                        <View
-                            key={item.id}
-                            style={[
-                                styles.tableRow,
-                                {
-                                    backgroundColor:
-                                        index % 2 === 0
-                                            ? "#FFFFFF"
-                                            : "#FAFAFA",
-                                },
-                            ]}
-                        >
-                            <Text style={styles.product}>
-                                {item.title}
-                            </Text>
+                    {order.items.map((item, index) => {
+                        const itemTotal = item.price * item.quantity;
 
-                            <Text style={styles.qty}>
-                                {item.quantity}
-                            </Text>
+                        return (
+                            <View
+                                key={item.id || index}
+                                style={[
+                                    styles.tableRow,
+                                    {
+                                        backgroundColor:
+                                            index % 2 === 0 ? "#FFFFFF" : COLORS.lightBg,
+                                    },
+                                ]}
+                            >
+                                <View style={styles.colProduct}>
+                                    <Text style={styles.productTitle}>{item.title}</Text>
+                                    {item.sku ? (
+                                        <Text style={styles.productSku}>SKU: {item.sku}</Text>
+                                    ) : null}
+                                </View>
 
-                            <Text style={styles.price}>
-                                ₹{item.price}
-                            </Text>
+                                <Text style={styles.colQty}>{item.quantity}</Text>
 
-                            <Text style={styles.total}>
-                                ₹{item.price * item.quantity}
-                            </Text>
-                        </View>
-                    ))}
+                                <Text style={styles.colPrice}>
+                                    {currencySymbol}
+                                    {item.price.toFixed(2)}
+                                </Text>
 
+                                <Text style={[styles.colTotal, styles.boldText]}>
+                                    {currencySymbol}
+                                    {itemTotal.toFixed(2)}
+                                </Text>
+                            </View>
+                        );
+                    })}
                 </View>
 
-                {/* Totals */}
+                {/* Summary Totals Ledger */}
+                <View style={styles.summaryContainer}>
+                    <View style={styles.totalsBox}>
+                        <View style={styles.totalRow}>
+                            <Text style={{ color: COLORS.muted }}>Subtotal</Text>
+                            <Text style={styles.boldText}>
+                                {currencySymbol}
+                                {order.subtotal.toFixed(2)}
+                            </Text>
+                        </View>
 
-                <View style={styles.totals}>
+                        <View style={styles.totalRow}>
+                            <Text style={{ color: COLORS.muted }}>Shipping</Text>
+                            <Text style={styles.boldText}>
+                                {order.shipping === 0
+                                    ? "Free"
+                                    : `${currencySymbol}${order.shipping.toFixed(2)}`}
+                            </Text>
+                        </View>
 
-                    <View style={styles.totalRow}>
-                        <Text>Subtotal</Text>
-                        <Text>₹{order.subtotal}</Text>
+                        {order.discount > 0 ? (
+                            <View style={styles.totalRow}>
+                                <Text style={{ color: COLORS.paidText }}>
+                                    Discount {order.coupon ? `(${order.coupon.code})` : ""}
+                                </Text>
+                                <Text style={{ color: COLORS.paidText, fontFamily: "Helvetica-Bold" }}>
+                                    -{currencySymbol}
+                                    {order.discount.toFixed(2)}
+                                </Text>
+                            </View>
+                        ) : null}
+
+                        <View style={styles.totalRow}>
+                            <Text style={{ color: COLORS.muted }}>Estimated Tax</Text>
+                            <Text style={styles.boldText}>
+                                {currencySymbol}
+                                {order.tax.toFixed(2)}
+                            </Text>
+                        </View>
+
+                        <View style={[styles.totalRow, styles.grandTotalRow]}>
+                            <Text>Grand Total</Text>
+                            <Text>
+                                {currencySymbol}
+                                {order.total.toFixed(2)}
+                            </Text>
+                        </View>
                     </View>
-
-                    <View style={styles.totalRow}>
-                        <Text>Shipping</Text>
-                        <Text>₹{order.shipping}</Text>
-                    </View>
-
-                    <View style={styles.totalRow}>
-                        <Text>
-                            Discount
-                            {order.coupon
-                                ? ` (${order.coupon.code})`
-                                : ""}
-                        </Text>
-                        <Text>-₹{order.discount}</Text>
-                    </View>
-
-                    <View style={styles.totalRow}>
-                        <Text>Tax</Text>
-                        <Text>₹{order.tax}</Text>
-                    </View>
-
-                    <View
-                        style={[
-                            styles.totalRow,
-                            styles.grandTotal,
-                        ]}
-                    >
-                        <Text>Total</Text>
-                        <Text>₹{order.total.toFixed(2)}</Text>
-                    </View>
-
                 </View>
 
                 {/* Footer */}
-
-                <View
-                    style={{
-                        marginTop: 40,
-                        borderTop: 1,
-                        borderTopColor: COLORS.border,
-                        paddingTop: 15,
-                        alignItems: "center",
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 11,
-                            fontWeight: "bold",
-                            marginBottom: 6,
-                        }}
-                    >
-                        Thank you for shopping with Furnitureables
+                <View style={styles.footer}>
+                    <Text style={styles.footerTitle}>
+                        Thank you for shopping with Furnitureables.
                     </Text>
-
-                    <Text
-                        style={{
-                            fontSize: 9,
-                            color: COLORS.gray,
-                        }}
-                    >
-                        This is a computer-generated invoice and does not require a signature.
+                    <Text style={styles.footerSubtitle}>
+                        This is a computer-generated tax invoice and does not require a physical signature.
                     </Text>
                 </View>
-
             </Page>
         </Document>
     );

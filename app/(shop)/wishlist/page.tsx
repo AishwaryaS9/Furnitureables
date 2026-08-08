@@ -9,13 +9,13 @@ import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, LogIn } from "lucide-react";
+import BreadcrumbNavigation from "@/components/common/BreadcrumbNavigation";
 
-// Dynamic SEO Metadata for Wishlist Page
 export const metadata: Metadata = {
   title: "Your Wishlist | Saved Architectural Furniture",
   description: "View and manage your saved solid wood furniture pieces and architectural design items.",
   robots: {
-    index: false, // Private user state should not be indexed by search engines
+    index: false,
     follow: true,
   },
 };
@@ -94,24 +94,7 @@ export default async function WishlistPage() {
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
 
           {/* Breadcrumb Navigation */}
-          <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-muted-foreground">
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-ring rounded-sm"
-                >
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true" className="text-border">/</li>
-              <li>
-                <span className="text-foreground font-semibold" aria-current="page">
-                  Wishlist
-                </span>
-              </li>
-            </ol>
-          </nav>
+          <BreadcrumbNavigation value="Wishlist" />
 
           {/* Header Section */}
           <header className="max-w-3xl mb-10 sm:mb-12 space-y-3">
@@ -130,7 +113,8 @@ export default async function WishlistPage() {
               Saved Wishlist
             </h1>
 
-            <p className="text-sm sm:text-base text-muted-foreground font-light leading-relaxed max-w-xl">
+            {/* <p className="text-sm sm:text-base text-muted-foreground font-light leading-relaxed max-w-xl"> */}
+            <p className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
               Your curated collection of solid wood pieces and architectural furniture saved for future reference.
             </p>
           </header>
@@ -144,7 +128,7 @@ export default async function WishlistPage() {
           </section>
 
         </div>
-      </main>
+      </main >
     </>
   );
 }

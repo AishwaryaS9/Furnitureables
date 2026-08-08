@@ -38,9 +38,9 @@ export default function CheckoutPage() {
     const coupon = useCouponStore((s) => s.coupon);
     const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
-    const { data: addresses } = useAddresses(user?.id);
+    const { data: addresses, isLoading: isAddressesLoading } = useAddresses(user?.id);
 
-    const { data: cart } = useCart(user?.id);
+    const { data: cart, isLoading: isCartLoading } = useCart(user?.id);
 
     const queryClient = useQueryClient();
 
@@ -281,7 +281,7 @@ export default function CheckoutPage() {
                                 cart={cart}
                                 selectedAddressId={selectedAddressId}
                                 onCheckout={handlePlaceOrder}
-                                loading={placeOrder.isPending || createRazorpayOrder.isPending}
+                                loading={placeOrder.isPending || createRazorpayOrder.isPending || isAddressesLoading || isCartLoading}
                             />
 
                             {/* Trust Guarantee Card */}
@@ -292,9 +292,7 @@ export default function CheckoutPage() {
                                 </p>
                             </div>
                         </aside>
-
                     </div>
-
                 </div>
             </main>
         </>
