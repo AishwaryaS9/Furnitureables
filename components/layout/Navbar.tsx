@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ShoppingCart, Heart, Menu, ChevronDown, PackageIcon, MapPinned, Sparkles, Info, Mail, ArrowRight } from "lucide-react";
+import { ShoppingCart, Heart, Menu, ChevronDown, PackageIcon, MapPinned, Sparkles, ArrowRight } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useUser, useClerk, UserButton } from "@clerk/nextjs";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -20,6 +20,7 @@ import SearchBar from "../product/filters/SearchBar";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuId = useId();
@@ -66,6 +67,7 @@ export default function Navbar() {
     setPrevPathname(pathname);
     setIsOpen(false);
     setIsDropdownOpen(false);
+    setIsMobileCategoriesOpen(false);
   }
 
   const isActive = (href: string) => pathname === href;
@@ -102,7 +104,7 @@ export default function Navbar() {
         {/* Skip to Main Content Link (WCAG 2.2 AA) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-1 focus:ring-ring"
         >
           Skip to main content
         </a>
@@ -127,10 +129,10 @@ export default function Navbar() {
             <div className="shrink-0">
               <Link
                 href="/"
-                className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-primary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+                className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-primary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-lg"
                 aria-label="Furnitureables Homepage"
               >
-                Furniture<span className="font-san text-muted-foreground">ables</span>
+                Furniture<span className="font-sans text-muted-foreground">ables</span>
               </Link>
             </div>
 
@@ -143,14 +145,14 @@ export default function Navbar() {
                 href="/"
                 aria-current={isActive("/") ? "page" : undefined}
                 className={cn(
-                  "transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  "transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-md py-1",
                   isActive("/") ? "text-foreground font-semibold" : "text-muted-foreground"
                 )}
               >
                 Home
               </Link>
 
-              {/* Shop Furniture Mega Dropdown */}
+              {/* Shop Furniture Dropdown */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
@@ -159,7 +161,7 @@ export default function Navbar() {
                   aria-haspopup="true"
                   aria-controls={dropdownMenuId}
                   className={cn(
-                    "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1 cursor-pointer border-0 bg-transparent p-0",
+                    "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-md py-1 cursor-pointer border-0 bg-transparent p-0",
                     pathname.startsWith("/categories") || pathname === "/products"
                       ? "text-foreground font-semibold"
                       : "text-muted-foreground"
@@ -209,7 +211,7 @@ export default function Navbar() {
                           key={cat.type}
                           href={`/products?category=${encodeURIComponent(cat.type)}`}
                           role="menuitem"
-                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary hover:text-primary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
+                          className="block rounded-xl px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary hover:text-primary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
                         >
                           {formatCategoryLabel(cat.type)}
                         </Link>
@@ -233,13 +235,12 @@ export default function Navbar() {
                 href="/about"
                 aria-current={isActive("/about") ? "page" : undefined}
                 className={cn(
-                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-md py-1",
                   isActive("/about")
                     ? "text-foreground font-semibold"
                     : "text-muted-foreground"
                 )}
               >
-                <Info className="h-3.5 w-3.5 text-muted-foreground/80" aria-hidden="true" />
                 <span>About Us</span>
               </Link>
 
@@ -248,13 +249,12 @@ export default function Navbar() {
                 href="/contact"
                 aria-current={isActive("/contact") ? "page" : undefined}
                 className={cn(
-                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-md py-1",
                   isActive("/contact")
                     ? "text-foreground font-semibold"
                     : "text-muted-foreground"
                 )}
               >
-                <Mail className="h-3.5 w-3.5 text-muted-foreground/80" aria-hidden="true" />
                 <span>Contact</span>
               </Link>
             </nav>
@@ -306,7 +306,7 @@ export default function Navbar() {
                     ? `Wishlist, ${wishlistCount} saved items`
                     : "Wishlist"
                 }
-                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 onClick={(e) => {
                   if (!user) {
                     e.preventDefault();
@@ -331,7 +331,7 @@ export default function Navbar() {
                 aria-label={
                   totalItems > 0 ? `Shopping Cart, ${totalItems} items` : "Shopping Cart"
                 }
-                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 <ShoppingCart className="h-5 w-5" aria-hidden="true" />
                 {totalItems > 0 && (
@@ -356,12 +356,12 @@ export default function Navbar() {
                   <Menu className="h-5 w-5" aria-hidden="true" />
                 </SheetTrigger>
 
-                <SheetContent side="right" className="w-full max-w-xs p-6 bg-card flex flex-col justify-between">
-                  <div className="space-y-6">
+                <SheetContent side="right" className="w-full max-w-xs p-0 bg-card flex flex-col h-full">
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/40">
                     {/* Header Logo */}
                     <SheetHeader className="text-left pb-4 border-b border-border/60">
-                      <SheetTitle className="text-lg font-bold text-foreground">
-                        Furniture<span className="font-light text-muted-foreground">ables</span>
+                      <SheetTitle className="text-lg font-serif font-bold text-foreground">
+                        Furniture<span className="font-sans text-muted-foreground">ables</span>
                       </SheetTitle>
                     </SheetHeader>
 
@@ -389,7 +389,6 @@ export default function Navbar() {
                           isActive("/about") ? "bg-secondary text-foreground font-semibold" : "text-muted-foreground"
                         )}
                       >
-                        <Info className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                         <span>About Us</span>
                       </Link>
 
@@ -401,7 +400,6 @@ export default function Navbar() {
                           isActive("/contact") ? "bg-secondary text-foreground font-semibold" : "text-muted-foreground"
                         )}
                       >
-                        <Mail className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                         <span>Contact</span>
                       </Link>
                     </nav>
@@ -410,35 +408,63 @@ export default function Navbar() {
 
                     {/* Dynamic Categories List */}
                     <div className="space-y-1">
-                      <span className="px-3 text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-2">
-                        Shop Categories
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsMobileCategoriesOpen((v) => !v)}
+                        aria-expanded={isMobileCategoriesOpen}
+                        className={cn(
+                          "flex w-full items-center justify-between px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground cursor-pointer border-0 bg-transparent",
+                          pathname.startsWith("/categories") || pathname === "/products"
+                            ? "text-foreground font-semibold"
+                            : "text-muted-foreground"
+                        )}
+                      >
+                        <span>Shop Furniture</span>
+                        <ChevronDown
+                          className={cn(
+                            "h-3.5 w-3.5 transition-transform duration-200",
+                            isMobileCategoriesOpen && "rotate-180"
+                          )}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isMobileCategoriesOpen && (
+                        <div className="pl-2 space-y-1 animate-in fade-in-50 slide-in-from-top-1 duration-200">
+                          {categoriesLoading && (
+                            <div className="space-y-2 px-3 py-1" aria-hidden="true">
+                              {[...Array(4)].map((_, i) => (
+                                <span key={i} className="block h-4 w-28 rounded bg-muted animate-pulse" />
+                              ))}
+                            </div>
+                          )}
 
-                      {categoriesLoading && (
-                        <div className="space-y-2 px-3" aria-hidden="true">
-                          {[...Array(4)].map((_, i) => (
-                            <span key={i} className="block h-4 w-28 rounded bg-muted animate-pulse" />
-                          ))}
+                          {!categoriesLoading && topCategories.length === 0 && (
+                            <p className="px-3 py-1 text-xs text-muted-foreground">No categories yet.</p>
+                          )}
+
+                          {!categoriesLoading &&
+                            topCategories.map((cat) => (
+                              <Link
+                                key={cat.type}
+                                href={`/products?category=${encodeURIComponent(cat.type)}`}
+                                onClick={() => setIsOpen(false)}
+                                className="block px-4 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                              >
+                                {formatCategoryLabel(cat.type)}
+                              </Link>
+                            ))}
+
+                          <Link
+                            href="/products"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center justify-between px-4 py-2 rounded-xl text-xs font-semibold text-primary hover:bg-secondary transition-colors"
+                          >
+                            <span>Browse All Collections</span>
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                          </Link>
                         </div>
                       )}
-
-                      {!categoriesLoading && topCategories.length === 0 && (
-                        <p className="px-3 text-xs text-muted-foreground">No categories yet.</p>
-                      )}
-
-                      {!categoriesLoading &&
-                        topCategories.map((cat) => (
-                          <Link
-                            key={cat.type}
-                            href={`/products?category=${encodeURIComponent(cat.type)}`}
-                            onClick={() => setIsOpen(false)}
-                            className="block px-4 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-                          >
-                            {formatCategoryLabel(cat.type)}
-                          </Link>
-                        ))}
                     </div>
-
                     <div className="border-t border-border/60 my-2" />
 
                     {/* Account Links with Shopping Cart */}
@@ -488,32 +514,11 @@ export default function Navbar() {
                           </Badge>
                         )}
                       </Link>
-
-                      {user && (
-                        <>
-                          <Link
-                            href="/orders"
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
-                          >
-                            <PackageIcon className="h-4 w-4 text-muted-foreground" />
-                            <span>My Orders</span>
-                          </Link>
-                          <Link
-                            href="/addresses"
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
-                          >
-                            <MapPinned className="h-4 w-4 text-muted-foreground" />
-                            <span>My Addresses</span>
-                          </Link>
-                        </>
-                      )}
                     </div>
                   </div>
 
                   {/* Bottom Footer Section: Logged in User Profile or Login Action */}
-                  <div className="pt-4 border-t border-border/60 mt-auto">
+                  <div className="p-6 pt-4 border-t border-border/60 shrink-0">
                     {user ? (
                       <div className="flex items-center justify-between px-1">
                         <div className="flex items-center gap-3 min-w-0">
