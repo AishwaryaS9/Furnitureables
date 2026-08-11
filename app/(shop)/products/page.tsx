@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/product/ProductCard";
 import { ShoppingBag, SlidersHorizontal, ArrowUpDown, Filter } from "lucide-react";
 import Pagination from "@/components/product/Pagination";
-import SearchBar from "@/components/product/filters/SearchBar";
 import ProductFilters from "@/components/product/filters/ProductFilters";
+
 import { useProducts } from "@/hooks/useProducts";
 import { useFilterStore } from "@/store/useFilterStore";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { SORT_OPTIONS } from "@/lib/data";
+import CategoryPills from "@/components/product/filters/CategoryPills";
 
 export default function ProductsPage() {
     const { data: products, isLoading } = useProducts();
@@ -19,6 +19,15 @@ export default function ProductsPage() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
     const filters = useFilterStore((s) => s.filters);
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const categoryParam = searchParams.get("category") ?? undefined;
+
+    useEffect(() => {
+        setFilter("category", categoryParam);
+    }, [categoryParam, setFilter]);
 
     const items = products?.items ?? [];
     const total = products?.total ?? 0;
@@ -28,7 +37,6 @@ export default function ProductsPage() {
         (v) => v !== undefined && v !== "" && v !== "all"
     ).length;
 
-    // Schema.org Structured Data for SEO (ItemList)
     const itemListSchema = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -69,12 +77,12 @@ export default function ProductsPage() {
                     <nav aria-label="Breadcrumb" className="mb-6">
                         <ol className="flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-muted-foreground">
                             <li>
-                                <a
+                                <Link
                                     href="/"
                                     className="hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
                                 >
                                     Home
-                                </a>
+                                </Link>
                             </li>
                             <li aria-hidden="true" className="text-border">/</li>
                             <li>
@@ -86,7 +94,7 @@ export default function ProductsPage() {
                     </nav>
 
                     {/* Header Section */}
-                    <header className="max-w-3xl mb-10 sm:mb-14 space-y-4">
+                    <header className="max-w-3xl mb-10 sm:mb-14 space-y-3">
                         <div
                             className="inline-flex items-center gap-2.5 bg-secondary/80 border border-border/60 rounded-full px-3.5 py-1.5 backdrop-blur-md shadow-xs"
                             role="status"
@@ -108,95 +116,51 @@ export default function ProductsPage() {
                         <p className="text-sm sm:text-base lg:text-lg text-muted-foreground font-light leading-relaxed max-w-2xl">
                             Sustainably engineered solid wood furniture, designed to blur the line between structural art and architectural modern living.
                         </p>
+
+                        <CategoryPills
+                            activeCategory={filters.category}
+                            onSelect={(type) => {
+                                const params = new URLSearchParams(searchParams.toString());
+                                if (type) {
+                                    params.set("category", type);
+                                } else {
+                                    params.delete("category");
+                                }
+                                const query = params.toString();
+                                router.push(query ? `/products?${query}` : "/products");
+                            }}
+                        />
                     </header>
 
-                    {/* Controls Bar: Search, Mobile Filter Toggle & Sort */}
-                    <section
-                        aria-label="Search and sorting options"
-                        className="sticky top-0 z-30 bg-background/90 backdrop-blur-md border-y border-border/80 py-4 mb-8 sm:mb-12 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between transition-all"
-                    >
-                        <div className="w-full sm:max-w-xs md:max-w-md relative">
-                            <SearchBar />
-                        </div>
+                    {/* Top Toolbar (Filter button on mobile & Sort options) */}
+                    <div className="flex items-center justify-between gap-3 mb-8 sm:mb-12 pb-4 border-b border-border/80">
+                        {/* Mobile Filter Trigger Button */}
+                        <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+                            <SheetTrigger
+                                type="button"
+                                className="lg:hidden flex items-center gap-2 text-xs font-medium border border-input bg-card rounded-lg h-9 px-3.5 shadow-xs cursor-pointer"
+                                aria-label="Open filter menu"
+                            >
+                                <Filter className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
+                                <span>Filters</span>
+                                {activeFiltersCount > 0 && (
+                                    <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground font-semibold">
+                                        {activeFiltersCount}
+                                    </span>
+                                )}
+                            </SheetTrigger>
 
-                        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-
-                            {/* Mobile Filter Trigger Button */}
-                            <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-                                <SheetTrigger
-                                    render={
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="lg:hidden flex items-center gap-2 text-xs font-medium border-input bg-card rounded-lg h-9 px-3.5 shadow-xs"
-                                            aria-label="Open filter menu"
-                                        />
-                                    }
-                                >
-                                    <Filter className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
-                                    <span>Filters</span>
-                                    {activeFiltersCount > 0 && (
-                                        <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground font-semibold">
-                                            {activeFiltersCount}
-                                        </span>
-                                    )}
-                                </SheetTrigger>
-
-                                <SheetContent side="left" className="w-full max-w-xs p-6 overflow-y-auto">
-                                    <SheetHeader className="text-left pb-4 border-b border-border mb-4">
-                                        <SheetTitle className="text-xs font-bold tracking-widest text-muted-foreground uppercase flex items-center gap-2">
-                                            <SlidersHorizontal className="w-3.5 h-3.5 text-foreground" aria-hidden="true" />
-                                            <span>Filter Catalog</span>
-                                        </SheetTitle>
-                                    </SheetHeader>
-                                    <ProductFilters />
-                                </SheetContent>
-                            </Sheet>
-
-                            {/* Sort Selection */}
-                            <div className="flex items-center gap-2.5 shrink-0 ml-auto sm:ml-0">
-                                <label
-                                    htmlFor="sort-select-trigger"
-                                    className="text-xs text-muted-foreground font-medium whitespace-nowrap hidden sm:flex items-center gap-1.5"
-                                >
-                                    <ArrowUpDown className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                                    <span>Sort by:</span>
-                                </label>
-
-                                <div className="w-auto min-w-37.5 sm:min-w-45">
-                                    <Select
-                                        value={filters.sortBy ?? "all"}
-                                        onValueChange={(val) =>
-                                            setFilter("sortBy", !val || val === "all" ? undefined : val)
-                                        }
-                                    >
-                                        <SelectTrigger
-                                            id="sort-select-trigger"
-                                            aria-label="Sort products catalog"
-                                            className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
-                                        >
-                                            {/* <SelectValue placeholder="Sort By (Default)" /> */}
-                                            <SelectValue placeholder="Sort By (Default)">
-                                                {SORT_OPTIONS.find((opt) => opt.value === (filters.sortBy ?? "all"))?.label}
-                                            </SelectValue>
-                                        </SelectTrigger>
-                                        <SelectContent
-                                            side="bottom"
-                                            sideOffset={4}
-                                            align="end"
-                                            className="rounded-lg"
-                                        >
-                                            {SORT_OPTIONS.map((opt) => (
-                                                <SelectItem key={opt.value} value={opt.value} className="text-xs">
-                                                    {opt.label}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                            <SheetContent side="left" className="w-full max-w-xs p-6 overflow-y-auto">
+                                <SheetHeader className="text-left pb-4 border-b border-border mb-4">
+                                    <SheetTitle className="text-xs font-bold tracking-widest text-muted-foreground uppercase flex items-center gap-2">
+                                        <SlidersHorizontal className="w-3.5 h-3.5 text-foreground" aria-hidden="true" />
+                                        <span>Filter Catalog</span>
+                                    </SheetTitle>
+                                </SheetHeader>
+                                <ProductFilters />
+                            </SheetContent>
+                        </Sheet>
+                    </div>
 
                     {/* Main Layout Grid */}
                     <div className="lg:grid lg:grid-cols-4 lg:gap-10 items-start">
@@ -216,7 +180,6 @@ export default function ProductsPage() {
 
                         {/* Product Feed Area */}
                         <div className="lg:col-span-3 min-w-0" id="product-grid" aria-live="polite">
-
                             {/* Skeleton Loading State */}
                             {isLoading && (
                                 <div
@@ -255,7 +218,7 @@ export default function ProductsPage() {
                                     </div>
                                     <h2 className="text-lg font-medium text-foreground tracking-tight">No match found</h2>
                                     <p className="text-sm text-muted-foreground font-light mt-2 max-w-xs mx-auto leading-relaxed">
-                                        We couldn't find items matching your dynamic filter criteria. Try adjusting your selections or clearing your filters.
+                                        We couldn&apos;t find items matching your dynamic filter criteria. Try adjusting your selections or clearing your filters.
                                     </p>
                                 </div>
                             )}
@@ -283,7 +246,6 @@ export default function ProductsPage() {
                                     </nav>
                                 </section>
                             )}
-
                         </div>
                     </div>
                 </div>

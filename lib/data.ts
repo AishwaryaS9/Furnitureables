@@ -2,7 +2,7 @@ import { CreditCard, Truck, Landmark, } from "lucide-react";
 import { PaymentMethod } from "@/generated/prisma";
 
 export const SORT_OPTIONS = [
-    { value: "all", label: "Sort By (Default)" },
+    { value: "all", label: "Default" },
     { value: "latest", label: "Newest Additions" },
     { value: "priceAsc", label: "Price: Low → High" },
     { value: "priceDesc", label: "Price: High → Low" },

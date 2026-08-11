@@ -1,20 +1,18 @@
 "use client";
 
 import { useFilterStore } from "@/store/useFilterStore";
+import { useProductCategories } from "@/hooks/useProductCategories";
 import { RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SORT_OPTIONS } from "@/lib/data";
 
 export default function ProductFilters() {
   const { setFilter, resetFilters } = useFilterStore();
   const filters = useFilterStore((s) => s.filters);
+
+  const { data: categories, isLoading: categoriesLoading } = useProductCategories(20);
 
   const hasActiveFilters = Object.values(filters).some(
     (v) => v !== undefined && v !== ""
@@ -26,6 +24,46 @@ export default function ProductFilters() {
       className="space-y-5 w-full"
       aria-label="Product filters"
     >
+
+      {/* SORT BY */}
+      <div className="space-y-1.5">
+        <label
+          htmlFor="filter-category-trigger"
+          className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase block"
+        >
+          Sort By
+        </label>
+        <div className="w-auto min-w-37.5 sm:min-w-45">
+          <Select
+            value={filters.sortBy ?? "all"}
+            onValueChange={(val) =>
+              setFilter("sortBy", !val || val === "all" ? undefined : val)
+            }
+          >
+            <SelectTrigger
+              id="sort-select-trigger"
+              aria-label="Sort products catalog"
+              className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
+            >
+              <SelectValue placeholder="(Default)">
+                {SORT_OPTIONS.find((opt) => opt.value === (filters.sortBy ?? "all"))?.label}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent
+              side="bottom"
+              sideOffset={4}
+              align="end"
+              className="rounded-lg"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       {/* CATEGORY */}
       <div className="space-y-1.5">
         <label
@@ -37,10 +75,7 @@ export default function ProductFilters() {
         <Select
           value={filters.category ?? "all"}
           onValueChange={(val) =>
-            setFilter(
-              "category",
-              !val || val === "all" ? undefined : val
-            )
+            setFilter("category", !val || val === "all" ? undefined : val)
           }
         >
           <SelectTrigger
@@ -48,61 +83,22 @@ export default function ProductFilters() {
             aria-label="Filter by Category"
             className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
           >
-            <SelectValue placeholder="All Categories" />
+            <SelectValue placeholder="All Categories" className="capitalize" />
           </SelectTrigger>
-          <SelectContent
-            // position="popper"
-            side="bottom"
-            sideOffset={4}
-            className="rounded-lg"
-          >
-            <SelectItem value="all" className="text-xs">All Categories</SelectItem>
-            <SelectItem value="sofa" className="text-xs">Sofas</SelectItem>
-            <SelectItem value="chair" className="text-xs">Chairs</SelectItem>
-            <SelectItem value="table" className="text-xs">Tables</SelectItem>
-            <SelectItem value="bed" className="text-xs">Beds</SelectItem>
-            <SelectItem value="desk" className="text-xs">Desks</SelectItem>
-            <SelectItem value="storage" className="text-xs">Storage</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* ENVIRONMENT / ROOM */}
-      <div className="space-y-1.5">
-        <label
-          htmlFor="filter-room-trigger"
-          className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase block"
-        >
-          Environment
-        </label>
-        <Select
-          value={filters.room ?? "all"}
-          onValueChange={(val) =>
-            setFilter(
-              "room",
-              !val || val === "all" ? undefined : val
-            )
-          }
-        >
-          <SelectTrigger
-            id="filter-room-trigger"
-            aria-label="Filter by Environment"
-            className="w-full text-xs font-medium bg-card rounded-lg h-9 shadow-xs"
-          >
-            <SelectValue placeholder="All Environments" />
-          </SelectTrigger>
-          <SelectContent
-            // position="popper"
-            side="bottom"
-            sideOffset={4}
-            className="rounded-lg"
-          >
-            <SelectItem value="all" className="text-xs">All Environments</SelectItem>
-            <SelectItem value="living" className="text-xs">Living Room</SelectItem>
-            <SelectItem value="bedroom" className="text-xs">Bedroom</SelectItem>
-            <SelectItem value="office" className="text-xs">Office</SelectItem>
-            <SelectItem value="study" className="text-xs">Study Room</SelectItem>
-            <SelectItem value="dining" className="text-xs">Dining Room</SelectItem>
+          <SelectContent side="bottom" sideOffset={4} className="rounded-lg">
+            <SelectItem value="all" className="text-xs">
+              All Categories
+            </SelectItem>
+            {categoriesLoading && (
+              <div className="px-2 py-1.5 text-xs text-muted-foreground">
+                Loading…
+              </div>
+            )}
+            {categories?.map((c) => (
+              <SelectItem key={c.type} value={c.type} className="text-xs capitalize">
+                {c.type} ({c.count})
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -3,19 +3,19 @@
 import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ShoppingCart, Heart, Search, Menu, X, ChevronDown, PackageIcon, MapPinned } from "lucide-react";
+import { ShoppingCart, Heart, Menu, ChevronDown, PackageIcon, MapPinned, Sparkles, Info, Mail, ArrowRight } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useUser, useClerk, UserButton } from "@clerk/nextjs";
 import { useWishlist } from "@/hooks/useWishlist";
+import { useProductCategories } from "@/hooks/useProductCategories";
+import { formatCategoryLabel } from "@/lib/utils";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-const categories = [
-  { name: "Living Room", href: "/categories/living-room" },
-  { name: "Bedroom", href: "/categories/bedroom" },
-  { name: "Dining & Kitchen", href: "/categories/dining-kitchen" },
-  { name: "Office", href: "/categories/office" },
-  { name: "Outdoor", href: "/categories/outdoor" },
-];
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import SearchBar from "../product/filters/SearchBar";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,9 +23,6 @@ export default function Navbar() {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuId = useId();
-  const desktopSearchId = useId();
-  const mobileSearchId = useId();
-  const mobileMenuId = useId();
 
   const { user } = useUser();
   const { openSignIn } = useClerk();
@@ -36,12 +33,17 @@ export default function Navbar() {
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   const { data } = useWishlist(!!user);
-
   const wishlistCount = user ? data?.wishlist.length ?? 0 : 0;
+
+  const { data: topCategories = [], isLoading: categoriesLoading } =
+    useProductCategories(5);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     }
@@ -59,165 +61,235 @@ export default function Navbar() {
     };
   }, []);
 
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsOpen(false);
     setIsDropdownOpen(false);
-  }, [pathname]);
+  }
 
   const isActive = (href: string) => pathname === href;
 
-  const linkClasses = (href: string) =>
-    `text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm ${isActive(href) ? "text-foreground font-semibold" : ""
-    }`;
-
   return (
-    <header className="w-full bg-background border-b border-border sticky top-0 z-50 text-foreground transition-colors">
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        Skip to main content
-      </a>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SiteNavigationElement",
+            "name": [
+              "Home",
+              "Shop Furniture",
+              "About Us",
+              "Contact",
+              "Wishlist",
+              "Cart",
+            ],
+            "url": [
+              "https://www.furnitureables.com/",
+              "https://www.furnitureables.com/products",
+              "https://www.furnitureables.com/about",
+              "https://www.furnitureables.com/contact",
+              "https://www.furnitureables.com/wishlist",
+              "https://www.furnitureables.com/cart",
+            ],
+          }),
+        }}
+      />
 
-      <div
-        className="w-full bg-primary text-primary-foreground text-xs py-2 px-4 text-center font-medium tracking-wide"
-        role="note"
-        aria-label="Promotion"
-      >
-        Mid-Summer Sale: Up to 40% off premium solid wood furniture! 🪵
-      </div>
+      <div className="w-full bg-background transition-colors">
+        {/* Skip to Main Content Link (WCAG 2.2 AA) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          Skip to main content
+        </a>
 
-      <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
+        {/* Top Promotional Bar */}
+        <aside
+          role="note"
+          aria-label="Current promotions"
+          className="w-full bg-primary text-primary-foreground text-[11px] sm:text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2"
+        >
+          <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span>
+            Mid-Summer Sale: Up to 40% off premium solid wood furniture! 🪵
+          </span>
+        </aside>
 
-          {/* Logo */}
-          <div className="shrink-0">
-            <Link
-              href="/"
-              className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
-              aria-label="Furnitureables — Home"
-            >
-              Furniture<span className="font-sans text-muted-foreground">ables</span>
-            </Link>
-          </div>
+        {/* Main Header Container */}
+        <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 sm:h-20 items-center justify-between gap-4">
 
-          {/* Desktop Navigation Links */}
-          <nav aria-label="Main" className="hidden md:flex space-x-8 items-center font-medium text-sm">
-            <Link href="/" aria-current={isActive("/") ? "page" : undefined} className={linkClasses("/")}>
-              Home
-            </Link>
-
-            {/* Shop Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                type="button"
-                onClick={() => setIsDropdownOpen((v) => !v)}
-                aria-expanded={isDropdownOpen}
-                aria-haspopup="true"
-                aria-controls={dropdownMenuId}
-                className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm py-1"
+            {/* Brand Logo */}
+            <div className="shrink-0">
+              <Link
+                href="/"
+                className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-primary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+                aria-label="Furnitureables Homepage"
               >
-                Shop Furniture
-                <ChevronDown size={16} aria-hidden="true" className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {isDropdownOpen && (
-                <div
-                  id={dropdownMenuId}
-                  role="menu"
-                  aria-label="Shop furniture categories"
-                  className="absolute top-full left-0 mt-2 w-56 rounded-md shadow-lg bg-popover text-popover-foreground ring-1 ring-border z-50 py-2 border border-border animate-in fade-in-50 slide-in-from-top-1 duration-200"
-                >
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.name}
-                      href={cat.href}
-                      role="menuitem"
-                      className="block px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:bg-accent focus-visible:text-accent-foreground"
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
-                  <div className="border-t border-border my-1"></div>
-                  <Link
-                    href="/products"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:bg-accent focus-visible:text-accent-foreground"
-                  >
-                    Browse All Collections
-                  </Link>
-                </div>
-              )}
+                Furniture<span className="font-san text-muted-foreground">ables</span>
+              </Link>
             </div>
 
-            <Link
-              href="/custom-orders"
-              aria-current={isActive("/custom-orders") ? "page" : undefined}
-              className={linkClasses("/custom-orders")}
+            {/* Desktop Navigation Links */}
+            <nav
+              aria-label="Main Navigation"
+              className="hidden md:flex items-center gap-6 lg:gap-8 font-medium text-xs sm:text-sm"
             >
-              Custom Craft
-            </Link>
-            <Link
-              href="/about"
-              aria-current={isActive("/about") ? "page" : undefined}
-              className={linkClasses("/about")}
-            >
-              Our Story
-            </Link>
-          </nav>
+              <Link
+                href="/"
+                aria-current={isActive("/") ? "page" : undefined}
+                className={cn(
+                  "transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  isActive("/") ? "text-foreground font-semibold" : "text-muted-foreground"
+                )}
+              >
+                Home
+              </Link>
 
-          {/* Search Bar (Desktop) */}
-          <form
-            role="search"
-            action="/search"
-            className="hidden lg:flex items-center flex-1 max-w-md relative mx-4"
-          >
-            <label htmlFor={desktopSearchId} className="sr-only">
-              Search furniture
-            </label>
-            <input
-              id={desktopSearchId}
-              name="q"
-              type="search"
-              placeholder="Search sofas, dining tables, rugs..."
-              className="w-full bg-muted/40 text-sm border border-input rounded-full py-2 pl-4 pr-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
-            />
-            <button
-              type="submit"
-              aria-label="Submit search"
-              className="absolute right-1 p-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
-            >
-              <Search size={18} aria-hidden="true" />
-            </button>
-          </form>
-
-          {/* Icon Actions */}
-          <div className="hidden md:flex items-center space-x-2 lg:space-x-4 text-muted-foreground">
-            <button
-              type="button"
-              aria-label="Search"
-              className="lg:hidden p-2.5 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
-            >
-              <Search size={22} aria-hidden="true" />
-            </button>
-            <div className="hidden sm:flex items-center gap-4">
-              {!user ? (
+              {/* Shop Furniture Mega Dropdown */}
+              <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
+                  onClick={() => setIsDropdownOpen((v) => !v)}
+                  aria-expanded={isDropdownOpen}
+                  aria-haspopup="true"
+                  aria-controls={dropdownMenuId}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1 cursor-pointer border-0 bg-transparent p-0",
+                    pathname.startsWith("/categories") || pathname === "/products"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground"
+                  )}
+                >
+                  <span>Shop Furniture</span>
+                  <ChevronDown
+                    className={cn(
+                      "h-3.5 w-3.5 transition-transform duration-200",
+                      isDropdownOpen && "rotate-180"
+                    )}
+                    aria-hidden="true"
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div
+                    id={dropdownMenuId}
+                    role="menu"
+                    aria-label="Furniture categories directory"
+                    className="absolute top-full left-0 mt-3 w-64 rounded-2xl border border-border/80 bg-popover text-popover-foreground shadow-lg z-50 p-2 animate-in fade-in-50 slide-in-from-top-2 duration-200"
+                  >
+                    <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      Browse Categories
+                    </div>
+
+                    {categoriesLoading && (
+                      <div className="px-1 py-1" aria-hidden="true">
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            className="mx-3 my-2 block h-4 w-32 rounded bg-muted animate-pulse"
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {!categoriesLoading && topCategories.length === 0 && (
+                      <p className="px-3 py-2 text-xs text-muted-foreground">
+                        No categories yet.
+                      </p>
+                    )}
+
+                    {!categoriesLoading &&
+                      topCategories.map((cat) => (
+                        <Link
+                          key={cat.type}
+                          href={`/products?category=${encodeURIComponent(cat.type)}`}
+                          role="menuitem"
+                          className="block rounded-xl px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary hover:text-primary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
+                        >
+                          {formatCategoryLabel(cat.type)}
+                        </Link>
+                      ))}
+
+                    <div className="my-1.5 border-t border-border/60" />
+                    <Link
+                      href="/products"
+                      role="menuitem"
+                      className="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-primary hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
+                    >
+                      <span>Browse All Collections</span>
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Link 1: About Us */}
+              <Link
+                href="/about"
+                aria-current={isActive("/about") ? "page" : undefined}
+                className={cn(
+                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  isActive("/about")
+                    ? "text-foreground font-semibold"
+                    : "text-muted-foreground"
+                )}
+              >
+                <Info className="h-3.5 w-3.5 text-muted-foreground/80" aria-hidden="true" />
+                <span>About Us</span>
+              </Link>
+
+              {/* Link 2: Contact */}
+              <Link
+                href="/contact"
+                aria-current={isActive("/contact") ? "page" : undefined}
+                className={cn(
+                  "inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md py-1",
+                  isActive("/contact")
+                    ? "text-foreground font-semibold"
+                    : "text-muted-foreground"
+                )}
+              >
+                <Mail className="h-3.5 w-3.5 text-muted-foreground/80" aria-hidden="true" />
+                <span>Contact</span>
+              </Link>
+            </nav>
+
+            {/* Desktop Search Bar Component */}
+            <SearchBar className="hidden lg:flex items-center flex-1 max-w-sm relative mx-4" inputClassName="h-9 py-2 pl-10 pr-9" />
+
+            {/* Desktop Header Actions */}
+            <div className="hidden md:flex items-center gap-4 lg:gap-5 text-muted-foreground">
+              {!user ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => openSignIn()}
-                  className="px-5 py-2 border border-primary text-primary hover:bg-primary hover:border-none hover:text-white transition cursor-pointer rounded-full text-sm font-sans uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  aria-label="Login or create account"
+                  className="h-9 px-4 text-xs font-semibold uppercase tracking-wider rounded-full cursor-pointer border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+                  aria-label="Log in to account"
                 >
                   Login
-                </button>
+                </Button>
               ) : (
                 <UserButton
-                  // afterSignOutUrl="/"
-                  appearance={{ elements: { userButtonAvatarBox: "w-6 h-6 border-customBlack/50" } }}
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "h-8 w-8 border border-border/80 shadow-2xs",
+                    },
+                  }}
                   aria-label="User account menu"
                 >
                   <UserButton.MenuItems>
-                    <UserButton.Action label="My Orders" onClick={() => router.push('/orders')} labelIcon={<PackageIcon size={16} />} />
+                    <UserButton.Action
+                      label="My Orders"
+                      onClick={() => router.push("/orders")}
+                      labelIcon={<PackageIcon size={16} />}
+                    />
                     <UserButton.Link
                       label="My Addresses"
                       labelIcon={<MapPinned className="h-4 w-4" />}
@@ -226,169 +298,278 @@ export default function Navbar() {
                   </UserButton.MenuItems>
                 </UserButton>
               )}
+
+              <Link
+                href="/wishlist"
+                aria-label={
+                  wishlistCount > 0
+                    ? `Wishlist, ${wishlistCount} saved items`
+                    : "Wishlist"
+                }
+                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={(e) => {
+                  if (!user) {
+                    e.preventDefault();
+                    toast.info("Please sign in to view your wishlist.");
+                    openSignIn();
+                  }
+                }}
+              >
+                <Heart className="h-5 w-5" aria-hidden="true" />
+                {wishlistCount > 0 && (
+                  <Badge
+                    aria-hidden="true"
+                    className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground font-mono"
+                  >
+                    {wishlistCount}
+                  </Badge>
+                )}
+              </Link>
+
+              <Link
+                href="/cart"
+                aria-label={
+                  totalItems > 0 ? `Shopping Cart, ${totalItems} items` : "Shopping Cart"
+                }
+                className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+                {totalItems > 0 && (
+                  <Badge
+                    aria-hidden="true"
+                    className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px] bg-destructive text-destructive-foreground font-mono animate-in zoom-in-50"
+                  >
+                    {totalItems}
+                  </Badge>
+                )}
+              </Link>
             </div>
 
-            <Link
-              href="/wishlist"
-              aria-label={wishlistCount > 0 ? `Wishlist, ${wishlistCount} items` : "Wishlist"}
-              className="p-2.5 hover:text-foreground transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
-              onClick={(e) => {
-                if (!user) {
-                  e.preventDefault();
-                  toast.info("Please sign in to view your wishlist.");
-                  openSignIn();
-                }
-              }}
-            >
-              <Heart size={22} aria-hidden="true" />
-              {wishlistCount > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold"
+            {/* Mobile Sidebar Navigation Drawer */}
+            <div className="flex md:hidden items-center gap-1">
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger
+                  type="button"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary border-0 bg-transparent cursor-pointer"
+                  aria-label={isOpen ? "Close main menu" : "Open main menu"}
                 >
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
+                  <Menu className="h-5 w-5" aria-hidden="true" />
+                </SheetTrigger>
 
-            <Link
-              href="/cart"
-              aria-label={totalItems > 0 ? `Cart, ${totalItems} items` : "Cart"}
-              className="p-2.5 hover:text-foreground transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
-            >
-              <ShoppingCart size={22} aria-hidden="true" />
-              {totalItems > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-in zoom-in duration-300"
-                >
-                  {totalItems}
-                </span>
-              )}
-            </Link>
+                <SheetContent side="right" className="w-full max-w-xs p-6 bg-card flex flex-col justify-between">
+                  <div className="space-y-6">
+                    {/* Header Logo */}
+                    <SheetHeader className="text-left pb-4 border-b border-border/60">
+                      <SheetTitle className="text-lg font-bold text-foreground">
+                        Furniture<span className="font-light text-muted-foreground">ables</span>
+                      </SheetTitle>
+                    </SheetHeader>
+
+                    {/* Mobile Search Bar Component */}
+                    <SearchBar inputClassName="text-xs h-9 rounded-xl bg-muted/50 pl-10 pr-9" clearButtonClassName="rounded-lg" />
+
+                    {/* Primary Links Stack */}
+                    <nav aria-label="Mobile Navigation" className="space-y-1">
+                      <Link
+                        href="/"
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "block px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-secondary",
+                          isActive("/") ? "bg-secondary text-foreground font-semibold" : "text-muted-foreground"
+                        )}
+                      >
+                        Home
+                      </Link>
+
+                      <Link
+                        href="/about"
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-secondary",
+                          isActive("/about") ? "bg-secondary text-foreground font-semibold" : "text-muted-foreground"
+                        )}
+                      >
+                        <Info className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                        <span>About Us</span>
+                      </Link>
+
+                      <Link
+                        href="/contact"
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-secondary",
+                          isActive("/contact") ? "bg-secondary text-foreground font-semibold" : "text-muted-foreground"
+                        )}
+                      >
+                        <Mail className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                        <span>Contact</span>
+                      </Link>
+                    </nav>
+
+                    <div className="border-t border-border/60 my-2" />
+
+                    {/* Dynamic Categories List */}
+                    <div className="space-y-1">
+                      <span className="px-3 text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-2">
+                        Shop Categories
+                      </span>
+
+                      {categoriesLoading && (
+                        <div className="space-y-2 px-3" aria-hidden="true">
+                          {[...Array(4)].map((_, i) => (
+                            <span key={i} className="block h-4 w-28 rounded bg-muted animate-pulse" />
+                          ))}
+                        </div>
+                      )}
+
+                      {!categoriesLoading && topCategories.length === 0 && (
+                        <p className="px-3 text-xs text-muted-foreground">No categories yet.</p>
+                      )}
+
+                      {!categoriesLoading &&
+                        topCategories.map((cat) => (
+                          <Link
+                            key={cat.type}
+                            href={`/products?category=${encodeURIComponent(cat.type)}`}
+                            onClick={() => setIsOpen(false)}
+                            className="block px-4 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                          >
+                            {formatCategoryLabel(cat.type)}
+                          </Link>
+                        ))}
+                    </div>
+
+                    <div className="border-t border-border/60 my-2" />
+
+                    {/* Account Links with Shopping Cart */}
+                    <div className="space-y-1">
+                      <span className="px-3 text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-2">
+                        My Account
+                      </span>
+
+                      {/* Shopping Cart Link */}
+                      <Link
+                        href="/cart"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      >
+                        <div className="inline-flex items-center gap-2">
+                          <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+                          <span>Shopping Cart</span>
+                        </div>
+                        {totalItems > 0 && (
+                          <Badge variant="destructive" className="font-mono text-[10px] h-5 px-1.5">
+                            {totalItems}
+                          </Badge>
+                        )}
+                      </Link>
+
+                      {/* Wishlist Link */}
+                      <Link
+                        href="/wishlist"
+                        onClick={(e) => {
+                          if (!user) {
+                            e.preventDefault();
+                            toast.info("Please sign in to view your wishlist.");
+                            openSignIn();
+                          } else {
+                            setIsOpen(false);
+                          }
+                        }}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      >
+                        <div className="inline-flex items-center gap-2">
+                          <Heart className="h-4 w-4 text-muted-foreground" />
+                          <span>Wishlist</span>
+                        </div>
+                        {wishlistCount > 0 && (
+                          <Badge variant="secondary" className="font-mono text-[10px] h-5 px-1.5">
+                            {wishlistCount}
+                          </Badge>
+                        )}
+                      </Link>
+
+                      {user && (
+                        <>
+                          <Link
+                            href="/orders"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          >
+                            <PackageIcon className="h-4 w-4 text-muted-foreground" />
+                            <span>My Orders</span>
+                          </Link>
+                          <Link
+                            href="/addresses"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          >
+                            <MapPinned className="h-4 w-4 text-muted-foreground" />
+                            <span>My Addresses</span>
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bottom Footer Section: Logged in User Profile or Login Action */}
+                  <div className="pt-4 border-t border-border/60 mt-auto">
+                    {user ? (
+                      <div className="flex items-center justify-between px-1">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <UserButton
+                            appearance={{
+                              elements: {
+                                userButtonAvatarBox: "h-9 w-9 border border-border/80 shadow-2xs shrink-0",
+                              },
+                            }}
+                            aria-label="User account menu"
+                          >
+                            <UserButton.MenuItems>
+                              <UserButton.Action
+                                label="My Orders"
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  router.push("/orders");
+                                }}
+                                labelIcon={<PackageIcon size={16} />}
+                              />
+                              <UserButton.Link
+                                label="My Addresses"
+                                labelIcon={<MapPinned className="h-4 w-4" />}
+                                href="/addresses"
+                              />
+                            </UserButton.MenuItems>
+                          </UserButton>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-semibold text-foreground truncate">
+                              {user.fullName || user.primaryEmailAddress?.emailAddress}
+                            </span>
+                            <span className="text-[11px] text-muted-foreground truncate">
+                              Logged in
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setIsOpen(false);
+                          openSignIn();
+                        }}
+                        className="w-full h-10 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
+                      >
+                        Sign In / Register
+                      </Button>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-1 text-muted-foreground">
-            <Link
-              href="/cart"
-              aria-label={totalItems > 0 ? `Cart, ${totalItems} items` : "Cart"}
-              className="p-2.5 hover:text-foreground relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
-            >
-              <ShoppingCart size={24} aria-hidden="true" />
-              {totalItems > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-in zoom-in duration-300"
-                >
-                  {totalItems}
-                </span>
-              )}
-            </Link>
-            <button
-              type="button"
-              onClick={() => setIsOpen((v) => !v)}
-              className="inline-flex items-center justify-center p-2.5 rounded-md hover:text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors"
-              aria-expanded={isOpen}
-              aria-controls={mobileMenuId}
-              aria-label={isOpen ? "Close main menu" : "Open main menu"}
-            >
-              {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-            </button>
-          </div>
-
         </div>
       </div>
-
-      {/* Mobile Menu Content Drawer */}
-      <div
-        id={mobileMenuId}
-        hidden={!isOpen}
-        className="md:hidden bg-background border-t border-border px-4 pt-2 pb-6 space-y-3 shadow-inner"
-      >
-        <form role="search" action="/search" className="relative my-2">
-          <label htmlFor={mobileSearchId} className="sr-only">
-            Search furniture
-          </label>
-          <input
-            id={mobileSearchId}
-            name="q"
-            type="search"
-            placeholder="Search furniture..."
-            className="w-full bg-muted/40 text-sm border border-input rounded-lg py-2 pl-4 pr-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          />
-          <button
-            type="submit"
-            aria-label="Submit search"
-            className="absolute right-1 top-1 p-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
-          >
-            <Search size={18} aria-hidden="true" />
-          </button>
-        </form>
-
-        <Link
-          href="/"
-          aria-current={isActive("/") ? "page" : undefined}
-          className={`block px-3 py-2.5 rounded-md text-base font-medium hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${isActive("/") ? "text-foreground font-semibold" : "text-muted-foreground"
-            }`}
-        >
-          Home
-        </Link>
-
-        <div className="px-3 py-2 font-medium text-muted-foreground/70 text-xs uppercase tracking-wider" id={`${mobileMenuId}-categories`}>
-          Shop by Category
-        </div>
-        <ul aria-labelledby={`${mobileMenuId}-categories`} className="list-none">
-          {categories.map((cat) => (
-            <li key={cat.name}>
-              <Link
-                href={cat.href}
-                className="block px-6 py-2 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {cat.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="border-t border-border my-2"></div>
-
-        <Link
-          href="/custom-orders"
-          aria-current={isActive("/custom-orders") ? "page" : undefined}
-          className={`block px-3 py-2.5 rounded-md text-base font-medium hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${isActive("/custom-orders") ? "text-foreground font-semibold" : "text-muted-foreground"
-            }`}
-        >
-          Custom Craft
-        </Link>
-        <Link
-          href="/about"
-          aria-current={isActive("/about") ? "page" : undefined}
-          className={`block px-3 py-2.5 rounded-md text-base font-medium hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${isActive("/about") ? "text-foreground font-semibold" : "text-muted-foreground"
-            }`}
-        >
-          Our Story
-        </Link>
-        <Link
-          href="/wishlist"
-          onClick={(e) => {
-            if (!user) {
-              e.preventDefault();
-              toast.info("Please sign in to view your wishlist.");
-              openSignIn();
-            }
-          }}
-          className="block px-3 py-2.5 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Wishlist
-        </Link>
-        <Link
-          href="/account"
-          className="block px-3 py-2.5 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          My Account
-        </Link>
-      </div>
-    </header>
+    </>
   );
 }

@@ -107,6 +107,31 @@ export const productResolvers = {
             };
         },
 
+        productCategories: async (
+            _parent: unknown,
+            { limit = 5 }: { limit?: number }
+        ) => {
+            const grouped = await prisma.product.groupBy({
+                by: ["type"],
+                _count: {
+                    type: true,
+                },
+                orderBy: {
+                    _count: {
+                        type: "desc",
+                    },
+                },
+                take: limit ?? 5,
+            });
+
+            return grouped
+                .filter((g) => !!g.type)
+                .map((g) => ({
+                    type: g.type,
+                    count: g._count.type,
+                }));
+        },
+
         product: async (
             _parent: unknown,
             { id }: { id: string }

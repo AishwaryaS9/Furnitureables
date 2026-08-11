@@ -23,3 +23,17 @@ export function formatPrice(amount: number, currency: "USD") {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+export function formatCategoryLabel(type: string) {
+  return type
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .split(" ")
+    .filter(Boolean)
+    .map((word) =>
+      word.length > 3 && word === word.toUpperCase()
+        ? word
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(" ");
+}
