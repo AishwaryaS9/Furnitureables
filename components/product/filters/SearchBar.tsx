@@ -48,7 +48,7 @@ export default function SearchBar({ className, inputClassName, clearButtonClassN
                 placeholder="Search solid wood pieces..."
                 aria-label="Search furniture catalog"
                 className={cn(
-                    "w-full bg-muted/40 text-foreground text-xs font-medium rounded-full pl-10 pr-9 border-border/80 focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
+                    "w-full bg-muted/40 text-foreground text-xs font-medium rounded-full pl-10 pr-9 border-border/80 focus-visible:ring-1 focus-visible:ring-ring [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
                     inputClassName
                 )}
             />
