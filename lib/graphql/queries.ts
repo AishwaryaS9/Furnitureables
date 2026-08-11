@@ -26,6 +26,24 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
+export const GET_PRODUCT_CATEGORIES = gql`
+  query GetProductCategories($limit: Int) {
+    productCategories(limit: $limit) {
+      type
+      count
+    }
+  }
+`;
+
+export const GET_PRODUCT_ROOMS = gql`
+  query GetProductRooms($limit: Int) {
+    productRooms(limit: $limit) {
+      room
+      count
+    }
+  }
+`;
+
 export const ADMIN_PRODUCTS = gql`
   query AdminProducts {
     adminProducts {

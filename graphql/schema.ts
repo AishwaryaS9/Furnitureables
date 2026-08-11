@@ -48,6 +48,11 @@ export const typeDefs = /* GraphQL */ `
     sortOrder: Int!
   }
 
+  type ProductCategory {
+    type: String!
+    count: Int!
+  }
+
   type Product {
     id: String!
 
@@ -398,6 +403,8 @@ input PlaceOrderInput {
     ): ProductsResponse!
 
     product(id: String!): Product
+
+    productCategories(limit: Int): [ProductCategory!]!
 
     adminProducts: [Product!]!
 
