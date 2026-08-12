@@ -1,4 +1,4 @@
-import { CreditCard, Truck, Landmark, } from "lucide-react";
+import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Settings } from "lucide-react";
 import { PaymentMethod } from "@/generated/prisma";
 
 export const SORT_OPTIONS = [
@@ -39,3 +39,51 @@ export const METHODS: {
             badge: "Global",
         },
     ];
+
+export const menuItems = [
+    {
+        title: "Dashboard",
+        href: "/admin",
+        icon: LayoutDashboard,
+    },
+    {
+        title: "Products",
+        href: "/admin/products",
+        icon: Package,
+    },
+    {
+        title: "Bulk Upload",
+        href: "/admin/upload",
+        icon: Upload,
+    },
+    {
+        title: "Orders",
+        href: "/admin/orders",
+        icon: ShoppingCart,
+    },
+    {
+        title: "Customers",
+        href: "/admin/customers",
+        icon: Users,
+    },
+    {
+        title: "Reviews",
+        href: "/admin/reviews",
+        icon: Star,
+    },
+    {
+        title: "Analytics",
+        href: "/admin/analytics",
+        icon: BarChart3,
+    },
+    {
+        title: "AI Generator",
+        href: "/admin/ai",
+        icon: Sparkles,
+    },
+    {
+        title: "Settings",
+        href: "/admin/settings",
+        icon: Settings,
+    },
+];
