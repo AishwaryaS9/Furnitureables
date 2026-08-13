@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { X, LogOut } from "lucide-react";
+import { X } from "lucide-react";
 import { menuItems } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { useUser } from "@clerk/nextjs";
 
 interface AdminSidebarProps {
   onCloseMobile?: () => void;
@@ -17,6 +18,7 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ onCloseMobile, className }: AdminSidebarProps) {
   const pathname = usePathname();
+  const { user } = useUser();
 
   return (
     <aside
@@ -102,18 +104,9 @@ export default function AdminSidebar({ onCloseMobile, className }: AdminSidebarP
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-foreground">Admin User</p>
-              <p className="truncate text-xs text-muted-foreground">admin@furnitureables.com</p>
+              <p className="truncate text-sm font-semibold text-foreground">Admin</p>
+              <p className="truncate text-xs text-muted-foreground">{user?.emailAddresses[0].emailAddress}</p>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label="Sign out"
-              className="h-8 w-8 rounded-xl text-muted-foreground hover:text-foreground hover:bg-background shadow-xs transition-colors"
-            >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-            </Button>
           </div>
         </div>
       </div>
