@@ -263,6 +263,51 @@ export const GET_WISHLIST_COUNT = gql`
   }
 `;
 
+export const ADMIN_DASHBOARD_STATS = gql`
+  query AdminDashboardStats {
+    adminDashboardStats {
+      totalRevenue
+      totalOrders
+      totalProducts
+      totalCustomers
+    }
+  }
+`;
+
+export const ADMIN_SALES_CHART = gql`
+  query AdminSalesChart($months: Int) {
+    adminSalesChart(months: $months) {
+      date
+      revenue
+    }
+  }
+`;
+
+export const ADMIN_LOW_STOCK_PRODUCTS = gql`
+  query AdminLowStockProducts($threshold: Int, $limit: Int) {
+    adminLowStockProducts(threshold: $threshold, limit: $limit) {
+      id
+      title
+      sku
+      stock
+    }
+  }
+`;
+
+export const ADMIN_RECENT_ORDERS = gql`
+  query AdminRecentOrders($limit: Int) {
+    adminRecentOrders(limit: $limit) {
+      id
+      orderNumber
+      customerName
+      createdAt
+      total
+      currency
+      status
+    }
+  }
+`;
+
 export const VALIDATE_COUPON = gql`
   query ValidateCoupon(
     $code: String!
