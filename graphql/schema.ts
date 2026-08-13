@@ -250,6 +250,39 @@ export const typeDefs = /* GraphQL */ `
   }
 
   ############################
+  ## DASHBOARD
+  ############################
+
+  type DashboardStats {
+    totalRevenue: Float!
+    totalOrders: Int!
+    totalProducts: Int!
+    totalCustomers: Int!
+  }
+
+  type SalesChartPoint {
+    date: String!
+    revenue: Float!
+  }
+
+  type LowStockProduct {
+    id: String!
+    title: String!
+    sku: String!
+    stock: Int!
+  }
+
+  type RecentOrder {
+    id: String!
+    orderNumber: String!
+    customerName: String!
+    createdAt: String!
+    total: Float!
+    currency: String!
+    status: OrderStatus!
+  }
+
+  ############################
   ## RESPONSE TYPES
   ############################
 
@@ -422,7 +455,15 @@ input PlaceOrderInput {
       code: String!
       subtotal: Float!
     ): CouponValidationResult!
-  
+
+    adminDashboardStats: DashboardStats!
+
+    adminSalesChart(months: Int): [SalesChartPoint!]!
+
+    adminLowStockProducts(threshold: Int, limit: Int): [LowStockProduct!]!
+
+    adminRecentOrders(limit: Int): [RecentOrder!]!
+
   }
 
   ############################

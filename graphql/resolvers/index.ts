@@ -6,6 +6,7 @@ import { orderResolver } from "./order";
 import { wishlistResolver } from "./wishlist";
 import { paymentResolver } from "./payment";
 import { couponResolvers } from './coupon';
+import { dashboardResolver } from "./dashboard";
 
 export const resolvers = {
     Query: {
@@ -15,6 +16,7 @@ export const resolvers = {
         ...orderResolver.Query,
         ...wishlistResolver.Query,
         ...couponResolvers.Query,
+        ...dashboardResolver.Query,
     },
 
     Mutation: {
