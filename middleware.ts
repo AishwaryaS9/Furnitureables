@@ -1,6 +1,20 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default clerkMiddleware();
+// Matches every /admin route EXCEPT the admin sign-in page itself,
+// so the login screen stays reachable while everything else is gated
+// behind authentication.
+const isProtectedAdminRoute = createRouteMatcher(['/admin((?!/sign-in).*)']);
+
+export default clerkMiddleware(async (auth, req) => {
+    if (isProtectedAdminRoute(req)) {
+        // Require a signed-in Clerk session; unauthenticated visitors are
+        // redirected to the dedicated admin login page instead of the
+        // default Clerk sign-in.
+        await auth.protect({
+            unauthenticatedUrl: new URL('/admin/sign-in', req.url).toString(),
+        });
+    }
+});
 
 export const config = {
     matcher: [

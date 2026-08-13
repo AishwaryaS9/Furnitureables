@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import AdminNavbar from "@/components/admin/layout/AdminNavbar";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
+import { getAdminUser } from "@/lib/auth/admin";
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +22,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  // Middleware already guarantees the visitor is signed in; this confirms
+  // they are actually an admin account before rendering the dashboard.
+  const admin = await getAdminUser();
+  if (!admin) {
+    redirect("/admin/sign-in?error=unauthorized");
+  }
+
   return (
     <div className="flex min-h-screen bg-background selection:bg-primary/20 selection:text-primary">
       {/* Desktop Sidebar */}
