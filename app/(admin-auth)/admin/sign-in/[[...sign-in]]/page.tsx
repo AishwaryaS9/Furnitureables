@@ -28,19 +28,11 @@ export default async function AdminSignInPage({
 }) {
     const { error } = await searchParams;
 
-    // If someone who's already an authenticated admin lands here, skip
-    // straight to the dashboard instead of showing the login form again.
     const user = await currentUser();
     if (user && user.publicMetadata?.role === "admin") {
         redirect("/admin");
     }
 
-    // A session exists but it's not an admin account. Clerk's <SignIn />
-    // component auto-redirects to fallbackRedirectUrl whenever it detects an
-    // active session — regardless of role — which would bounce this user
-    // straight back to /admin, get rejected by the layout, land back here,
-    // and repeat forever. So for this case we skip <SignIn /> entirely and
-    // ask them to sign out first.
     const isSignedInAsWrongAccount = Boolean(user);
 
     const isUnauthorized = error === "unauthorized";
@@ -89,7 +81,7 @@ export default async function AdminSignInPage({
                         <SignIn
                             routing="path"
                             path="/admin/sign-in"
-                            fallbackRedirectUrl="/admin"
+                            fallbackRedirectUrl="/admin/sign-in?error=unauthorized"
                             appearance={{
                                 elements: {
                                     rootBox: "w-full flex justify-center",

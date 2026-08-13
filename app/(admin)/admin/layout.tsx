@@ -23,8 +23,6 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  // Middleware already guarantees the visitor is signed in; this confirms
-  // they are actually an admin account before rendering the dashboard.
   const admin = await getAdminUser();
   if (!admin) {
     redirect("/admin/sign-in?error=unauthorized");
