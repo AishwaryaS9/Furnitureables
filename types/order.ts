@@ -6,6 +6,29 @@ export interface PlaceOrderInput {
   couponId?: string;
 }
 
+export interface AdminOrder {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  itemsCount: number;
+  total: number;
+  currency: string;
+  status:
+  | "PENDING"
+  | "CONFIRMED"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED";
+  paymentStatus:
+  | "PENDING"
+  | "PAID"
+  | "FAILED"
+  | "REFUNDED";
+  paymentMethod: PaymentMethod;
+  createdAt: string;
+}
+
 export interface OrderItem {
   id: string;
   title: string;

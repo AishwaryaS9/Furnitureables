@@ -33,9 +33,6 @@ export default function AdminSidebar({ onCloseMobile, className }: AdminSidebarP
             className="flex items-center gap-2.5 text-lg font-serif font-bold tracking-tight text-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
             aria-label="Furnitureables Homepage"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-sans font-bold shadow-sm shadow-primary/20">
-              F
-            </span>
             <span className="text-foreground">
               Furniture<span className="font-sans text-muted-foreground font-normal">ables</span>
             </span>

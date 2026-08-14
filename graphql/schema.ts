@@ -282,6 +282,20 @@ export const typeDefs = /* GraphQL */ `
     status: OrderStatus!
   }
 
+  type AdminOrder {
+    id: String!
+    orderNumber: String!
+    customerName: String!
+    customerEmail: String!
+    itemsCount: Int!
+    total: Float!
+    currency: String!
+    status: OrderStatus!
+    paymentStatus: PaymentStatus!
+    paymentMethod: PaymentMethod!
+    createdAt: String!
+  }
+
   ############################
   ## RESPONSE TYPES
   ############################
@@ -463,6 +477,8 @@ input PlaceOrderInput {
     adminLowStockProducts(threshold: Int, limit: Int): [LowStockProduct!]!
 
     adminRecentOrders(limit: Int): [RecentOrder!]!
+
+    adminOrders: [AdminOrder!]!
 
   }
 

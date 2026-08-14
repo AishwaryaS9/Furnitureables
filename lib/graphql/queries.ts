@@ -308,6 +308,24 @@ export const ADMIN_RECENT_ORDERS = gql`
   }
 `;
 
+export const ADMIN_ORDERS = gql`
+  query AdminOrders {
+    adminOrders {
+      id
+      orderNumber
+      customerName
+      customerEmail
+      itemsCount
+      total
+      currency
+      status
+      paymentStatus
+      paymentMethod
+      createdAt
+    }
+  }
+`;
+
 export const VALIDATE_COUPON = gql`
   query ValidateCoupon(
     $code: String!
