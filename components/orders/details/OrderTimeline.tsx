@@ -78,8 +78,6 @@ export default function OrderTimeline({ order }: Props) {
                         Order Status
                     </CardTitle>
 
-                    {/* Legend: makes the dashed-vs-dotted line meaning explicit
-              rather than relying on the person to infer it. */}
                     <div
                         aria-hidden="true"
                         className="flex items-center gap-3 text-[11px] text-muted-foreground"
@@ -97,14 +95,10 @@ export default function OrderTimeline({ order }: Props) {
             </CardHeader>
 
             <CardContent>
-                {/* Quick, non-visual summary so screen-reader users get the
-            current status immediately instead of having to step through
-            every list item to find which one is current. */}
                 <p className="sr-only" role="status">
                     Current status: {STATUS_LABELS[order.status]}
                 </p>
 
-                {/* Always horizontal, at every breakpoint. */}
                 <ol
                     aria-label="Order tracking progress steps"
                     className="relative flex items-start justify-between"
@@ -113,10 +107,6 @@ export default function OrderTimeline({ order }: Props) {
                         const isCompleted = index <= current;
                         const isCurrentStep = index === current;
                         const isLast = index === steps.length - 1;
-                        // The connector to the RIGHT of this step is "done" only once
-                        // the order has moved past both endpoints of that segment
-                        // (e.g. Order Placed \u2192 Shipped is only dashed once the order
-                        // has actually shipped, not while it's merely placed).
                         const isSegmentReached = index < current;
                         const Icon = step.icon;
 
@@ -126,7 +116,6 @@ export default function OrderTimeline({ order }: Props) {
                                 aria-current={isCurrentStep ? "step" : undefined}
                                 className="relative flex flex-1 flex-col items-center gap-2 text-center"
                             >
-                                {/* Connector line to the next step */}
                                 {!isLast && (
                                     <div
                                         aria-hidden="true"

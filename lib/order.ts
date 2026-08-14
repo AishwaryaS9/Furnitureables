@@ -29,41 +29,31 @@ export function formatCurrency(
 export function getOrderStatusColor(status: string) {
   switch (status) {
     case "PENDING":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-
+      return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
     case "CONFIRMED":
-      return "bg-blue-100 text-blue-800 border-blue-200";
-
+      return "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20";
     case "SHIPPED":
-      return "bg-purple-100 text-purple-800 border-purple-200";
-
+      return "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
     case "DELIVERED":
-      return "bg-green-100 text-green-800 border-green-200";
-
+      return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
     case "CANCELLED":
-      return "bg-red-100 text-red-800 border-red-200";
-
+      return "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20";
     default:
-      return "";
+      return "bg-muted text-muted-foreground border-border";
   }
 }
 
 export function getPaymentStatusColor(status: string) {
   switch (status) {
-    case "PENDING":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-
     case "PAID":
-      return "bg-green-100 text-green-800 border-green-200";
-
+      return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
     case "FAILED":
-      return "bg-red-100 text-red-800 border-red-200";
-
+      return "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20";
     case "REFUNDED":
-      return "bg-slate-100 text-slate-700 border-slate-200";
-
+      return "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20";
+    case "PENDING":
     default:
-      return "";
+      return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
   }
 }
 
@@ -71,18 +61,15 @@ export function calculateOrderTotals() {
   // Reserved for future coupon/tax calculations
 }
 
-export function getPaymentMethodLabel(method: PaymentMethod) {
+export function getPaymentMethodLabel(method: PaymentMethod | string) {
   switch (method) {
     case "COD":
       return "Cash on Delivery";
-
     case "RAZORPAY":
       return "Razorpay";
-
     case "STRIPE":
       return "Stripe";
-
     default:
-      return method;
+      return method ? method.charAt(0) + method.slice(1).toLowerCase() : "";
   }
 }

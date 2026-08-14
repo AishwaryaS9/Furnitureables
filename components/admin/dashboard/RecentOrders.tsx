@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useAdminRecentOrders } from "@/hooks/useAdminRecentOrders";
 import { RecentOrderStatus } from "@/types/dashboard";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const currencyFormatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -79,21 +80,19 @@ export default function RecentOrders() {
                         </p>
                     </div>
                 </div>
-
-                <div className="flex items-center gap-2.5">
-                    {!isLoading && !isError && hasOrders && (
-                        <Badge variant="secondary" className="rounded-full px-2.5 py-0.5 text-xs font-semibold">
-                            {orders.length}
-                        </Badge>
-                    )}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 gap-1 text-xs font-medium text-muted-foreground hover:text-foreground hidden sm:inline-flex"
-                    >
-                        View all
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                    </Button>
+                <div className="flex items-center gap-2">
+                    <Link href="/admin/orders" tabIndex={-1} className="focus:outline-none">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-9 rounded-xl gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+                            aria-label="View all orders"
+                        >
+                            View all
+                            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                        </Button>
+                    </Link>
                 </div>
             </CardHeader>
 

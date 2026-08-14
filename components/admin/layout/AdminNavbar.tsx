@@ -45,7 +45,7 @@ export default function AdminNavbar() {
                         variant="ghost"
                         size="icon"
                         aria-label="View notifications (3 unread)"
-                        className="relative h-10 w-10 p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
+                        className="relative h-10 w-10 p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-all duration-200"
                     >
                         <Bell className="h-5 w-5" aria-hidden="true" />
                         <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-destructive ring-4 ring-card animate-pulse" />
@@ -58,7 +58,7 @@ export default function AdminNavbar() {
                             appearance={{
                                 elements: {
                                     userButtonAvatarBox:
-                                        "h-9 w-9 ring-2 ring-border/80 hover:ring-ring transition-all rounded-full shadow-sm",
+                                        "h-9 w-9 ring-1 ring-border/80 hover:ring-ring transition-all rounded-full shadow-xs",
                                 },
                             }}
                         />

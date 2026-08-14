@@ -337,7 +337,7 @@ export default function Navbar() {
                 {totalItems > 0 && (
                   <Badge
                     aria-hidden="true"
-                    className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px] bg-destructive text-destructive-foreground font-mono animate-in zoom-in-50"
+                    className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px] bg-destructive text-primary-foreground font-mono animate-in zoom-in-50"
                   >
                     {totalItems}
                   </Badge>

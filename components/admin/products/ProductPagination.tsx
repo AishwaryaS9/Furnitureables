@@ -9,6 +9,7 @@ interface ProductPaginationProps {
   totalItems: number;
   pageSize: number;
   onPageChange: (page: number) => void;
+  itemLabel?: string;
 }
 
 export default function ProductPagination({
@@ -17,6 +18,7 @@ export default function ProductPagination({
   totalItems,
   pageSize,
   onPageChange,
+  itemLabel = "products",
 }: ProductPaginationProps) {
   if (totalItems === 0) return null;
 
@@ -26,7 +28,7 @@ export default function ProductPagination({
   return (
     <nav
       role="navigation"
-      aria-label="Product catalog pagination"
+      aria-label={`${itemLabel} pagination`}
       className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-3"
     >
       {/* Dynamic Summary Status */}
@@ -38,7 +40,7 @@ export default function ProductPagination({
         <span>
           Showing <span className="font-semibold text-foreground">{startItem}</span> to{" "}
           <span className="font-semibold text-foreground">{endItem}</span> of{" "}
-          <span className="font-semibold text-foreground">{totalItems}</span> products
+          <span className="font-semibold text-foreground">{totalItems}</span> {itemLabel}
         </span>
       </div>
 
@@ -59,7 +61,7 @@ export default function ProductPagination({
           size="icon"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          aria-label="Go to first page of products"
+          aria-label={`Go to first page of ${itemLabel}`}
           aria-disabled={currentPage === 1}
           className="h-8 w-8 rounded-xl border-border/80 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
@@ -74,7 +76,7 @@ export default function ProductPagination({
           size="icon"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          aria-label="Go to previous page of products"
+          aria-label={`Go to previous page of ${itemLabel}`}
           aria-disabled={currentPage === 1}
           className="h-8 w-8 rounded-xl border-border/80 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
@@ -89,7 +91,7 @@ export default function ProductPagination({
           size="icon"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          aria-label="Go to next page of products"
+          aria-label={`Go to next page of ${itemLabel}`}
           aria-disabled={currentPage >= totalPages}
           className="h-8 w-8 rounded-xl border-border/80 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
@@ -104,7 +106,7 @@ export default function ProductPagination({
           size="icon"
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          aria-label={`Go to last page (Page ${totalPages}) of products`}
+          aria-label={`Go to last page (Page ${totalPages}) of ${itemLabel}`}
           aria-disabled={currentPage >= totalPages}
           className="h-8 w-8 rounded-xl border-border/80 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >

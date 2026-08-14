@@ -69,6 +69,88 @@ export const orderResolver = {
                 },
             });
         },
+
+        // adminOrders: async () => {
+        //     const orders = await prisma.order.findMany({
+        //         orderBy: {
+        //             createdAt: "desc",
+        //         },
+        //         include: {
+        //             user: {
+        //                 select: {
+        //                     email: true,
+        //                 },
+        //             },
+        //             items: {
+        //                 select: {
+        //                     id: true,
+        //                 },
+        //             },
+        //         },
+        //     });
+
+        //     return orders.map((order) => ({
+        //         id: order.id,
+        //         orderNumber: order.orderNumber,
+        //         customerName: order.fullName,
+        //         customerEmail: order.user.email,
+        //         itemsCount: order.items.length,
+        //         total: order.total,
+        //         currency: order.currency,
+        //         status: order.status,
+        //         paymentStatus: order.paymentStatus,
+        //         paymentMethod: order.paymentMethod,
+        //         createdAt: order.createdAt.toISOString(),
+        //     }));
+        // },
+
+
+        adminOrders: async () => {
+            const orders = await prisma.order.findMany({
+                orderBy: {
+                    createdAt: "desc",
+                },
+                include: {
+                    user: {
+                        select: {
+                            email: true,
+                        },
+                    },
+                    items: {
+                        select: {
+                            id: true,
+                            title: true,
+                            image: true,
+                            price: true,
+                            quantity: true,
+                        },
+                    },
+                },
+            });
+
+            const orderItem = orders.map((order) => ({
+                id: order.id,
+                orderNumber: order.orderNumber,
+                customerName: order.fullName,
+                customerEmail: order.user?.email ?? "-",
+                itemsCount: order.items.length,
+                total: order.total,
+                currency: order.currency,
+                status: order.status,
+                paymentStatus: order.paymentStatus,
+                paymentMethod: order.paymentMethod,
+                createdAt: order.createdAt.toISOString(),
+                items: order.items.map((item) => ({
+                    id: item.id,
+                    productName: item.title,
+                    productImage: item.image,
+                    quantity: item.quantity,
+                    price: item.price,
+                })),
+            }));
+            // console.log("Ordre iremmss", JSON.stringify(orderItem, null, 2))
+            return orderItem
+        },
     },
 
     Mutation: {
