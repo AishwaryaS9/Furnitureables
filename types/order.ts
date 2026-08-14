@@ -41,26 +41,29 @@ export interface OrderItem {
   };
 }
 
-export type OrderStatusFilter =
-  | "ALL"
+export type OrderStatus =
   | "PENDING"
   | "CONFIRMED"
   | "SHIPPED"
   | "DELIVERED"
   | "CANCELLED";
 
-export type PaymentStatusFilter =
-  | "ALL"
+export type PaymentStatus =
   | "PENDING"
   | "PAID"
   | "FAILED"
   | "REFUNDED";
 
+export type OrderStatusFilter = "ALL" | OrderStatus;
+export type PaymentStatusFilter = "ALL" | PaymentStatus;
+
 export interface Order {
   id: string;
   orderNumber: string;
-  status: OrderStatusFilter;
-  paymentStatus: PaymentStatusFilter;
+  // status: OrderStatusFilter;
+  // paymentStatus: PaymentStatusFilter;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
   paymentMethod: PaymentMethod;
   coupon?: {
     code: string;
