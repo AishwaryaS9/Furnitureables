@@ -1,181 +1,212 @@
 "use client";
 
-import { PackageSearch } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import * as React from "react";
+import { PackageSearch, MoreHorizontal, Eye, Copy, CreditCard } from "lucide-react";
+import { toast } from "sonner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { AdminOrder } from "@/types/order";
+import { formatCurrency, formatOrderDate, getPaymentMethodLabel } from "@/lib/order";
+import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
+import PaymentStatusBadge from "@/components/orders/PaymentStatusBadge";
+import OrderDetailsModal from "./OrderDetailsModal";
+
 
 interface Props {
     orders: AdminOrder[];
+    onViewOrder?: (orderId: string) => void;
 }
 
-const currencyFormatter = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-});
+export default function OrderTable({ orders, onViewOrder }: Props) {
+    const [selectedOrder, setSelectedOrder] = React.useState<AdminOrder | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
-const dateFormatter = new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-});
+    const handleViewDetails = (order: AdminOrder) => {
+        setSelectedOrder(order);
+        setIsDialogOpen(true);
+        onViewOrder?.(order.id);
+    };
 
-function toTitleCase(status: string) {
-    return status.charAt(0) + status.slice(1).toLowerCase();
-}
+    const handleCopyOrderId = async (orderNumber: string) => {
+        try {
+            await navigator.clipboard.writeText(orderNumber);
+            toast.success("Copied to clipboard", {
+                description: `Order ID ${orderNumber} copied successfully.`,
+            });
+        } catch {
+            toast.error("Failed to copy", {
+                description: "Please check your browser permissions.",
+            });
+        }
+    };
 
-function renderStatusBadge(status: AdminOrder["status"]) {
-    switch (status) {
-        case "DELIVERED":
-            return (
-                <Badge className="rounded-xl px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20">
-                    Delivered
-                </Badge>
-            );
-        case "SHIPPED":
-            return (
-                <Badge className="rounded-xl px-2.5 py-1 text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-500/20">
-                    Shipped
-                </Badge>
-            );
-        case "CONFIRMED":
-            return (
-                <Badge className="rounded-xl px-2.5 py-1 text-xs font-medium bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20">
-                    Confirmed
-                </Badge>
-            );
-        case "CANCELLED":
-            return (
-                <Badge variant="destructive" className="rounded-xl px-2.5 py-1 text-xs font-medium">
-                    Cancelled
-                </Badge>
-            );
-        case "PENDING":
-        default:
-            return (
-                <Badge className="rounded-xl px-2.5 py-1 text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20">
-                    Pending
-                </Badge>
-            );
-    }
-}
-
-function renderPaymentBadge(paymentStatus: AdminOrder["paymentStatus"]) {
-    if (paymentStatus === "PAID") {
-        return (
-            <Badge variant="outline" className="rounded-xl px-2.5 py-1 text-xs font-medium border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
-                Paid
-            </Badge>
-        );
-    }
-    if (paymentStatus === "FAILED") {
-        return (
-            <Badge variant="outline" className="rounded-xl px-2.5 py-1 text-xs font-medium border-destructive/30 text-destructive">
-                Failed
-            </Badge>
-        );
-    }
-    if (paymentStatus === "REFUNDED") {
-        return (
-            <Badge variant="outline" className="rounded-xl px-2.5 py-1 text-xs font-medium border-muted-foreground/30 text-muted-foreground">
-                Refunded
-            </Badge>
-        );
-    }
     return (
-        <Badge variant="outline" className="rounded-xl px-2.5 py-1 text-xs font-medium border-amber-500/30 text-amber-600 dark:text-amber-400">
-            Pending
-        </Badge>
-    );
-}
+        <>
+            <section
+                aria-label="Customer Orders Overview"
+                className="rounded-2xl border border-border/80 bg-card/90 shadow-sm backdrop-blur-md overflow-hidden"
+            >
+                <div
+                    className="overflow-x-auto focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    tabIndex={0}
+                    role="region"
+                    aria-label="Orders Data Table Scrollable Area"
+                >
+                    <Table aria-label="Customer Orders Table" className="w-full text-left">
+                        <TableHeader>
+                            <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
+                                <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Order</TableHead>
+                                <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Customer</TableHead>
+                                <TableHead scope="col" className="hidden md:table-cell py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</TableHead>
+                                <TableHead scope="col" className="hidden sm:table-cell py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Items</TableHead>
+                                <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Order Status</TableHead>
+                                <TableHead scope="col" className="hidden lg:table-cell py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment</TableHead>
+                                <TableHead scope="col" className="py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total</TableHead>
+                                <TableHead scope="col" className="py-3.5 pr-6 w-12 text-right sr-only">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
 
-export default function OrderTable({ orders }: Props) {
-    return (
-        <div className="rounded-3xl border border-border/60 bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
-                <Table aria-label="Orders Table">
-                    <TableHeader>
-                        <TableRow className="border-b border-border/60 bg-muted/40 hover:bg-muted/40">
-                            <TableHead className="py-4 pl-6 font-semibold">Order</TableHead>
-                            <TableHead className="py-4 font-semibold">Customer</TableHead>
-                            <TableHead className="hidden md:table-cell py-4 font-semibold">Date</TableHead>
-                            <TableHead className="hidden sm:table-cell py-4 font-semibold text-center">Items</TableHead>
-                            <TableHead className="py-4 font-semibold">Status</TableHead>
-                            <TableHead className="hidden lg:table-cell py-4 font-semibold">Payment</TableHead>
-                            <TableHead className="py-4 pr-6 text-right font-semibold">Total</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                        <TableBody>
+                            {orders.map((order) => {
+                                const date = formatOrderDate(order.createdAt);
 
-                    <TableBody>
-                        {orders.map((order) => {
-                            const date = dateFormatter.format(new Date(order.createdAt));
-
-                            return (
-                                <TableRow
-                                    key={order.id}
-                                    className="border-b border-border/40 transition-colors hover:bg-muted/30"
-                                >
-                                    <TableCell className="py-3.5 pl-6 font-medium text-foreground">
-                                        {order.orderNumber}
-                                        <div className="md:hidden text-xs text-muted-foreground font-normal mt-0.5">
-                                            {date}
-                                        </div>
-                                    </TableCell>
-
-                                    <TableCell className="py-3.5">
-                                        <div className="font-medium text-foreground line-clamp-1">
-                                            {order.customerName}
-                                        </div>
-                                        <div className="text-xs text-muted-foreground font-normal mt-0.5 line-clamp-1">
-                                            {order.customerEmail}
-                                        </div>
-                                    </TableCell>
-
-                                    <TableCell className="hidden md:table-cell py-3.5 text-xs font-medium text-muted-foreground">
-                                        {date}
-                                    </TableCell>
-
-                                    <TableCell className="hidden sm:table-cell py-3.5 text-center text-xs font-medium text-muted-foreground">
-                                        {order.itemsCount}
-                                    </TableCell>
-
-                                    <TableCell className="py-3.5">
-                                        {renderStatusBadge(order.status)}
-                                        <div className="lg:hidden mt-1.5">
-                                            {renderPaymentBadge(order.paymentStatus)}
-                                        </div>
-                                    </TableCell>
-
-                                    <TableCell className="hidden lg:table-cell py-3.5">
-                                        <div className="space-y-1">
-                                            {renderPaymentBadge(order.paymentStatus)}
-                                            <div className="text-[11px] text-muted-foreground font-medium">
-                                                {toTitleCase(order.paymentMethod)}
+                                return (
+                                    <TableRow
+                                        key={order.id}
+                                        className="group border-b border-border/40 transition-colors hover:bg-muted/40"
+                                    >
+                                        {/* Order Number */}
+                                        <TableCell className="py-4 pl-6">
+                                            <div className="flex items-center gap-2">
+                                                <div>
+                                                    <span className="font-mono text-sm font-medium text-foreground tracking-tight">
+                                                        {order.orderNumber}
+                                                    </span>
+                                                    <div className="md:hidden text-xs text-muted-foreground mt-0.5">
+                                                        <time dateTime={new Date(order.createdAt).toISOString()}>{date}</time>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </TableCell>
+                                        </TableCell>
 
-                                    <TableCell className="py-3.5 pr-6 text-right font-semibold text-foreground">
-                                        {currencyFormatter.format(order.total)}
+                                        {/* Customer */}
+                                        <TableCell className="py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="min-w-0">
+                                                    <div className="font-medium text-sm text-foreground truncate max-w-37.5 sm:max-w-50">
+                                                        {order.customerName}
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground truncate max-w-37.5 sm:max-w-50">
+                                                        {order.customerEmail}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+
+                                        {/* Date */}
+                                        <TableCell className="hidden md:table-cell py-4 text-xs font-medium text-muted-foreground whitespace-nowrap">
+                                            <time dateTime={new Date(order.createdAt).toISOString()}>{date}</time>
+                                        </TableCell>
+
+                                        {/* Items */}
+                                        <TableCell className="hidden sm:table-cell py-4 text-center">
+                                            <span
+                                                className="inline-flex items-center justify-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground tabular-nums"
+                                                aria-label={`${order.itemsCount} ${order.itemsCount === 1 ? "item" : "items"} in order`}
+                                            >
+                                                {order.itemsCount} {order.itemsCount === 1 ? "item" : "items"}
+                                            </span>
+                                        </TableCell>
+
+                                        {/* Order Status */}
+                                        <TableCell className="py-4 whitespace-nowrap">
+                                            <OrderStatusBadge status={order.status} />
+                                            <div className="lg:hidden mt-1.5">
+                                                <PaymentStatusBadge status={order.paymentStatus} />
+                                            </div>
+                                        </TableCell>
+
+                                        {/* Payment Method & Status */}
+                                        <TableCell className="hidden lg:table-cell py-4">
+                                            <div className="space-y-1">
+                                                <div>
+                                                    <PaymentStatusBadge status={order.paymentStatus} />
+                                                </div>
+                                                <div className="flex items-center gap-1 text-[11px] text-muted-foreground font-medium">
+                                                    <CreditCard className="h-3 w-3 shrink-0" aria-hidden="true" />
+                                                    <span>{getPaymentMethodLabel(order.paymentMethod)}</span>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+
+                                        {/* Total */}
+                                        <TableCell className="py-4 text-right font-semibold text-foreground text-sm tabular-nums">
+                                            {formatCurrency(order.total)}
+                                        </TableCell>
+
+                                        {/* Actions Menu */}
+                                        <TableCell className="py-4 pr-6 text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger
+                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground opacity-70 group-hover:opacity-100 transition-opacity hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+                                                    aria-label={`Open action menu for order ${order.orderNumber}`}
+                                                >
+                                                    <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end" className="w-48 shadow-md rounded-xl p-1 z-50">
+                                                    <DropdownMenuGroup>
+                                                        <DropdownMenuLabel className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground px-2 py-1">
+                                                            Actions
+                                                        </DropdownMenuLabel>
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleViewDetails(order)}
+                                                            className="cursor-pointer gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg transition-colors focus:bg-accent focus:text-accent-foreground"
+                                                        >
+                                                            <Eye className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                                                            View Order Details
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleCopyOrderId(order.orderNumber)}
+                                                            className="cursor-pointer gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg transition-colors focus:bg-accent focus:text-accent-foreground"
+                                                        >
+                                                            <Copy className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                                                            Copy Order ID
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuGroup>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+
+                            {/* Empty State */}
+                            {orders.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={8} className="h-64 text-center">
+                                        <div className="flex flex-col items-center justify-center p-8 text-center" role="status" aria-live="polite">
+                                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 border border-border/80 mb-3" aria-hidden="true">
+                                                <PackageSearch className="h-7 w-7 text-muted-foreground/60" />
+                                            </div>
+                                            <h3 className="text-sm font-semibold text-foreground">No orders found</h3>
+                                            <p className="text-xs text-muted-foreground max-w-xs mt-1">
+                                                Try adjusting your search query, filter criteria, or check back later.
+                                            </p>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
-                            );
-                        })}
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+            </section>
 
-                        {orders.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={7} className="h-56 text-center">
-                                    <div className="flex flex-col items-center justify-center space-y-2 text-muted-foreground">
-                                        <PackageSearch className="h-10 w-10 text-muted-foreground/40" />
-                                        <p className="text-sm font-semibold">No orders match your filter.</p>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-        </div>
+            {/* Separated Order Details Modal */}
+            <OrderDetailsModal
+                order={selectedOrder}
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+            />
+        </>
     );
 }

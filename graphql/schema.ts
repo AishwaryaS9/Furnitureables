@@ -282,7 +282,15 @@ export const typeDefs = /* GraphQL */ `
     status: OrderStatus!
   }
 
-  type AdminOrder {
+  type AdminOrderItem {
+    id: String!
+    productName: String!
+    productImage: String
+    quantity: Int!
+    price: Float!
+  }
+
+ type AdminOrder {
     id: String!
     orderNumber: String!
     customerName: String!
@@ -294,6 +302,7 @@ export const typeDefs = /* GraphQL */ `
     paymentStatus: PaymentStatus!
     paymentMethod: PaymentMethod!
     createdAt: String!
+    items: [AdminOrderItem!]!
   }
 
   ############################

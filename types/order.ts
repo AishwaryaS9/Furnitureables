@@ -6,27 +6,27 @@ export interface PlaceOrderInput {
   couponId?: string;
 }
 
+export interface AdminOrderItem {
+  id: string;
+  productName: string;
+  productImage?: string | null;
+  quantity: number;
+  price: number;
+}
+
 export interface AdminOrder {
   id: string;
   orderNumber: string;
   customerName: string;
   customerEmail: string;
-  itemsCount: number;
-  total: number;
-  currency: string;
-  status:
-  | "PENDING"
-  | "CONFIRMED"
-  | "SHIPPED"
-  | "DELIVERED"
-  | "CANCELLED";
-  paymentStatus:
-  | "PENDING"
-  | "PAID"
-  | "FAILED"
-  | "REFUNDED";
+  status: OrderStatusFilter;
+  paymentStatus: PaymentStatusFilter;
   paymentMethod: PaymentMethod;
+  total: number;
+  itemsCount: number;
+  currency: string;
   createdAt: string;
+  items?: AdminOrderItem[];
 }
 
 export interface OrderItem {
@@ -36,32 +36,32 @@ export interface OrderItem {
   sku?: string;
   price: number;
   quantity: number;
-
   product?: {
     id: string;
   };
 }
 
-export interface Order {
-  id: string;
-
-  orderNumber: string;
-
-  status:
+export type OrderStatusFilter =
+  | "ALL"
   | "PENDING"
   | "CONFIRMED"
   | "SHIPPED"
   | "DELIVERED"
   | "CANCELLED";
 
-  paymentStatus:
+export type PaymentStatusFilter =
+  | "ALL"
   | "PENDING"
   | "PAID"
   | "FAILED"
   | "REFUNDED";
 
+export interface Order {
+  id: string;
+  orderNumber: string;
+  status: OrderStatusFilter;
+  paymentStatus: PaymentStatusFilter;
   paymentMethod: PaymentMethod;
-
   coupon?: {
     code: string;
   } | null;

@@ -322,6 +322,13 @@ export const ADMIN_ORDERS = gql`
       paymentStatus
       paymentMethod
       createdAt
+      items {
+        id
+        productName
+        productImage
+        quantity
+        price
+      }
     }
   }
 `;

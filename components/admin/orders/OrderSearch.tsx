@@ -1,33 +1,22 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { Filter, Search, X, CreditCard } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
-export type OrderStatusFilter =
-    | "ALL"
-    | "PENDING"
-    | "CONFIRMED"
-    | "SHIPPED"
-    | "DELIVERED"
-    | "CANCELLED";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { OrderStatusFilter, PaymentStatusFilter } from "@/types/order";
 
 interface Props {
     value: string;
     onChange: (value: string) => void;
     status: OrderStatusFilter;
     onStatusChange: (status: OrderStatusFilter) => void;
+    paymentStatus: PaymentStatusFilter;
+    onPaymentStatusChange: (status: PaymentStatusFilter) => void;
 }
 
 const STATUS_OPTIONS: { value: OrderStatusFilter; label: string }[] = [
-    { value: "ALL", label: "All statuses" },
+    { value: "ALL", label: "All order statuses" },
     { value: "PENDING", label: "Pending" },
     { value: "CONFIRMED", label: "Confirmed" },
     { value: "SHIPPED", label: "Shipped" },
@@ -35,9 +24,18 @@ const STATUS_OPTIONS: { value: OrderStatusFilter; label: string }[] = [
     { value: "CANCELLED", label: "Cancelled" },
 ];
 
-export default function OrderSearch({ value, onChange, status, onStatusChange }: Props) {
+const PAYMENT_STATUS_OPTIONS: { value: PaymentStatusFilter; label: string }[] = [
+    { value: "ALL", label: "All payments statuses" },
+    { value: "PAID", label: "Paid" },
+    { value: "PENDING", label: "Pending" },
+    { value: "FAILED", label: "Failed" },
+    { value: "REFUNDED", label: "Refunded" },
+];
+
+export default function OrderSearch({ value, onChange, status, onStatusChange, paymentStatus, onPaymentStatusChange }: Props) {
     return (
-        <div className="flex flex-col sm:flex-row gap-3 w-full">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full">
+            {/* Search Input */}
             <div className="relative w-full sm:max-w-md">
                 <label htmlFor="order-search-input" className="sr-only">
                     Search orders by order number, customer name, or email
@@ -73,21 +71,77 @@ export default function OrderSearch({ value, onChange, status, onStatusChange }:
                 )}
             </div>
 
-            <Select value={status} onValueChange={(v) => onStatusChange(v as OrderStatusFilter)}>
-                <SelectTrigger
-                    className="h-11 w-full sm:w-48 rounded-2xl border-border/60 bg-card/60 text-sm backdrop-blur-xl shadow-xs"
-                    aria-label="Filter orders by status"
+            {/* Order Status Filter */}
+            <div className="w-full sm:w-44">
+                <Select
+                    value={status}
+                    onValueChange={(v) => onStatusChange(v as OrderStatusFilter)}
                 >
-                    <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                    {STATUS_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+                    <SelectTrigger
+                        className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
+                        aria-label="Filter orders by status"
+                    >
+                        <div className="flex min-w-0 items-center gap-2">
+                            <Filter
+                                className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                                aria-hidden="true"
+                            />
+                            <span className="truncate font-medium">
+                                {STATUS_OPTIONS.find((opt) => opt.value === status)?.label ??
+                                    "Filter by status"}
+                            </span>
+                        </div>
+                    </SelectTrigger>
+
+                    <SelectContent className="rounded-xl">
+                        {STATUS_OPTIONS.map((option) => (
+                            <SelectItem
+                                key={option.value}
+                                value={option.value}
+                                className="cursor-pointer rounded-lg text-xs font-medium"
+                            >
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Payment Status Filter */}
+            <div className="w-full sm:w-50">
+                <Select
+                    value={paymentStatus}
+                    onValueChange={(v) => onPaymentStatusChange(v as PaymentStatusFilter)}
+                >
+                    <SelectTrigger
+                        className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
+                        aria-label="Filter orders by payment status"
+                    >
+                        <div className="flex min-w-0 items-center gap-2">
+                            <CreditCard
+                                className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                                aria-hidden="true"
+                            />
+                            <span className="truncate font-medium">
+                                {PAYMENT_STATUS_OPTIONS.find((opt) => opt.value === paymentStatus)?.label ??
+                                    "Filter by payment"}
+                            </span>
+                        </div>
+                    </SelectTrigger>
+
+                    <SelectContent className="rounded-xl">
+                        {PAYMENT_STATUS_OPTIONS.map((option) => (
+                            <SelectItem
+                                key={option.value}
+                                value={option.value}
+                                className="cursor-pointer rounded-lg text-xs font-medium"
+                            >
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
         </div>
     );
 }
