@@ -75,7 +75,7 @@ export default function ProductStats({ total, lowStock, outOfStock, inventoryVal
 
                             <div>
                                 <div
-                                    className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground"
+                                    className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
                                     aria-label={`${stat.title}: ${stat.value}`}
                                 >
                                     {stat.value}

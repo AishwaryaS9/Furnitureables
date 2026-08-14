@@ -5,8 +5,8 @@ import { useAdminOrders } from "@/hooks/useAdminOrders";
 import OrderStats from "@/components/admin/orders/OrderStats";
 import OrderTable from "@/components/admin/orders/OrderTable";
 import ProductPagination from "@/components/admin/products/ProductPagination";
-import { OrderStatusFilter, PaymentStatusFilter } from "@/types/order";
 import OrderSearch from "@/components/admin/orders/OrderSearch";
+import { OrderStatusFilter, PaymentStatusFilter } from "@/types/order";
 
 const PAGE_SIZE = 8;
 
@@ -72,23 +72,31 @@ export default function OrdersPage() {
     const isFiltered = Boolean(search) || status !== "ALL" || paymentStatus !== "ALL";
 
     return (
-        <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+        <main
+            id="main-content"
+            tabIndex={-1}
+            aria-labelledby="orders-page-title"
+            className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 focus:outline-none"
+        // className="space-y-6 sm:space-y-8 max-w-7xl mx-auto"
+        >
             {/* Header Landmark */}
             <header className="space-y-2">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight text-foreground truncate gap-2.5 py-1">
+                <h1
+                    id="orders-page-title"
+                    className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight text-foreground truncate gap-2.5 py-1"
+                >
                     Orders
                 </h1>
-                <p
-                    role="status"
-                    aria-live="polite"
-                    className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed"
-                >
+                <p className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
                     View and track every order placed on your store.
                 </p>
             </header>
 
             {/* Order Statistics Landmark */}
-            <section aria-label="Order Statistics Overview">
+            <section aria-labelledby="order-stats-heading">
+                <h2 id="order-stats-heading" className="sr-only">
+                    Order Statistics Overview
+                </h2>
                 <OrderStats
                     total={total}
                     pending={pending}
@@ -97,8 +105,15 @@ export default function OrdersPage() {
                 />
             </section>
 
-            {/* Search and Table Landmark */}
-            <section aria-label="Orders Table" className="space-y-4">
+            {/* Search, Filter, and Table Section */}
+            <section
+                aria-labelledby="order-list-heading"
+                className="space-y-4 w-full"
+            >
+                <h2 id="order-list-heading" className="sr-only">
+                    Orders Management Table
+                </h2>
+
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <OrderSearch
                         value={search}
@@ -108,15 +123,32 @@ export default function OrdersPage() {
                         paymentStatus={paymentStatus}
                         onPaymentStatusChange={handlePaymentStatusChange}
                     />
-                    {isFiltered && (
-                        <p className="text-xs text-muted-foreground font-medium shrink-0" aria-live="polite">
-                            Showing {filteredOrders.length} of {orders.length} orders
-                        </p>
-                    )}
+
+                    {/* Live status container for screen reader announcements */}
+                    <div
+                        role="status"
+                        aria-live="polite"
+                        aria-atomic="true"
+                        className="shrink-0"
+                    >
+                        {isFiltered ? (
+                            <p className="text-xs text-muted-foreground font-medium">
+                                Showing {filteredOrders.length} of {orders.length} orders
+                            </p>
+                        ) : (
+                            <span className="sr-only">
+                                Showing all {orders.length} orders
+                            </span>
+                        )}
+                    </div>
                 </div>
 
-                <OrderTable orders={paginatedOrders} />
+                {/* Table Container */}
+                <div className="w-full overflow-x-auto">
+                    <OrderTable orders={paginatedOrders} />
+                </div>
 
+                {/* Pagination Controls */}
                 <ProductPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -126,6 +158,6 @@ export default function OrdersPage() {
                     itemLabel="orders"
                 />
             </section>
-        </div>
+        </main>
     );
 }

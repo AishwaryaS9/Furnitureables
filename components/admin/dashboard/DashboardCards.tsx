@@ -53,7 +53,7 @@ export default function DashboardCards() {
         return (
           <Card
             key={item.title}
-            className="rounded-2xl border-border/60 bg-card/80 backdrop-blur-xl shadow-xs transition-all hover:shadow-sm"
+            className="rounded-2xl border-border/60 bg-card/60 backdrop-blur-xl shadow-xs transition-all hover:shadow-sm"
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-5 pt-5">
               <CardTitle className="text-sm font-medium text-muted-foreground">

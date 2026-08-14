@@ -32,13 +32,30 @@ const PAYMENT_STATUS_OPTIONS: { value: PaymentStatusFilter; label: string }[] = 
     { value: "REFUNDED", label: "Refunded" },
 ];
 
-export default function OrderSearch({ value, onChange, status, onStatusChange, paymentStatus, onPaymentStatusChange }: Props) {
+export default function OrderSearch({
+    value,
+    onChange,
+    status,
+    onStatusChange,
+    paymentStatus,
+    onPaymentStatusChange,
+}: Props) {
+    const selectedStatusLabel =
+        STATUS_OPTIONS.find((opt) => opt.value === status)?.label ?? "Filter by status";
+    const selectedPaymentLabel =
+        PAYMENT_STATUS_OPTIONS.find((opt) => opt.value === paymentStatus)?.label ?? "Filter by payment";
+
     return (
-        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full">
-            {/* Search Input */}
-            <div className="relative w-full sm:max-w-md">
+        <form
+            role="search"
+            aria-label="Order filters and search"
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 w-full"
+        >
+            {/* Search Input (Takes flexible remaining space) */}
+            <div className="relative w-full lg:max-w-md flex-1">
                 <label htmlFor="order-search-input" className="sr-only">
-                    Search orders by order number, customer name, or email
+                    Search orders by order number, customer name, or email address
                 </label>
 
                 <div
@@ -51,6 +68,10 @@ export default function OrderSearch({ value, onChange, status, onStatusChange, p
                 <Input
                     id="order-search-input"
                     type="search"
+                    name="orderSearch"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
                     placeholder="Search by order #, customer, or email..."
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
@@ -64,84 +85,99 @@ export default function OrderSearch({ value, onChange, status, onStatusChange, p
                         size="icon"
                         onClick={() => onChange("")}
                         className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                        aria-label="Clear order search input"
+                        aria-label="Clear search input query"
                     >
                         <X className="h-4 w-4" aria-hidden="true" />
                     </Button>
                 )}
             </div>
 
-            {/* Order Status Filter */}
-            <div className="w-full sm:w-44">
-                <Select
-                    value={status}
-                    onValueChange={(v) => onStatusChange(v as OrderStatusFilter)}
-                >
-                    <SelectTrigger
-                        className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
-                        aria-label="Filter orders by status"
+            {/* Filter Dropdowns in the same row */}
+            <div
+                role="group"
+                aria-label="Order status filter controls"
+                className="flex flex-row items-center gap-3 w-full lg:w-auto shrink-0"
+            >
+                {/* Order Status Filter */}
+                <div className="w-1/2 lg:w-44">
+                    <label id="status-filter-label" htmlFor="order-status-filter" className="sr-only">
+                        Filter by order status
+                    </label>
+                    <Select
+                        value={status}
+                        onValueChange={(v) => onStatusChange(v as OrderStatusFilter)}
                     >
-                        <div className="flex min-w-0 items-center gap-2">
-                            <Filter
-                                className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
-                                aria-hidden="true"
-                            />
-                            <span className="truncate font-medium">
-                                {STATUS_OPTIONS.find((opt) => opt.value === status)?.label ??
-                                    "Filter by status"}
-                            </span>
-                        </div>
-                    </SelectTrigger>
+                        <SelectTrigger
+                            id="order-status-filter"
+                            className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
+                            aria-labelledby="status-filter-label"
+                            aria-label={`Order status filter, current: ${selectedStatusLabel}`}
+                        >
+                            <div className="flex min-w-0 items-center gap-2">
+                                <Filter
+                                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                                    aria-hidden="true"
+                                />
+                                <span className="truncate font-medium">
+                                    {selectedStatusLabel}
+                                </span>
+                            </div>
+                        </SelectTrigger>
 
-                    <SelectContent className="rounded-xl">
-                        {STATUS_OPTIONS.map((option) => (
-                            <SelectItem
-                                key={option.value}
-                                value={option.value}
-                                className="cursor-pointer rounded-lg text-xs font-medium"
-                            >
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
+                        <SelectContent className="rounded-xl">
+                            {STATUS_OPTIONS.map((option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    className="cursor-pointer rounded-lg text-xs font-medium"
+                                >
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
 
-            {/* Payment Status Filter */}
-            <div className="w-full sm:w-50">
-                <Select
-                    value={paymentStatus}
-                    onValueChange={(v) => onPaymentStatusChange(v as PaymentStatusFilter)}
-                >
-                    <SelectTrigger
-                        className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
-                        aria-label="Filter orders by payment status"
+                {/* Payment Status Filter */}
+                <div className="w-1/2 lg:w-50">
+                    <label id="payment-filter-label" htmlFor="payment-status-filter" className="sr-only">
+                        Filter by payment status
+                    </label>
+                    <Select
+                        value={paymentStatus}
+                        onValueChange={(v) => onPaymentStatusChange(v as PaymentStatusFilter)}
                     >
-                        <div className="flex min-w-0 items-center gap-2">
-                            <CreditCard
-                                className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
-                                aria-hidden="true"
-                            />
-                            <span className="truncate font-medium">
-                                {PAYMENT_STATUS_OPTIONS.find((opt) => opt.value === paymentStatus)?.label ??
-                                    "Filter by payment"}
-                            </span>
-                        </div>
-                    </SelectTrigger>
+                        <SelectTrigger
+                            id="payment-status-filter"
+                            className="h-11 w-full rounded-2xl border-border/60 bg-card/60 text-xs font-medium backdrop-blur-xl shadow-xs"
+                            aria-labelledby="payment-filter-label"
+                            aria-label={`Payment status filter, current: ${selectedPaymentLabel}`}
+                        >
+                            <div className="flex min-w-0 items-center gap-2">
+                                <CreditCard
+                                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                                    aria-hidden="true"
+                                />
+                                <span className="truncate font-medium">
+                                    {selectedPaymentLabel}
+                                </span>
+                            </div>
+                        </SelectTrigger>
 
-                    <SelectContent className="rounded-xl">
-                        {PAYMENT_STATUS_OPTIONS.map((option) => (
-                            <SelectItem
-                                key={option.value}
-                                value={option.value}
-                                className="cursor-pointer rounded-lg text-xs font-medium"
-                            >
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                        <SelectContent className="rounded-xl">
+                            {PAYMENT_STATUS_OPTIONS.map((option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    className="cursor-pointer rounded-lg text-xs font-medium"
+                                >
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
-        </div>
+        </form>
     );
 }
