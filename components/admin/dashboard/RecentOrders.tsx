@@ -2,54 +2,14 @@
 
 import { ShoppingBag, AlertCircle, ArrowUpRight, PackageOpen, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAdminRecentOrders } from "@/hooks/useAdminRecentOrders";
-import { RecentOrderStatus } from "@/types/dashboard";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
-const currencyFormatter = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-});
-
-const dateFormatter = new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-});
-
-const STATUS_STYLES: Record<RecentOrderStatus, { dot: string; badge: string }> = {
-    DELIVERED: {
-        dot: "bg-emerald-500",
-        badge: "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    },
-    CONFIRMED: {
-        dot: "bg-blue-500",
-        badge: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    },
-    SHIPPED: {
-        dot: "bg-amber-500",
-        badge: "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400",
-    },
-    PENDING: {
-        dot: "bg-slate-400",
-        badge: "border-slate-400/30 bg-slate-400/10 text-slate-600 dark:text-slate-400",
-    },
-    CANCELLED: {
-        dot: "bg-red-500",
-        badge: "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400",
-    },
-};
-
-function toTitleCase(status: string) {
-    return status.charAt(0) + status.slice(1).toLowerCase();
-}
-
+import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
+import { formatCurrency, formatOrderDate } from "@/lib/order";
 
 export default function RecentOrders() {
     const { data, isLoading, isError, refetch, isRefetching } = useAdminRecentOrders(5);
@@ -162,7 +122,7 @@ export default function RecentOrders() {
                                         Date
                                     </TableHead>
                                     <TableHead className="hidden md:table-cell py-3.5 px-4 font-semibold text-xs tracking-wider uppercase text-muted-foreground">
-                                        Status
+                                        Order Status
                                     </TableHead>
                                     <TableHead className="py-3.5 px-4 text-right font-semibold text-xs tracking-wider uppercase text-muted-foreground">
                                         Amount
@@ -171,9 +131,7 @@ export default function RecentOrders() {
                             </TableHeader>
                             <TableBody>
                                 {orders.map((order) => {
-                                    const date = dateFormatter.format(new Date(order.createdAt));
-                                    const status = STATUS_STYLES[order.status];
-
+                                    const date = formatOrderDate(order.createdAt)
                                     return (
                                         <TableRow
                                             key={order.id}
@@ -198,22 +156,10 @@ export default function RecentOrders() {
                                                 {date}
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell py-4 px-4 whitespace-nowrap">
-                                                <Badge
-                                                    variant="outline"
-                                                    className={cn(
-                                                        "gap-1.5 font-semibold text-xs py-1 px-2.5",
-                                                        status?.badge
-                                                    )}
-                                                >
-                                                    <span
-                                                        className={cn("h-1.5 w-1.5 rounded-full", status?.dot)}
-                                                        aria-hidden="true"
-                                                    />
-                                                    {toTitleCase(order.status)}
-                                                </Badge>
+                                                <OrderStatusBadge status={order.status} />
                                             </TableCell>
                                             <TableCell className="py-4 px-4 text-right font-semibold text-sm text-foreground tabular-nums whitespace-nowrap">
-                                                {currencyFormatter.format(order.total)}
+                                                {formatCurrency(order.total)}
                                             </TableCell>
                                         </TableRow>
                                     );
