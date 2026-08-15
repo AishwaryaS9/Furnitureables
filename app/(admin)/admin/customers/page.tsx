@@ -4,8 +4,9 @@ import { useState, useMemo } from "react";
 import { useAdminCustomers } from "@/hooks/useAdminCustomers";
 import CustomerStats from "@/components/admin/customers/CustomerStats";
 import CustomerTable from "@/components/admin/customers/CustomerTable";
-import CustomerSearch, { CustomerSort } from "@/components/admin/customers/CustomerSearch";
+import CustomerSearch from "@/components/admin/customers/CustomerSearch";
 import ProductPagination from "@/components/admin/products/ProductPagination";
+import { CustomerSort } from "@/types/customer";
 
 const PAGE_SIZE = 8;
 
