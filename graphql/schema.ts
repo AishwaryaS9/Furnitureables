@@ -305,6 +305,56 @@ export const typeDefs = /* GraphQL */ `
     items: [AdminOrderItem!]!
   }
 
+  type AdminCustomer {
+    id: String!
+    name: String!
+    email: String!
+    joinedAt: String!
+    totalOrders: Int!
+    totalSpent: Float!
+    currency: String!
+    lastOrderAt: String
+  }
+
+  type AdminCustomerAddress {
+    id: String!
+    fullName: String!
+    phoneCode: String!
+    phone: String!
+    addressLine1: String!
+    addressLine2: String
+    landmark: String
+    city: String!
+    state: String!
+    postalCode: String!
+    country: String!
+    isDefault: Boolean!
+  }
+
+  type AdminCustomerOrder {
+    id: String!
+    orderNumber: String!
+    itemsCount: Int!
+    total: Float!
+    currency: String!
+    status: OrderStatus!
+    paymentStatus: PaymentStatus!
+    createdAt: String!
+  }
+
+  type AdminCustomerDetail {
+    id: String!
+    name: String!
+    email: String!
+    joinedAt: String!
+    totalOrders: Int!
+    totalSpent: Float!
+    currency: String!
+    lastOrderAt: String
+    addresses: [AdminCustomerAddress!]!
+    orders: [AdminCustomerOrder!]!
+  }
+
   ############################
   ## RESPONSE TYPES
   ############################
@@ -488,6 +538,10 @@ input PlaceOrderInput {
     adminRecentOrders(limit: Int): [RecentOrder!]!
 
     adminOrders: [AdminOrder!]!
+
+    adminCustomers: [AdminCustomer!]!
+
+    adminCustomer(id: String!): AdminCustomerDetail
 
   }
 

@@ -1,5 +1,6 @@
 import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Settings } from "lucide-react";
 import { PaymentMethod } from "@/generated/prisma";
+import { CustomerSort } from "@/types/customer";
 
 export const SORT_OPTIONS = [
     { value: "all", label: "Default" },
@@ -86,4 +87,12 @@ export const menuItems = [
         href: "/admin/settings",
         icon: Settings,
     },
+];
+
+
+export const CUSTOMER_SORT_OPTIONS: { value: CustomerSort; label: string }[] = [
+    { value: "newest", label: "Newest customers" },
+    { value: "oldest", label: "Oldest customers" },
+    { value: "most-orders", label: "Most orders" },
+    { value: "highest-spend", label: "Highest spend" },
 ];
