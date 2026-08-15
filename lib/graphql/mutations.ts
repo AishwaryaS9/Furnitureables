@@ -154,6 +154,18 @@ export const CREATE_STRIPE_PAYMENT_INTENT = gql`
   }
 `;
 
+export const ADMIN_UPDATE_ORDER_STATUS = gql`
+  mutation AdminUpdateOrderStatus(
+    $id: String!
+    $status: OrderStatus!
+  ) {
+    adminUpdateOrderStatus(id: $id, status: $status) {
+      id
+      status
+    }
+  }
+`;
+
 export const BUY_AGAIN = gql`
 mutation BuyAgain($orderId: String!) {
   buyAgain(orderId: $orderId) {

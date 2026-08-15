@@ -1,4 +1,5 @@
 import { PaymentMethod } from "@/generated/prisma";
+import { OrderStatus, OrderStatusFilter, PaymentStatusFilter } from "@/types/order";
 import { format, isValid } from "date-fns";
 
 export function generateOrderNumber() {
@@ -73,3 +74,28 @@ export function getPaymentMethodLabel(method: PaymentMethod | string) {
       return method ? method.charAt(0) + method.slice(1).toLowerCase() : "";
   }
 }
+
+export const STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
+  { value: "PENDING", label: "Pending" },
+  { value: "CONFIRMED", label: "Confirmed" },
+  { value: "SHIPPED", label: "Shipped" },
+  { value: "DELIVERED", label: "Delivered" },
+  { value: "CANCELLED", label: "Cancelled" },
+];
+
+export const ORDER_STATUS_OPTIONS: { value: OrderStatusFilter; label: string }[] = [
+  { value: "ALL", label: "All order statuses" },
+  { value: "PENDING", label: "Pending" },
+  { value: "CONFIRMED", label: "Confirmed" },
+  { value: "SHIPPED", label: "Shipped" },
+  { value: "DELIVERED", label: "Delivered" },
+  { value: "CANCELLED", label: "Cancelled" },
+];
+
+export const PAYMENT_STATUS_OPTIONS: { value: PaymentStatusFilter; label: string }[] = [
+  { value: "ALL", label: "All payments statuses" },
+  { value: "PAID", label: "Paid" },
+  { value: "PENDING", label: "Pending" },
+  { value: "FAILED", label: "Failed" },
+  { value: "REFUNDED", label: "Refunded" },
+];

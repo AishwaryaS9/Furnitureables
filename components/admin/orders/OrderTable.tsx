@@ -5,11 +5,11 @@ import { PackageSearch, MoreHorizontal, Eye, Copy, CreditCard } from "lucide-rea
 import { toast } from "sonner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
-import { AdminOrder } from "@/types/order";
+import { AdminOrder, OrderStatus } from "@/types/order";
 import { formatCurrency, formatOrderDate, getPaymentMethodLabel } from "@/lib/order";
-import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import PaymentStatusBadge from "@/components/orders/PaymentStatusBadge";
 import OrderDetailsModal from "./OrderDetailsModal";
+import OrderStatusSelect from "./OrderStatusSelect";
 
 interface Props {
     orders: AdminOrder[];
@@ -17,11 +17,16 @@ interface Props {
 }
 
 export default function OrderTable({ orders, onViewOrder }: Props) {
-    const [selectedOrder, setSelectedOrder] = React.useState<AdminOrder | null>(null);
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+    const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null);
+
+    const selectedOrder = React.useMemo(
+        () => orders.find((order) => order.id === selectedOrderId) ?? null,
+        [orders, selectedOrderId]
+    );
 
     const handleViewDetails = (order: AdminOrder) => {
-        setSelectedOrder(order);
+        setSelectedOrderId(order.id);
         setIsDialogOpen(true);
         onViewOrder?.(order.id);
     };
@@ -111,7 +116,11 @@ export default function OrderTable({ orders, onViewOrder }: Props) {
 
                                         {/* Order Status */}
                                         <TableCell className="py-4 whitespace-nowrap">
-                                            <OrderStatusBadge status={order.status} />
+                                            <OrderStatusSelect
+                                                orderId={order.id}
+                                                orderNumber={order.orderNumber}
+                                                status={order.status as OrderStatus}
+                                            />
                                         </TableCell>
 
                                         {/* Payment Method & Status */}

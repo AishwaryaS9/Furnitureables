@@ -4,10 +4,10 @@ import Image from "next/image";
 import { Calendar, User, Mail, ShoppingBag, CreditCard, Copy, Package } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AdminOrder } from "@/types/order";
+import { AdminOrder, OrderStatus } from "@/types/order";
 import { formatCurrency, formatOrderDate, getPaymentMethodLabel } from "@/lib/order";
-import OrderStatusBadge from "@/components/orders/OrderStatusBadge";
 import PaymentStatusBadge from "@/components/orders/PaymentStatusBadge";
+import OrderStatusSelect from "./OrderStatusSelect";
 
 interface Props {
     order: AdminOrder | null;
@@ -71,7 +71,11 @@ export default function OrderDetailsModal({ order, open, onOpenChange }: Props) 
                                 Fulfillment Status
                             </span>
                             <div aria-labelledby="fulfillment-status-label">
-                                <OrderStatusBadge status={order.status} />
+                                <OrderStatusSelect
+                                    orderId={order.id}
+                                    orderNumber={order.orderNumber}
+                                    status={order.status as OrderStatus}
+                                />
                             </div>
                         </div>
                         <div>

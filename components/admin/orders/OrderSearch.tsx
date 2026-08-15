@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { OrderStatusFilter, PaymentStatusFilter } from "@/types/order";
+import { ORDER_STATUS_OPTIONS, PAYMENT_STATUS_OPTIONS } from "@/lib/order";
 
 interface Props {
     value: string;
@@ -15,23 +16,6 @@ interface Props {
     onPaymentStatusChange: (status: PaymentStatusFilter) => void;
 }
 
-const STATUS_OPTIONS: { value: OrderStatusFilter; label: string }[] = [
-    { value: "ALL", label: "All order statuses" },
-    { value: "PENDING", label: "Pending" },
-    { value: "CONFIRMED", label: "Confirmed" },
-    { value: "SHIPPED", label: "Shipped" },
-    { value: "DELIVERED", label: "Delivered" },
-    { value: "CANCELLED", label: "Cancelled" },
-];
-
-const PAYMENT_STATUS_OPTIONS: { value: PaymentStatusFilter; label: string }[] = [
-    { value: "ALL", label: "All payments statuses" },
-    { value: "PAID", label: "Paid" },
-    { value: "PENDING", label: "Pending" },
-    { value: "FAILED", label: "Failed" },
-    { value: "REFUNDED", label: "Refunded" },
-];
-
 export default function OrderSearch({
     value,
     onChange,
@@ -41,7 +25,7 @@ export default function OrderSearch({
     onPaymentStatusChange,
 }: Props) {
     const selectedStatusLabel =
-        STATUS_OPTIONS.find((opt) => opt.value === status)?.label ?? "Filter by status";
+        ORDER_STATUS_OPTIONS.find((opt) => opt.value === status)?.label ?? "Filter by status";
     const selectedPaymentLabel =
         PAYMENT_STATUS_OPTIONS.find((opt) => opt.value === paymentStatus)?.label ?? "Filter by payment";
 
@@ -125,7 +109,7 @@ export default function OrderSearch({
                         </SelectTrigger>
 
                         <SelectContent className="rounded-xl">
-                            {STATUS_OPTIONS.map((option) => (
+                            {ORDER_STATUS_OPTIONS.map((option) => (
                                 <SelectItem
                                     key={option.value}
                                     value={option.value}

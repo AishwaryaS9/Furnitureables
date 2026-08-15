@@ -4,6 +4,15 @@ import { buildOrder } from "@/lib/order/buildOrder";
 import { razorpay } from "@/lib/razorpay";
 import { getStripe } from "@/lib/stripe";
 import { PlaceOrderInput } from "@/types/order";
+import { OrderStatus } from "@/generated/prisma";
+
+const VALID_ORDER_STATUSES: OrderStatus[] = [
+    "PENDING",
+    "CONFIRMED",
+    "SHIPPED",
+    "DELIVERED",
+    "CANCELLED",
+];
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -594,6 +603,103 @@ export const orderResolver = {
                     },
                 });
             });
+        },
+
+        adminUpdateOrderStatus: async (
+            _: unknown,
+            {
+                id,
+                status,
+            }: {
+                id: string;
+                status: OrderStatus;
+            }
+        ) => {
+            if (!VALID_ORDER_STATUSES.includes(status)) {
+                throw new Error("Invalid order status.");
+            }
+
+            const existingOrder = await prisma.order.findUnique({
+                where: { id },
+            });
+
+            if (!existingOrder) {
+                throw new Error("Order not found.");
+            }
+
+            // Restore stock if an order is being cancelled from a non-cancelled state
+            if (
+                status === "CANCELLED" &&
+                existingOrder.status !== "CANCELLED"
+            ) {
+                await prisma.$transaction(async (tx) => {
+                    const items = await tx.orderItem.findMany({
+                        where: { orderId: id },
+                    });
+
+                    for (const item of items) {
+                        await tx.product.update({
+                            where: { id: item.productId },
+                            data: {
+                                stock: {
+                                    increment: item.quantity,
+                                },
+                            },
+                        });
+                    }
+
+                    await tx.order.update({
+                        where: { id },
+                        data: { status },
+                    });
+                });
+            } else {
+                await prisma.order.update({
+                    where: { id },
+                    data: { status },
+                });
+            }
+
+            const order = await prisma.order.findUniqueOrThrow({
+                where: { id },
+                include: {
+                    user: {
+                        select: {
+                            email: true,
+                        },
+                    },
+                    items: {
+                        select: {
+                            id: true,
+                            title: true,
+                            image: true,
+                            price: true,
+                            quantity: true,
+                        },
+                    },
+                },
+            });
+
+            return {
+                id: order.id,
+                orderNumber: order.orderNumber,
+                customerName: order.fullName,
+                customerEmail: order.user?.email ?? "-",
+                itemsCount: order.items.length,
+                total: order.total,
+                currency: order.currency,
+                status: order.status,
+                paymentStatus: order.paymentStatus,
+                paymentMethod: order.paymentMethod,
+                createdAt: order.createdAt.toISOString(),
+                items: order.items.map((item) => ({
+                    id: item.id,
+                    productName: item.title,
+                    productImage: item.image,
+                    quantity: item.quantity,
+                    price: item.price,
+                })),
+            };
         },
 
         buyAgain: async (

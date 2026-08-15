@@ -558,5 +558,10 @@ input PlaceOrderInput {
     createStripePaymentIntent(
       input: PlaceOrderInput!
     ): StripePaymentIntentResponse!
+
+    adminUpdateOrderStatus(
+      id: String!
+      status: OrderStatus!
+    ): AdminOrder!
   }
 `;
