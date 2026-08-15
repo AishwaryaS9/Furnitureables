@@ -333,6 +333,60 @@ export const ADMIN_ORDERS = gql`
   }
 `;
 
+export const ADMIN_CUSTOMERS = gql`
+  query AdminCustomers {
+    adminCustomers {
+      id
+      name
+      email
+      joinedAt
+      totalOrders
+      totalSpent
+      currency
+      lastOrderAt
+    }
+  }
+`;
+
+export const ADMIN_CUSTOMER_DETAIL = gql`
+  query AdminCustomer($id: String!) {
+    adminCustomer(id: $id) {
+      id
+      name
+      email
+      joinedAt
+      totalOrders
+      totalSpent
+      currency
+      lastOrderAt
+      addresses {
+        id
+        fullName
+        phoneCode
+        phone
+        addressLine1
+        addressLine2
+        landmark
+        city
+        state
+        postalCode
+        country
+        isDefault
+      }
+      orders {
+        id
+        orderNumber
+        itemsCount
+        total
+        currency
+        status
+        paymentStatus
+        createdAt
+      }
+    }
+  }
+`;
+
 export const VALIDATE_COUPON = gql`
   query ValidateCoupon(
     $code: String!
