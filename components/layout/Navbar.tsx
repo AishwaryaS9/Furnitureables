@@ -14,8 +14,10 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import SearchBar from "../product/filters/SearchBar";
+import Image from "next/image";
+import logo from "@/public/logo.svg";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -126,16 +128,20 @@ export default function Navbar() {
           <div className="flex h-16 sm:h-20 items-center justify-between gap-4">
 
             {/* Brand Logo */}
-            <div className="shrink-0">
+            <div className="shrink-0 flex items-center">
               <Link
                 href="/"
                 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-primary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-lg"
                 aria-label="Furnitureables Homepage"
               >
-                Furniture<span className="font-sans text-muted-foreground">ables</span>
+                <Image
+                  src={logo}
+                  alt="Furnitureables"
+                  priority
+                  className="w-44 h-auto sm:w-52 md:w-52 lg:w-56 xl:w-64"
+                />
               </Link>
             </div>
-
             {/* Desktop Navigation Links */}
             <nav
               aria-label="Main Navigation"
@@ -360,9 +366,12 @@ export default function Navbar() {
                   <div className="flex-1 overflow-y-auto p-6 space-y-6 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/40">
                     {/* Header Logo */}
                     <SheetHeader className="text-left pb-4 border-b border-border/60">
-                      <SheetTitle className="text-lg font-serif font-bold text-foreground">
-                        Furniture<span className="font-sans text-muted-foreground">ables</span>
-                      </SheetTitle>
+                      <Image
+                        src={logo}
+                        alt="Furnitureables"
+                        priority
+                        className="w-44 h-auto sm:w-52 md:w-52 lg:w-56 xl:w-64"
+                      />
                     </SheetHeader>
 
                     {/* Mobile Search Bar Component */}
