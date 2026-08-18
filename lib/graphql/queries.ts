@@ -409,3 +409,63 @@ export const VALIDATE_COUPON = gql`
     }
   }
 `;
+
+export const PRODUCT_REVIEWS = gql`
+  query ProductReviews($productId: String!) {
+    productReviews(productId: $productId) {
+      total
+      averageRating
+      canReview
+      currentUserReview {
+        id
+        rating
+        title
+        comment
+        status
+        createdAt
+        updatedAt
+      }
+      reviews {
+        id
+        rating
+        title
+        comment
+        status
+        createdAt
+        updatedAt
+        author {
+          id
+          name
+        }
+        product {
+          id
+          title
+          image
+        }
+      }
+    }
+  }
+`;
+
+export const ADMIN_REVIEWS = gql`
+  query AdminReviews($status: ReviewStatus) {
+    adminReviews(status: $status) {
+      id
+      rating
+      title
+      comment
+      status
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+      }
+      product {
+        id
+        title
+        image
+      }
+    }
+  }
+`;

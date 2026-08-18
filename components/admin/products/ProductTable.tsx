@@ -59,13 +59,13 @@ export default function ProductTable({ products }: Props) {
           <Table aria-label="Products Table">
             <TableHeader>
               <TableRow className="border-b border-border/60 bg-muted/40 hover:bg-muted/40">
-                <TableHead className="w-20 py-4 pl-6 font-semibold">Item</TableHead>
-                <TableHead className="py-4 font-semibold text-left">Title</TableHead>
-                <TableHead className="hidden sm:table-cell py-4 font-semibold">SKU</TableHead>
-                <TableHead className="hidden md:table-cell py-4 font-semibold">Category</TableHead>
-                <TableHead className="py-4 font-semibold">Price</TableHead>
-                <TableHead className="py-4 font-semibold">Stock Status</TableHead>
-                <TableHead className="py-4 pr-6 text-right font-semibold">Actions</TableHead>
+                <TableHead className="w-20 py-4 pl-6 font-semibold uppercase text-muted-foreground text-xs">Item</TableHead>
+                <TableHead className="py-4 font-semibold uppercase text-left text-muted-foreground text-xs">Title</TableHead>
+                <TableHead className="hidden sm:table-cell py-4 font-semibold uppercase text-muted-foreground text-xs">SKU</TableHead>
+                <TableHead className="hidden md:table-cell py-4 font-semibold uppercase text-muted-foreground text-xs">Category</TableHead>
+                <TableHead className="py-4 font-semibold uppercase text-muted-foreground text-xs">Price</TableHead>
+                <TableHead className="py-4 font-semibold uppercase text-muted-foreground text-xs">Stock Status</TableHead>
+                <TableHead className="py-4 pr-6 text-right font-semibold uppercase text-muted-foreground text-xs">Actions</TableHead>
               </TableRow>
             </TableHeader>
 

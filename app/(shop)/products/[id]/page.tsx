@@ -1,15 +1,15 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { graphqlServerClient } from "@/lib/graphql/server-client";
-import { PRODUCT_BY_ID } from "@/lib/graphql/queries";
+import { PRODUCT_BY_ID, PRODUCT_REVIEWS } from "@/lib/graphql/queries";
 import { ProductResponse } from "@/types/graphql";
+import { ProductReviews } from "@/types/review";
 import ProductClient from "./ProductClient";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 
-// 1. Dynamic SEO Metadata Generation
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const client = await graphqlServerClient();
@@ -99,5 +99,10 @@ export default async function ProductPage({ params }: Props) {
     notFound();
   }
 
-  return <ProductClient product={product} />;
+  const { productReviews } = await client.request<{ productReviews: ProductReviews }>(
+    PRODUCT_REVIEWS,
+    { productId: id }
+  );
+
+  return <ProductClient product={product} reviews={productReviews} />;
 }

@@ -8,6 +8,7 @@ import { paymentResolver } from "./payment";
 import { couponResolvers } from './coupon';
 import { dashboardResolver } from "./dashboard";
 import { customerResolver } from "./customer";
+import { reviewResolver } from "./review";
 
 export const resolvers = {
     Query: {
@@ -19,6 +20,7 @@ export const resolvers = {
         ...couponResolvers.Query,
         ...dashboardResolver.Query,
         ...customerResolver.Query,
+        ...reviewResolver.Query,
     },
 
     Mutation: {
@@ -29,6 +31,7 @@ export const resolvers = {
         ...orderResolver.Mutation,
         ...wishlistResolver.Mutation,
         ...paymentResolver.Mutation,
+        ...reviewResolver.Mutation,
     },
     Product: {
         ...productResolvers.Product

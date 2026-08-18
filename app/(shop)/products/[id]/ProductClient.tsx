@@ -5,14 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Truck, ShieldCheck, Minus, Plus, Maximize2, X, AlertCircle } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
+import ProductReviews from "@/components/product/ProductReviews";
 import { Product } from "@/types/product";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import WishlistButton from "@/components/wishlist/WishlistButton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { formatCurrency } from "@/lib/order";
+import { ProductReviews as ProductReviewsData } from "@/types/review";
 
-export default function ProductClient({ product }: { product: Product }) {
+export default function ProductClient({ product, reviews }: { product: Product; reviews: ProductReviewsData }) {
     const addToCart = useAddToCart();
     const [quantity, setQuantity] = useState(1);
 
@@ -374,6 +376,8 @@ export default function ProductClient({ product }: { product: Product }) {
 
                         <RelatedProducts type={product.type} id={product.id} />
                     </section>
+
+                    <ProductReviews productId={product.id} initialData={reviews} />
 
                 </div>
             </main>

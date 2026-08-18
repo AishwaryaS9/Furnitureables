@@ -173,3 +173,52 @@ mutation BuyAgain($orderId: String!) {
   }
 }
 `;
+
+export const CREATE_REVIEW = gql`
+  mutation CreateReview($input: CreateReviewInput!) {
+    createReview(input: $input) {
+      id
+      rating
+      title
+      comment
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_REVIEW = gql`
+  mutation UpdateReview($id: String!, $input: UpdateReviewInput!) {
+    updateReview(id: $id, input: $input) {
+      id
+      rating
+      title
+      comment
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_REVIEW = gql`
+  mutation DeleteReview($id: String!) {
+    deleteReview(id: $id)
+  }
+`;
+
+export const ADMIN_UPDATE_REVIEW_STATUS = gql`
+  mutation AdminUpdateReviewStatus($id: String!, $status: ReviewStatus!) {
+    adminUpdateReviewStatus(id: $id, status: $status) {
+      id
+      status
+    }
+  }
+`;
+
+export const ADMIN_DELETE_REVIEW = gql`
+  mutation AdminDeleteReview($id: String!) {
+    adminDeleteReview(id: $id)
+  }
+`;

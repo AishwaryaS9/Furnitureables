@@ -19,6 +19,7 @@ model User {
   cart      Cart?
   orders    Order[]
   wishlists Wishlist[]
+  reviews   Review[]
 }
 
 model Product {
@@ -39,6 +40,7 @@ model Product {
   orderItems  OrderItem[]
   media       ProductMedia[]
   wishlists   Wishlist[]
+  reviews     Review[]
 }
 
 model ProductMedia {
@@ -181,6 +183,27 @@ model Wishlist {
   @@index([productId])
 }
 
+
+model Review {
+  id        String       @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  title     String?
+  comment   String?
+  status    ReviewStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId, status])
+  @@index([userId])
+  @@index([status])
+}
+
 model Coupon {
   id                String   @id @default(cuid())
   code              String   @unique
@@ -228,6 +251,12 @@ enum PaymentMethod {
   COD
   STRIPE
   RAZORPAY
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum DiscountType {
