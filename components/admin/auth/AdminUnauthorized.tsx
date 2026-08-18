@@ -24,7 +24,10 @@ export default function AdminUnauthorized({ email }: AdminUnauthorizedProps) {
                     "This account doesn't have admin access."
                 )}{" "}
             </p>
-            <Link href="/" className="w-full rounded-xl bg-primary text-white">
+            <Link
+                href="/"
+                className="flex w-full h-10 items-center justify-center text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer gap-2 group"
+            >
                 Go to Home Page
             </Link>
         </div>

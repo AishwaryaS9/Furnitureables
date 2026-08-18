@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs/server";
 import { ShieldCheck, TriangleAlert } from "lucide-react";
 import AdminUnauthorized from "@/components/admin/auth/AdminUnauthorized";
+import Image from "next/image";
+import logo from "@/public/logo.svg";
 
 export const metadata: Metadata = {
     title: "Admin Sign In | Furnitureables",
@@ -45,14 +47,13 @@ export default async function AdminSignInPage({
                     className="flex items-center gap-2.5 text-lg font-serif font-bold tracking-tight text-foreground mb-8 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
                     aria-label="Furnitureables Homepage"
                 >
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-sans font-bold shadow-sm shadow-primary/20">
-                        F
-                    </span>
-                    <span className="text-foreground">
-                        Furniture<span className="font-sans text-muted-foreground font-normal">ables</span>
-                    </span>
+                    <Image
+                        src={logo}
+                        alt="Furnitureables"
+                        priority
+                        className="w-44 h-auto sm:w-52 md:w-52 lg:w-56 xl:w-64"
+                    />
                 </Link>
-
                 <div className="flex items-center gap-2 mb-1 text-sm font-medium text-muted-foreground">
                     <ShieldCheck className="h-4 w-4" aria-hidden="true" />
                     Admin Portal
@@ -92,8 +93,6 @@ export default async function AdminSignInPage({
                                     formButtonPrimary:
                                         "bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl",
                                     formFieldInput: "rounded-xl",
-                                    // Admin accounts are provisioned manually (Clerk Dashboard),
-                                    // not via public self sign-up.
                                     footerAction: "hidden",
                                 },
                             }}

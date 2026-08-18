@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Order } from "@/types/order";
 import { formatCurrency, formatOrderDate } from "@/lib/order";
 import DownloadInvoiceButton from "./DownloadInvoiceButton";
+import Image from "next/image";
+import logo from "@/public/logo.svg";
 
 interface InvoiceProps {
     order: Order;
@@ -59,12 +61,12 @@ export default function Invoice({ order }: InvoiceProps) {
                 {/* Top Header Row */}
                 <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 border-b border-border/60 pb-8 print:border-black/20">
                     <div className="space-y-3">
-                        <Link
-                            href="/"
-                            className="inline-block text-2xl sm:text-3xl font-serif font-bold tracking-tight text-foreground print:text-black"
-                        >
-                            Furniture<span className="font-sans font-normal text-muted-foreground print:text-black/70">ables</span>
-                        </Link>
+                        <Image
+                            src={logo}
+                            alt="Furnitureables"
+                            priority
+                            className="w-44 h-auto sm:w-52 md:w-52 lg:w-56 xl:w-64"
+                        />
 
                         <p className="text-xs sm:text-sm text-muted-foreground font-light print:text-black/70">
                             Premium Furniture for Modern Living

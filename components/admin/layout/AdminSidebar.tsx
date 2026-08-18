@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
+import logo from "@/public/logo.svg";
 
 interface AdminSidebarProps {
   onCloseMobile?: () => void;
@@ -33,11 +35,13 @@ export default function AdminSidebar({ onCloseMobile, className }: AdminSidebarP
             className="flex items-center gap-2.5 text-lg font-serif font-bold tracking-tight text-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
             aria-label="Furnitureables Homepage"
           >
-            <span className="text-foreground">
-              Furniture<span className="font-sans text-muted-foreground font-normal">ables</span>
-            </span>
+            <Image
+              src={logo}
+              alt="Furnitureables"
+              priority
+              className="w-44 h-auto sm:w-52 md:w-52 lg:w-56 xl:w-64"
+            />
           </Link>
-
           {onCloseMobile && (
             <Button
               type="button"

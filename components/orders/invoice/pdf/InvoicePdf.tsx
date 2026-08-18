@@ -1,5 +1,6 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { Order } from "@/types/order";
+import logo from "@/public/logo.svg";
 
 interface InvoicePdfProps {
     order: Order;
@@ -41,17 +42,10 @@ const styles = StyleSheet.create({
         maxWidth: 240,
     },
 
-    brandTitle: {
-        fontSize: 22,
-        fontFamily: "Helvetica-Bold",
-        color: COLORS.primary,
-        letterSpacing: -0.5,
-    },
-
-    brandSubtitle: {
-        marginTop: 3,
-        fontSize: 9,
-        color: COLORS.muted,
+    logo: {
+        width: 180,
+        height: "auto",
+        marginBottom: 6,
     },
 
     brandMeta: {
@@ -270,10 +264,10 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                 {/* Header Block */}
                 <View style={styles.header}>
                     <View style={styles.brandGroup}>
-                        <Text style={styles.brandTitle}>Furnitureables</Text>
-                        <Text style={styles.brandSubtitle}>
-                            Premium Furniture for Modern Living
-                        </Text>
+                        <Image
+                            src={logo.src}
+                            style={styles.logo}
+                        />
                         <View style={styles.brandMeta}>
                             <Text>support@furnitureables.com</Text>
                             <Text>www.furnitureables.com</Text>
