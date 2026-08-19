@@ -74,8 +74,8 @@ export const typeDefs = /* GraphQL */ `
 
     isWishlisted: Boolean!
 
-    createdAt: String!
-    updatedAt: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   ############################

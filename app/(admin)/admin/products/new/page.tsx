@@ -57,9 +57,9 @@ export default function CreateProductPage() {
                 </div>
             </header>
 
-            {/* Form Section wrapped in an accessible container card */}
             <section aria-label="Product creation form">
                 <ProductForm
+                    mode="create"
                     onSubmit={handleSubmit}
                     loading={createProduct.isPending}
                 />

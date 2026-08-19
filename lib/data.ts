@@ -77,16 +77,6 @@ export const menuItems = [
         href: "/admin/analytics",
         icon: BarChart3,
     },
-    {
-        title: "AI Generator",
-        href: "/admin/ai",
-        icon: Sparkles,
-    },
-    {
-        title: "Settings",
-        href: "/admin/settings",
-        icon: Settings,
-    },
 ];
 
 

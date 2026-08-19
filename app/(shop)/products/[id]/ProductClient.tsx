@@ -192,7 +192,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
                                             aria-label={`View image ${index + 1} of ${images.length} for ${product.title}`}
                                             aria-pressed={isSelected}
                                             className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border transition-all focus-visible:outline-2 focus-visible:outline-ring cursor-pointer
-                        ${isSelected
+                                                ${isSelected
                                                     ? "border-primary ring-2 ring-primary/20 bg-card"
                                                     : "border-border/80 bg-secondary/30 hover:border-muted-foreground/50 opacity-80 hover:opacity-100"
                                                 }`}
@@ -328,7 +328,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
                                     </Button>
 
                                     {/* Wishlist Toggle Button */}
-                                    <div className="h-11 w-11 flex items-center justify-center border border-input bg-card rounded-xl shadow-xs shrink-0">
+                                    <div className="h-11 w-11 flex items-center justify-center shrink-0">
                                         <WishlistButton
                                             productId={product.id}
                                             isWishlisted={product.isWishlisted}

@@ -5,9 +5,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowUpRight } from "lucide-react";
 import { Product } from "@/types/product";
-import { formatPrice, getProductThumbnail } from "@/lib/utils";
+import { getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import WishlistButton from "../wishlist/WishlistButton";
+import { formatCurrency } from "@/lib/order";
 
 export default function ProductCard({ product }: { product: Product }) {
   const addToCart = useAddToCart();
@@ -174,9 +175,9 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center justify-between border-t border-border/50 pt-1.5">
           <p
             className="text-sm font-semibold tracking-tight text-foreground"
-            aria-label={`Price: ${formatPrice(product.price, "USD")}`}
+            aria-label={`Price: ${formatCurrency(product.price)}`}
           >
-            {formatPrice(product.price, "USD")}
+            {formatCurrency(product.price)}
           </p>
 
           {product.color && (

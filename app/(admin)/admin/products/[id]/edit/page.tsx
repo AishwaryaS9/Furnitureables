@@ -176,6 +176,7 @@ export default function EditProductPage() {
       {/* Main Form Section Landmark */}
       <section aria-label={`Form to edit details for ${product.title}`}>
         <ProductForm
+          mode="edit"
           initialValues={initialValues}
           onSubmit={handleSubmit}
           loading={updateProduct.isPending}

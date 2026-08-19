@@ -2,15 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { UploadCloud, X, Loader2 } from "lucide-react";
+import { UploadCloud, X, Loader2, Sparkles, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProductFormData, ProductMediaInput } from "@/types/product";
+import { GenerateProductDetailsResponse } from "@/types/ai";
+import { toast } from "sonner";
 
 interface ProductFormProps {
   initialValues?: ProductFormData;
   onSubmit: (values: ProductFormData) => Promise<void>;
   loading?: boolean;
+  mode?: "create" | "edit";
 }
 
 const emptyValues: ProductFormData = {
@@ -31,9 +34,14 @@ export default function ProductForm({
   initialValues = emptyValues,
   onSubmit,
   loading = false,
+  mode = "create",
 }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>(initialValues);
   const [uploading, setUploading] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
+  const isEdit = mode === "edit";
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -94,7 +102,7 @@ export default function ProductForm({
       }));
     } catch (err) {
       console.error(err);
-      alert("Image upload failed");
+      toast.error("Image upload failed");
     } finally {
       setUploading(false);
     }
@@ -107,6 +115,55 @@ export default function ProductForm({
         .filter((_, index) => index !== indexToRemove)
         .map((media, index) => ({ ...media, sortOrder: index })),
     }));
+  }
+
+  async function handleGenerateWithAI() {
+    const primaryImage = form.media[0];
+
+    if (!primaryImage) return;
+
+    setAiGenerating(true);
+    setAiError(null);
+
+    try {
+      const res = await fetch("/api/ai/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageUrl: primaryImage.url,
+          generateSku: !isEdit,
+          type: form.type,
+          material: form.material,
+          color: form.color,
+          room: form.room,
+          dimensions: form.dimensions,
+        }),
+      });
+
+      const data: GenerateProductDetailsResponse = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "AI generation failed. Please try again.");
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        title: data.title,
+        description: data.description,
+        type: prev.type || data.type || prev.type,
+        material: prev.material || data.material || prev.material,
+        color: prev.color || data.color || prev.color,
+        dimensions: prev.dimensions || data.dimensions || prev.dimensions,
+        sku: isEdit ? prev.sku : data.sku || prev.sku,
+      }));
+    } catch (err) {
+      console.error(err);
+      setAiError(
+        err instanceof Error ? err.message : "AI generation failed. Please try again."
+      );
+    } finally {
+      setAiGenerating(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -141,18 +198,32 @@ export default function ProductForm({
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="sku" className="text-xs font-semibold text-foreground">
+            <label htmlFor="sku" className="text-xs font-semibold text-foreground flex items-center gap-1.5">
               SKU Code <span className="text-destructive">*</span>
+              {isEdit && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground normal-case">
+                  <Lock className="h-3 w-3" aria-hidden="true" />
+                  Locked
+                </span>
+              )}
             </label>
             <Input
               id="sku"
               name="sku"
-              placeholder="e.g., FUR-CH-001"
+              placeholder={isEdit ? undefined : "Generated automatically, or enter your own"}
               value={form.sku}
               onChange={handleChange}
+              readOnly={isEdit}
               required
-              className="h-11 rounded-2xl border-border/60 bg-card/60 font-mono text-xs"
+              aria-readonly={isEdit}
+              title={isEdit ? "SKU cannot be changed after a product is created." : undefined}
+              className={`h-11 rounded-2xl border-border/60 bg-card/60 font-mono text-xs ${isEdit ? "cursor-not-allowed opacity-70" : ""}`}
             />
+            {isEdit && (
+              <p className="text-[10px] text-muted-foreground">
+                SKU is permanent and cannot be changed once a product is created.
+              </p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -339,6 +410,50 @@ export default function ProductForm({
                 </div>
               ))}
             </div>
+          )}
+
+          {form.media.length > 0 && (
+            <div className="flex flex-col gap-2 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-2.5">
+                <Sparkles className="h-4 w-4 mt-0.5 text-primary shrink-0" aria-hidden="true" />
+                <div>
+                  <p className="text-xs font-semibold text-foreground">
+                    {isEdit ? "Regenerate title & description with AI" : "Generate title, description & SKU with AI"}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">
+                    {isEdit
+                      ? "Uses the first gallery image. Your SKU stays exactly as it is."
+                      : "Uses the first gallery image to draft the listing and mint a unique SKU."}
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={handleGenerateWithAI}
+                disabled={aiGenerating}
+                className="h-9 rounded-xl font-semibold gap-2 shrink-0"
+              >
+                {aiGenerating ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>{isEdit ? "Regenerate with AI" : "Generate with AI"}</span>
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
+
+          {aiError && (
+            <p role="alert" className="text-xs font-medium text-destructive">
+              {aiError}
+            </p>
           )}
         </div>
       </div>
