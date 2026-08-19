@@ -79,6 +79,47 @@ export const typeDefs = /* GraphQL */ `
   }
 
   ############################
+  ## REVIEWS
+  ############################
+
+  enum ReviewStatus {
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  type ReviewAuthor {
+    id: String!
+    name: String!
+  }
+
+  type ReviewProduct {
+    id: String!
+    title: String!
+    image: String
+  }
+
+  type Review {
+    id: String!
+    rating: Int!
+    title: String
+    comment: String
+    status: ReviewStatus!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    author: ReviewAuthor!
+    product: ReviewProduct!
+  }
+
+  type ProductReviewsResponse {
+    reviews: [Review!]!
+    total: Int!
+    averageRating: Float!
+    canReview: Boolean!
+    currentUserReview: Review
+  }
+
+  ############################
   ## CART
   ############################
 
@@ -496,6 +537,19 @@ input PlaceOrderInput {
 }
 
 
+  input CreateReviewInput {
+    productId: String!
+    rating: Int!
+    title: String
+    comment: String
+  }
+
+  input UpdateReviewInput {
+    rating: Int
+    title: String
+    comment: String
+  }
+
   ############################
   ## QUERIES
   ############################
@@ -523,6 +577,9 @@ input PlaceOrderInput {
     order(id: String!): Order
 
     wishlist: [Wishlist!]!
+
+    productReviews(productId: String!): ProductReviewsResponse!
+    adminReviews(status: ReviewStatus): [Review!]!
 
     validateCoupon(
       code: String!
@@ -597,6 +654,12 @@ input PlaceOrderInput {
     addToWishlist(productId: String!): Wishlist!
 
     removeFromWishlist(productId: String!): Boolean!
+
+    createReview(input: CreateReviewInput!): Review!
+    updateReview(id: String!, input: UpdateReviewInput!): Review!
+    deleteReview(id: String!): Boolean!
+    adminUpdateReviewStatus(id: String!, status: ReviewStatus!): Review!
+    adminDeleteReview(id: String!): Boolean!
 
     createRazorpayOrder(
       input: PlaceOrderInput!

@@ -96,3 +96,10 @@ export const CUSTOMER_SORT_OPTIONS: { value: CustomerSort; label: string }[] = [
     { value: "most-orders", label: "Most orders" },
     { value: "highest-spend", label: "Highest spend" },
 ];
+
+export const REVIEW_STATUS_OPTIONS = [
+    { value: "ALL", label: "All Statuses" },
+    { value: "PENDING", label: "Pending" },
+    { value: "APPROVED", label: "Approved" },
+    { value: "REJECTED", label: "Rejected" },
+];

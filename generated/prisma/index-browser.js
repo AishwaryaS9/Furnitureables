@@ -239,6 +239,18 @@ exports.Prisma.WishlistScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  productId: 'productId',
+  rating: 'rating',
+  title: 'title',
+  comment: 'comment',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CouponScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -295,6 +307,12 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   RAZORPAY: 'RAZORPAY'
 };
 
+exports.ReviewStatus = exports.$Enums.ReviewStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.DiscountType = exports.$Enums.DiscountType = {
   PERCENTAGE: 'PERCENTAGE',
   FIXED: 'FIXED'
@@ -310,6 +328,7 @@ exports.Prisma.ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   Wishlist: 'Wishlist',
+  Review: 'Review',
   Coupon: 'Coupon'
 };
 
