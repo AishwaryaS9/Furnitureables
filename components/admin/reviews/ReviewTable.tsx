@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { MessageSquareQuote, RefreshCw, Star, Trash2 } from "lucide-react";
 import { Review, ReviewStatus } from "@/types/review";
@@ -8,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { REVIEW_STATUS_OPTIONS } from "@/lib/data";
 import { formatOrderDate } from "@/lib/order";
+import ProductPagination from "../products/ProductPagination";
 
 interface ReviewTableProps {
     reviews: Review[];
@@ -15,6 +17,10 @@ interface ReviewTableProps {
     actionId: string | null;
     onStatusChange: (id: string, status: ReviewStatus) => void;
     onDeleteRequest: (review: Review) => void;
+    currentPage?: number;
+    pageSize?: number;
+    totalReviews?: number;
+    onPageChange?: (page: number) => void;
 }
 
 const STATUS_OPTIONS = REVIEW_STATUS_OPTIONS.filter(
@@ -52,11 +58,28 @@ export default function ReviewTable({
     actionId,
     onStatusChange,
     onDeleteRequest,
+    currentPage: controlledPage,
+    pageSize = 10,
+    totalReviews,
+    onPageChange: controlledPageChange,
 }: ReviewTableProps) {
+    const [localPage, setLocalPage] = useState(1);
+
+    const isControlled = controlledPage !== undefined && controlledPageChange !== undefined;
+    const activePage = isControlled ? controlledPage : localPage;
+    const handlePageChange = isControlled ? controlledPageChange : setLocalPage;
+
+    const totalItems = totalReviews ?? reviews.length;
+    const totalPages = Math.ceil(totalItems / pageSize) || 1;
+
+    const displayedReviews = isControlled
+        ? reviews
+        : reviews.slice((activePage - 1) * pageSize, activePage * pageSize);
+
     return (
         <div
             aria-label="Customer Reviews Management Overview"
-            className="w-full rounded-2xl border border-border/80 bg-card/90 shadow-xs backdrop-blur-md overflow-hidden"
+            className="w-full rounded-2xl border border-border/80 bg-card/90 shadow-xs backdrop-blur-md overflow-hidden flex flex-col"
         >
             <div
                 className="w-full overflow-x-auto focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -67,16 +90,16 @@ export default function ReviewTable({
                 <Table className="w-full text-left">
                     <TableHeader>
                         <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
-                            <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[30%] min-w-[200px]">
+                            <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[30%] min-w-50">
                                 Product
                             </TableHead>
                             <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[45%]">
                                 Feedback
                             </TableHead>
-                            <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[15%] min-w-[130px]">
+                            <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[15%] min-w-32.5">
                                 Status
                             </TableHead>
-                            <TableHead scope="col" className="py-3.5 pr-6 w-[10%] min-w-[50px] text-right sr-only">
+                            <TableHead scope="col" className="py-3.5 pr-6 w-[10%] min-w-12.5 text-right sr-only">
                                 Actions
                             </TableHead>
                         </TableRow>
@@ -91,7 +114,7 @@ export default function ReviewTable({
                                     </div>
                                 </TableCell>
                             </TableRow>
-                        ) : reviews.length === 0 ? (
+                        ) : displayedReviews.length === 0 ? (
                             <TableRow className="hover:bg-transparent">
                                 <TableCell colSpan={4} className="h-64 p-0 text-center">
                                     <div className="flex flex-col items-center justify-center p-8 text-center" role="status" aria-live="polite">
@@ -106,7 +129,7 @@ export default function ReviewTable({
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            reviews.map((review) => {
+                            displayedReviews.map((review) => {
                                 return (
                                     <TableRow
                                         key={review.id}
@@ -127,10 +150,10 @@ export default function ReviewTable({
                                                     ) : null}
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
-                                                    <span className="truncate text-sm font-medium text-foreground max-w-[190px]">
+                                                    <span className="truncate text-sm font-medium text-foreground max-w-47.5">
                                                         {review.product.title}
                                                     </span>
-                                                    <span className="mt-0.5 text-xs text-muted-foreground truncate max-w-[190px]">
+                                                    <span className="mt-0.5 text-xs text-muted-foreground truncate max-w-47.5">
                                                         by {review.author.name}
                                                     </span>
                                                     <span className="text-[11px] text-muted-foreground/80 mt-1 font-medium whitespace-nowrap">
@@ -143,8 +166,8 @@ export default function ReviewTable({
                                         </TableCell>
 
                                         {/* Feedback Column */}
-                                        <TableCell className="py-4 align-top max-w-[280px] sm:max-w-[360px]">
-                                            <div className="flex flex-col gap-1 min-w-0 pr-4 whitespace-normal break-words">
+                                        <TableCell className="py-4 align-top max-w-70 sm:max-w-90">
+                                            <div className="flex flex-col gap-1 min-w-0 pr-4 whitespace-normal wrap-break-word">
                                                 <Stars value={review.rating} />
                                                 {review.title && (
                                                     <span className="text-sm font-medium text-foreground leading-snug">
@@ -152,7 +175,7 @@ export default function ReviewTable({
                                                     </span>
                                                 )}
                                                 {review.comment && (
-                                                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                                                    <p className="text-xs text-muted-foreground leading-relaxed">
                                                         {review.comment}
                                                     </p>
                                                 )}
@@ -169,7 +192,7 @@ export default function ReviewTable({
                                                 disabled={actionId === review.id}
                                             >
                                                 <SelectTrigger
-                                                    className={`h-8 w-[120px] rounded-full text-xs font-medium ${statusClass(
+                                                    className={`h-8 w-30 rounded-full text-xs font-medium ${statusClass(
                                                         review.status
                                                     )}`}
                                                     aria-label={`Change status for review by ${review.author.name} on ${review.product.title}. Current status: ${review.status}`}
@@ -192,12 +215,14 @@ export default function ReviewTable({
                                                 </SelectContent>
                                             </Select>
                                         </TableCell>
+
                                         {/* Actions Column */}
                                         <TableCell className="py-4 pr-6 text-right align-top">
                                             <Button
                                                 size="icon"
                                                 variant="ghost"
-                                                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground opacity-70 group-hover:opacity-100 transition-opacity hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+                                                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground opacity-70 group-hover:opacity-100 
+                                                transition-opacity hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
                                                 onClick={() => onDeleteRequest(review)}
                                                 disabled={actionId === review.id}
                                                 aria-label={`Delete review by ${review.author.name} for ${review.product.title}`}
@@ -212,6 +237,20 @@ export default function ReviewTable({
                     </TableBody>
                 </Table>
             </div>
+
+            {/* Pagination Footer */}
+            {!loading && totalItems > 0 && (
+                <div className="border-t border-border/70 px-4 py-2 bg-muted/20">
+                    <ProductPagination
+                        currentPage={activePage}
+                        totalPages={totalPages}
+                        totalItems={totalItems}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                        itemLabel="reviews"
+                    />
+                </div>
+            )}
         </div>
     );
 }

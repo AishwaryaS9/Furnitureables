@@ -14,9 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import ReviewForm from "./ReviewForm";
 import Pagination from "./Pagination";
-import { useClerk } from "@clerk/nextjs";
-import Link from "next/link";
-
+import { formatOrderDate } from "../../lib/order";
 
 const REVIEWS_PER_PAGE = 5;
 
@@ -49,8 +47,6 @@ export default function ProductReviews({ productId, initialData }: {
     const [editing, setEditing] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const { openSignIn } = useClerk();
 
     async function refresh() {
         const result = await graphqlClient.request<{ productReviews: ProductReviewsData }>(
@@ -289,19 +285,7 @@ export default function ProductReviews({ productId, initialData }: {
                                     </p>
                                 </div>
                             </div>
-                            <Link
-                                href="/sign-in"
-                                className="inline-block text-[11px] font-medium text-primary hover:underline underline-offset-4"
-                            >
-                                Sign in to check eligibility →
-                            </Link>
-                            {/* <button
-                                type="button"
-                                onClick={()=>openSignIn()}
-                                className="inline-block text-[11px] font-medium text-primary hover:underline underline-offset-4 cursor-pointer text-left"
-                            >
-                                Sign in to check eligibility →
-                            </button> */}
+
                         </div>
                     )}
                 </aside>
@@ -323,18 +307,12 @@ export default function ProductReviews({ productId, initialData }: {
                         <>
                             <div className="space-y-3" role="feed" aria-label="Customer reviews list">
                                 {paginatedReviews.map((review) => {
-                                    const formattedDate = new Date(review.createdAt).toLocaleDateString("en-IN", {
-                                        day: "numeric",
-                                        month: "short",
-                                        year: "numeric",
-                                    });
-                                    const isoDate = new Date(review.createdAt).toISOString();
 
                                     return (
                                         <article
                                             key={review.id}
                                             aria-labelledby={`review-author-${review.id}`}
-                                            className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 shadow-none transition-colors hover:border-border"
+                                            className="p-4 sm:p-5"
                                         >
                                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2.5 border-b border-border/40">
                                                 <div className="flex items-center gap-2.5">
@@ -354,22 +332,20 @@ export default function ProductReviews({ productId, initialData }: {
                                                                 Verified
                                                             </Badge>
                                                         </span>
-                                                        <time
-                                                            dateTime={isoDate}
-                                                            className="text-[10px] text-muted-foreground block sm:hidden"
-                                                        >
-                                                            {formattedDate}
+
+                                                        <time dateTime={new Date(review.createdAt).toISOString()}
+                                                            className="text-[10px] text-muted-foreground block sm:hidden">
+                                                            {formatOrderDate(review.createdAt)}
                                                         </time>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex items-center justify-between sm:justify-end gap-2.5">
                                                     <Stars value={review.rating} />
-                                                    <time
-                                                        dateTime={isoDate}
-                                                        className="text-[10px] text-muted-foreground hidden sm:inline"
-                                                    >
-                                                        {formattedDate}
+
+                                                    <time dateTime={new Date(review.createdAt).toISOString()}
+                                                        className="text-[10px] text-muted-foreground hidden sm:inline">
+                                                        {formatOrderDate(review.createdAt)}
                                                     </time>
                                                 </div>
                                             </div>
@@ -381,7 +357,7 @@ export default function ProductReviews({ productId, initialData }: {
                                                     </h3>
                                                 )}
                                                 {review.comment && (
-                                                    <p className="text-xs leading-relaxed text-muted-foreground break-words whitespace-pre-line">
+                                                    <p className="text-xs leading-relaxed text-muted-foreground wrap-break-word whitespace-pre-line">
                                                         {review.comment}
                                                     </p>
                                                 )}
