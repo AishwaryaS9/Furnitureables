@@ -1,7 +1,7 @@
 "use client";
 
 import { IndianRupee, Package, ShoppingCart, Users, AlertCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAdminDashboardStats } from "@/hooks/useAdminDashboardStats";
 
@@ -20,69 +20,82 @@ export default function DashboardCards() {
       value: data ? currencyFormatter.format(data.totalRevenue) : "₹0",
       icon: IndianRupee,
       description: "Total revenue earned",
+      accent: "from-emerald-500/20 to-teal-500/20 text-emerald-600 dark:text-emerald-400",
+      border: "border-border/60",
     },
     {
       title: "Orders",
       value: (data?.totalOrders ?? 0).toLocaleString("en-IN"),
       icon: ShoppingCart,
-      description: "Total completed and pending orders",
+      description: "Completed and pending orders",
+      accent: "from-amber-500/20 to-orange-500/20 text-amber-600 dark:text-amber-400",
+      border: "border-border/60",
     },
     {
       title: "Products",
       value: (data?.totalProducts ?? 0).toLocaleString("en-IN"),
       icon: Package,
       description: "Total catalog items available",
+      accent: "from-blue-500/20 to-indigo-500/20 text-blue-600 dark:text-blue-400",
+      border: "border-border/60",
     },
     {
       title: "Customers",
       value: (data?.totalCustomers ?? 0).toLocaleString("en-IN"),
       icon: Users,
-      description: "Total registered customer accounts",
+      description: "Registered customer accounts",
+      accent: "from-indigo-500/20 to-purple-500/20 text-indigo-600 dark:text-indigo-400",
+      border: "border-border/60",
     },
   ];
 
   return (
     <div
-      className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+      className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4"
       role="region"
       aria-label="Summary KPI Cards"
     >
-      {stats.map((item) => {
-        const Icon = item.icon;
+      {stats.map((stat) => {
+        const Icon = stat.icon;
 
         return (
           <Card
-            key={item.title}
-            className="rounded-2xl border-border/60 bg-card/60 backdrop-blur-xl shadow-xs transition-all hover:shadow-sm"
+            key={stat.title}
+            className="group relative overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-xl p-5 shadow-xs transition-all duration-300 hover:shadow-sm"
           >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-5 pt-5">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {item.title}
-              </CardTitle>
-              <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted/60 text-foreground"
-                aria-hidden="true"
-              >
-                <Icon className="h-5 w-5" />
-              </div>
-            </CardHeader>
-            <CardContent className="px-5 pb-5 pt-0">
-              {isLoading ? (
-                <Skeleton className="h-8 w-24" />
-              ) : isError ? (
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <AlertCircle className="h-4 w-4" />
-                  <span>Unable to load</span>
-                </div>
-              ) : (
+            <CardContent className="p-0 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {stat.title}
+                </span>
                 <div
-                  className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
-                  aria-label={`${item.title}: ${item.value}`}
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${stat.accent} shadow-inner`}
+                  aria-hidden="true"
                 >
-                  {item.value}
+                  <Icon className="h-5 w-5" />
                 </div>
-              )}
-              <p className="sr-only">{item.description}</p>
+              </div>
+
+              <div>
+                {isLoading ? (
+                  <Skeleton className="h-8 w-28 rounded-lg" />
+                ) : isError ? (
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>Unable to load</span>
+                  </div>
+                ) : (
+                  <div
+                    className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
+                    aria-label={`${stat.title}: ${stat.value}`}
+                  >
+                    {stat.value}
+                  </div>
+                )}
+                <p className="mt-1 text-xs text-muted-foreground font-medium">
+                  {stat.description}
+                </p>
+              </div>
             </CardContent>
           </Card>
         );
