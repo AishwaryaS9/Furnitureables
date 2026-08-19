@@ -162,7 +162,7 @@ export default function ReviewsPage() {
                         </form>
 
                         {/* Status Filter Dropdown */}
-                        <div className="w-full sm:w-[170px] shrink-0">
+                        <div className="w-full sm:w-42.5 shrink-0">
                             <Select
                                 value={filter}
                                 onValueChange={(val: Filter | null) => {
