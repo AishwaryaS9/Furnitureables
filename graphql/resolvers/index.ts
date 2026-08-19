@@ -9,6 +9,7 @@ import { couponResolvers } from './coupon';
 import { dashboardResolver } from "./dashboard";
 import { customerResolver } from "./customer";
 import { reviewResolver } from "./review";
+import { analyticsResolver } from "./analytics";
 
 export const resolvers = {
     Query: {
@@ -21,6 +22,7 @@ export const resolvers = {
         ...dashboardResolver.Query,
         ...customerResolver.Query,
         ...reviewResolver.Query,
+        ...analyticsResolver.Query,
     },
 
     Mutation: {

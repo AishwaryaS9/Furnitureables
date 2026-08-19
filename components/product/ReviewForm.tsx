@@ -196,7 +196,7 @@ export default function ReviewForm({ productId, review, onSaved, onCancel }: Rev
                             type="submit"
                             size="sm"
                             disabled={loading}
-                            className="rounded-xl min-w-[110px] h-8 text-xs"
+                            className="rounded-xl min-w-27.5 h-8 text-xs"
                         >
                             {loading ? (
                                 <>

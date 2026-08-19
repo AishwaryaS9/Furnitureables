@@ -1,0 +1,113 @@
+"use client";
+
+import { Boxes } from "lucide-react";
+import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis } from "recharts";
+import { useAdminStockVsSales } from "@/hooks/useAdminAnalytics";
+import { StockVsSalesPoint } from "@/types/analytics";
+import ChartCard from "./ChartCard";
+import { tooltipStyle } from "@/lib/chart";
+
+function StockTooltip({
+    active,
+    payload,
+}: {
+    active?: boolean;
+    payload?: { payload: StockVsSalesPoint }[];
+}) {
+    if (!active || !payload?.length) return null;
+
+    const point = payload[0].payload;
+
+    return (
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
+            <p className="text-xs font-medium text-muted-foreground mb-1 max-w-48 truncate">
+                {point.title}
+            </p>
+            <p className="text-sm font-semibold text-foreground">{point.stock} in stock</p>
+            <p className="text-xs text-muted-foreground">{point.unitsSold} units sold</p>
+        </div>
+    );
+}
+
+export default function StockVsSalesChart() {
+    const { data, isLoading, isError } = useAdminStockVsSales(20);
+
+    const points = data ?? [];
+    const hasData = points.length > 0;
+
+    return (
+        <ChartCard
+            title="Stock vs Units Sold"
+            description="Inventory levels against sales performance"
+            icon={Boxes}
+            isLoading={isLoading}
+            isError={isError}
+            isEmpty={!hasData}
+            emptyMessage="This chart will populate once the catalog has products and sales."
+        >
+            <div className="sr-only">
+                <table>
+                    <caption>
+                        Stock vs Units Sold: Comparison of inventory on hand and units sold across top products
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Title</th>
+                            <th scope="col">Stock on Hand</th>
+                            <th scope="col">Units Sold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => (
+                            <tr key={point.title}>
+                                <td>{point.title}</td>
+                                <td>{point.stock} units</td>
+                                <td>{point.unitsSold} units</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Scatter plot correlating current inventory stock on hand with units sold"
+            >
+                <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-border/60" />
+                        <XAxis
+                            type="number"
+                            dataKey="stock"
+                            name="Stock"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                            label={{
+                                value: "Stock on hand",
+                                position: "insideBottom",
+                                offset: -4,
+                                fontSize: 11,
+                                fill: "var(--muted-foreground)",
+                            }}
+                        />
+                        <YAxis
+                            type="number"
+                            dataKey="unitsSold"
+                            name="Units sold"
+                            axisLine={false}
+                            tickLine={false}
+                            width={36}
+                            tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                        />
+                        <ZAxis range={[80, 80]} />
+                        <Tooltip cursor={{ strokeDasharray: "3 3" }} content={<StockTooltip />} />
+                        <Scatter data={points} fill="var(--accent)" fillOpacity={0.75} />
+                    </ScatterChart>
+                </ResponsiveContainer>
+            </div>
+        </ChartCard>
+    );
+}

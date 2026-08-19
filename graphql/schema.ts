@@ -323,6 +323,68 @@ export const typeDefs = /* GraphQL */ `
     status: OrderStatus!
   }
 
+  ############################
+  ## ANALYTICS
+  ############################
+
+  type RevenueTrendPoint {
+    date: String!
+    revenue: Float!
+    orders: Int!
+  }
+
+  type OrderStatusSlice {
+    status: String!
+    count: Int!
+  }
+
+  type TopProduct {
+    id: String!
+    title: String!
+    revenue: Float!
+    unitsSold: Int!
+  }
+
+  type CategoryPerformance {
+    category: String!
+    revenue: Float!
+    orders: Int!
+  }
+
+  type CustomerGrowthPoint {
+    date: String!
+    newCustomers: Int!
+    totalCustomers: Int!
+  }
+
+  type PaymentMethodSlice {
+    method: String!
+    count: Int!
+    revenue: Float!
+  }
+
+  type RatingDistributionSlice {
+    rating: Int!
+    count: Int!
+  }
+
+  type StockVsSalesPoint {
+    id: String!
+    title: String!
+    stock: Int!
+    unitsSold: Int!
+  }
+
+  type CategoryRevenueShare {
+    name: String!
+    value: Float!
+  }
+
+  type OrderFunnelStage {
+    stage: String!
+    count: Int!
+  }
+
   type AdminOrderItem {
     id: String!
     productName: String!
@@ -593,6 +655,26 @@ input PlaceOrderInput {
     adminLowStockProducts(threshold: Int, limit: Int): [LowStockProduct!]!
 
     adminRecentOrders(limit: Int): [RecentOrder!]!
+
+    adminRevenueTrend(days: Int): [RevenueTrendPoint!]!
+
+    adminOrderStatusDistribution: [OrderStatusSlice!]!
+
+    adminTopProducts(limit: Int): [TopProduct!]!
+
+    adminCategoryPerformance: [CategoryPerformance!]!
+
+    adminCustomerGrowth(months: Int): [CustomerGrowthPoint!]!
+
+    adminPaymentMethodDistribution: [PaymentMethodSlice!]!
+
+    adminRatingDistribution: [RatingDistributionSlice!]!
+
+    adminStockVsSales(limit: Int): [StockVsSalesPoint!]!
+
+    adminCategoryRevenueShare: [CategoryRevenueShare!]!
+
+    adminOrderFunnel: [OrderFunnelStage!]!
 
     adminOrders: [AdminOrder!]!
 
