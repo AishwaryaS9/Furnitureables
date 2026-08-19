@@ -308,6 +308,104 @@ export const ADMIN_RECENT_ORDERS = gql`
   }
 `;
 
+export const ADMIN_REVENUE_TREND = gql`
+  query AdminRevenueTrend($days: Int) {
+    adminRevenueTrend(days: $days) {
+      date
+      revenue
+      orders
+    }
+  }
+`;
+
+export const ADMIN_ORDER_STATUS_DISTRIBUTION = gql`
+  query AdminOrderStatusDistribution {
+    adminOrderStatusDistribution {
+      status
+      count
+    }
+  }
+`;
+
+export const ADMIN_TOP_PRODUCTS = gql`
+  query AdminTopProducts($limit: Int) {
+    adminTopProducts(limit: $limit) {
+      id
+      title
+      revenue
+      unitsSold
+    }
+  }
+`;
+
+export const ADMIN_CATEGORY_PERFORMANCE = gql`
+  query AdminCategoryPerformance {
+    adminCategoryPerformance {
+      category
+      revenue
+      orders
+    }
+  }
+`;
+
+export const ADMIN_CUSTOMER_GROWTH = gql`
+  query AdminCustomerGrowth($months: Int) {
+    adminCustomerGrowth(months: $months) {
+      date
+      newCustomers
+      totalCustomers
+    }
+  }
+`;
+
+export const ADMIN_PAYMENT_METHOD_DISTRIBUTION = gql`
+  query AdminPaymentMethodDistribution {
+    adminPaymentMethodDistribution {
+      method
+      count
+      revenue
+    }
+  }
+`;
+
+export const ADMIN_RATING_DISTRIBUTION = gql`
+  query AdminRatingDistribution {
+    adminRatingDistribution {
+      rating
+      count
+    }
+  }
+`;
+
+export const ADMIN_STOCK_VS_SALES = gql`
+  query AdminStockVsSales($limit: Int) {
+    adminStockVsSales(limit: $limit) {
+      id
+      title
+      stock
+      unitsSold
+    }
+  }
+`;
+
+export const ADMIN_CATEGORY_REVENUE_SHARE = gql`
+  query AdminCategoryRevenueShare {
+    adminCategoryRevenueShare {
+      name
+      value
+    }
+  }
+`;
+
+export const ADMIN_ORDER_FUNNEL = gql`
+  query AdminOrderFunnel {
+    adminOrderFunnel {
+      stage
+      count
+    }
+  }
+`;
+
 export const ADMIN_ORDERS = gql`
   query AdminOrders {
     adminOrders {
