@@ -30,7 +30,38 @@ export default function OrderStatusChart() {
             isEmpty={total === 0}
             emptyMessage="Order status breakdown will appear once orders are placed."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>Order Status Distribution: Breakdown of orders by status and percentage share</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Order Count</th>
+                            <th scope="col">Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((entry) => {
+                            const label = STATUS_LABELS[entry.status] ?? entry.status;
+                            const percentage = total > 0 ? ((entry.count / total) * 100).toFixed(1) : "0";
+                            return (
+                                <tr key={entry.status}>
+                                    <td>{label}</td>
+                                    <td>{entry.count} orders</td>
+                                    <td>{percentage}%</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Donut chart showing order status distribution across pending, confirmed, shipped, delivered, and cancelled states"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Tooltip

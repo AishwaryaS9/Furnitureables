@@ -21,7 +21,7 @@ function FunnelTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1">{point.stage}</p>
             <p className="text-sm font-semibold text-foreground">{point.count} orders</p>
         </div>
@@ -44,7 +44,32 @@ export default function OrderFunnelChart() {
             isEmpty={!hasData}
             emptyMessage="The fulfillment funnel will appear once orders start coming in."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>Order Fulfillment Funnel: Number of orders at each stage from placed to delivered</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Fulfillment Stage</th>
+                            <th scope="col">Order Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => (
+                            <tr key={point.stage}>
+                                <td>{point.stage}</td>
+                                <td>{point.count} orders</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Funnel chart showing progression of orders from placed to delivered"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <FunnelChart margin={{ top: 10, right: 80, bottom: 10, left: 20 }}>
                         <Tooltip content={<FunnelTooltip />} />

@@ -15,20 +15,31 @@ export const metadata: Metadata = {
     title: "Analytics | Admin Portal — Furnitureables",
     description:
         "Deep-dive store analytics: revenue trends, customer growth, order status, top products, and category performance.",
+    robots: {
+        index: false,
+        follow: false,
+    },
 };
 
 export default function AnalyticsPage() {
     return (
-        <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+        <main
+            id="main-content"
+            tabIndex={-1}
+            aria-labelledby="page-title"
+            className="space-y-6 sm:space-y-8 max-w-7xl mx-auto focus:outline-none"
+        >
             {/* Page Context Header */}
             <header className="space-y-1 sm:space-y-2">
                 <div className="space-y-2 min-w-0">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight text-foreground truncate gap-2.5 py-1">
+                    <h1
+                        id="page-title"
+                        className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight text-foreground truncate gap-2.5 py-1"
+                    >
                         Analytics
                     </h1>
                     <p
-                        role="status"
-                        aria-live="polite"
+                        id="page-description"
                         className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed"
                     >
                         A closer look at revenue, customers, products, and order fulfillment across the store.
@@ -37,7 +48,10 @@ export default function AnalyticsPage() {
             </header>
 
             {/* Primary KPI Metrics */}
-            <section aria-label="Key Performance Metrics">
+            <section
+                aria-label="Key Performance Metrics"
+                className="space-y-4"
+            >
                 <DashboardCards />
             </section>
 
@@ -83,6 +97,7 @@ export default function AnalyticsPage() {
                 </div>
             </section>
 
+            {/* Inventory & Revenue Mix */}
             <section
                 aria-label="Inventory and Revenue Mix"
                 className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-start"
@@ -96,9 +111,12 @@ export default function AnalyticsPage() {
             </section>
 
             {/* Reviews */}
-            <section aria-label="Review Ratings">
+            <section
+                aria-label="Review Ratings Distribution"
+                className="space-y-4"
+            >
                 <RatingDistributionChart />
             </section>
-        </div>
+        </main>
     );
 }

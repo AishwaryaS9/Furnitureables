@@ -2,16 +2,7 @@
 
 import { useState } from "react";
 import { Activity } from "lucide-react";
-import {
-    Bar,
-    CartesianGrid,
-    ComposedChart,
-    Line,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { useAdminRevenueTrend } from "@/hooks/useAdminAnalytics";
 import { RevenueTrendPoint } from "@/types/analytics";
@@ -36,7 +27,7 @@ function RevenueTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1">{point.date}</p>
             <p className="text-sm font-semibold text-foreground">
                 {currencyFormatter.format(point.revenue)}
@@ -52,6 +43,7 @@ export default function RevenueTrendChart() {
 
     const points = data ?? [];
     const hasData = points.some((p) => p.revenue > 0 || p.orders > 0);
+    const selectedRangeLabel = RANGE_OPTIONS.find((o) => o.value === days)?.label ?? `${days} days`;
 
     return (
         <ChartCard
@@ -71,10 +63,10 @@ export default function RevenueTrendChart() {
                     }}
                 >
                     <SelectTrigger
-                        aria-label="Select date range"
+                        aria-label="Select date range for revenue and order trend chart"
                         className="h-8 w-auto rounded-lg border-border/60 bg-background/60 text-xs font-medium px-2.5"
                     >
-                        <span>{RANGE_OPTIONS.find((o) => o.value === days)?.label}</span>
+                        <span>{selectedRangeLabel}</span>
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
                         {RANGE_OPTIONS.map((option) => (
@@ -86,7 +78,36 @@ export default function RevenueTrendChart() {
                 </Select>
             }
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>
+                        Revenue and Orders Trend data table for {selectedRangeLabel}: daily revenue and order volume
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Revenue</th>
+                            <th scope="col">Order Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => (
+                            <tr key={point.date}>
+                                <td>{point.date}</td>
+                                <td>{currencyFormatter.format(point.revenue)}</td>
+                                <td>{point.orders} orders</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label={`Composed bar and line chart showing daily revenue and orders trend over ${selectedRangeLabel}`}
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                         <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border/60" />

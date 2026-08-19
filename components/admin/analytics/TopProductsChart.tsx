@@ -1,16 +1,7 @@
 "use client";
 
 import { Trophy } from "lucide-react";
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Cell,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useAdminTopProducts } from "@/hooks/useAdminAnalytics";
 import { TopProduct } from "@/types/analytics";
 import ChartCard from "./ChartCard";
@@ -28,7 +19,7 @@ function TopProductsTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1 max-w-48 truncate">
                 {point.title}
             </p>
@@ -44,6 +35,7 @@ export default function TopProductsChart() {
     const { data, isLoading, isError } = useAdminTopProducts(5);
 
     const points = [...(data ?? [])].sort((a, b) => a.revenue - b.revenue);
+    const rankedPoints = [...(data ?? [])].sort((a, b) => b.revenue - a.revenue);
     const hasData = points.length > 0;
 
     return (
@@ -56,7 +48,38 @@ export default function TopProductsChart() {
             isEmpty={!hasData}
             emptyMessage="Top products will appear once orders start coming in."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>
+                        Top Products by Revenue: Ranking of top-selling products by total revenue and units sold
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Product Title</th>
+                            <th scope="col">Revenue</th>
+                            <th scope="col">Units Sold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rankedPoints.map((entry, index) => (
+                            <tr key={entry.id}>
+                                <td>#{index + 1}</td>
+                                <td>{entry.title}</td>
+                                <td>{currencyFormatter.format(entry.revenue)}</td>
+                                <td>{entry.unitsSold} units</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Horizontal bar chart ranking top-selling products by revenue"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={points}

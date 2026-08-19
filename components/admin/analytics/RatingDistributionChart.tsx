@@ -36,7 +36,7 @@ function RatingTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1">
                 {point.rating} star{point.rating === 1 ? "" : "s"}
             </p>
@@ -53,6 +53,7 @@ export default function RatingDistributionChart() {
         label: `${p.rating}★`,
     }));
     const hasData = points.some((p) => p.count > 0);
+    const totalReviews = points.reduce((sum, p) => sum + p.count, 0);
 
     return (
         <ChartCard
@@ -64,7 +65,37 @@ export default function RatingDistributionChart() {
             isEmpty={!hasData}
             emptyMessage="Rating distribution will appear once customers leave approved reviews."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>Customer Review Rating Distribution: Breakdown of approved reviews by star rating</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Review Count</th>
+                            <th scope="col">Share of Reviews</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((entry) => {
+                            const percentage = totalReviews > 0 ? ((entry.count / totalReviews) * 100).toFixed(1) : "0";
+                            return (
+                                <tr key={entry.rating}>
+                                    <td>{entry.rating} star{entry.rating === 1 ? "" : "s"}</td>
+                                    <td>{entry.count} reviews</td>
+                                    <td>{percentage}%</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Bar chart showing distribution of customer reviews from 1 to 5 stars"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                         <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border/60" />

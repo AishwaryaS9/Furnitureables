@@ -57,7 +57,7 @@ function RevenueShareTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1">{point.name}</p>
             <p className="text-sm font-semibold text-foreground">
                 {currencyFormatter.format(point.value)}
@@ -73,6 +73,7 @@ export default function RevenueByCategoryChart() {
 
     const points = (data ?? []) as unknown as TreemapDatum[];
     const hasData = points.length > 0;
+    const totalRevenue = points.reduce((sum, p) => sum + (Number(p.value) || 0), 0);
 
     return (
         <ChartCard
@@ -84,7 +85,38 @@ export default function RevenueByCategoryChart() {
             isEmpty={!hasData}
             emptyMessage="Revenue share will appear once orders start coming in."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>Revenue Share by Category: Concentration of sales across product categories</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Revenue</th>
+                            <th scope="col">Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => {
+                            const val = Number(point.value) || 0;
+                            const share = totalRevenue > 0 ? ((val / totalRevenue) * 100).toFixed(1) : "0";
+                            return (
+                                <tr key={point.name}>
+                                    <td>{point.name}</td>
+                                    <td>{currencyFormatter.format(val)}</td>
+                                    <td>{share}%</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Treemap visualization showing revenue concentration by product category"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <Treemap
                         data={points}

@@ -1,16 +1,7 @@
 "use client";
 
 import { Boxes } from "lucide-react";
-import {
-    CartesianGrid,
-    ResponsiveContainer,
-    Scatter,
-    ScatterChart,
-    Tooltip,
-    XAxis,
-    YAxis,
-    ZAxis,
-} from "recharts";
+import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis } from "recharts";
 import { useAdminStockVsSales } from "@/hooks/useAdminAnalytics";
 import { StockVsSalesPoint } from "@/types/analytics";
 import ChartCard from "./ChartCard";
@@ -28,7 +19,7 @@ function StockTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1 max-w-48 truncate">
                 {point.title}
             </p>
@@ -54,7 +45,36 @@ export default function StockVsSalesChart() {
             isEmpty={!hasData}
             emptyMessage="This chart will populate once the catalog has products and sales."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>
+                        Stock vs Units Sold: Comparison of inventory on hand and units sold across top products
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Title</th>
+                            <th scope="col">Stock on Hand</th>
+                            <th scope="col">Units Sold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => (
+                            <tr key={point.title}>
+                                <td>{point.title}</td>
+                                <td>{point.stock} units</td>
+                                <td>{point.unitsSold} units</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Scatter plot correlating current inventory stock on hand with units sold"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-border/60" />

@@ -1,15 +1,7 @@
 "use client";
 
 import { Users } from "lucide-react";
-import {
-    Area,
-    AreaChart,
-    CartesianGrid,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useAdminCustomerGrowth } from "@/hooks/useAdminAnalytics";
 import { CustomerGrowthPoint } from "@/types/analytics";
 import ChartCard from "./ChartCard";
@@ -27,7 +19,7 @@ function GrowthTooltip({
     const point = payload[0].payload;
 
     return (
-        <div style={tooltipStyle()}>
+        <div style={tooltipStyle()} role="tooltip" aria-hidden="true">
             <p className="text-xs font-medium text-muted-foreground mb-1">{point.date}</p>
             <p className="text-sm font-semibold text-foreground">
                 {point.totalCustomers.toLocaleString("en-IN")} total
@@ -53,7 +45,34 @@ export default function CustomerGrowthChart() {
             isEmpty={!hasData}
             emptyMessage="Customer growth will appear here once accounts are created."
         >
-            <div className="w-full h-72">
+            <div className="sr-only">
+                <table>
+                    <caption>Customer Growth: Cumulative registered and new customers over the last 6 months</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Date / Month</th>
+                            <th scope="col">Total Cumulative Customers</th>
+                            <th scope="col">New Customers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {points.map((point) => (
+                            <tr key={point.date}>
+                                <td>{point.date}</td>
+                                <td>{point.totalCustomers.toLocaleString("en-IN")} total</td>
+                                <td>{point.newCustomers} new</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                className="w-full h-72"
+                aria-hidden="true"
+                role="img"
+                aria-label="Area chart showing cumulative registered customer growth over the last 6 months"
+            >
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                         <defs>
