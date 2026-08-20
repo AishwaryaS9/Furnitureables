@@ -6,21 +6,29 @@ import { graphqlServerClient } from "@/lib/graphql/server-client";
 import { GET_WISHLIST } from "@/lib/graphql/queries";
 import { WishlistResponse } from "@/types/wishlist";
 import { auth } from "@clerk/nextjs/server";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, LogIn } from "lucide-react";
+import { Heart, LogIn, ChevronLeft, ChevronRight } from "lucide-react";
 import BreadcrumbNavigation from "@/components/common/BreadcrumbNavigation";
+import { cn } from "@/lib/utils";
+
+const PAGE_SIZE = 8;
 
 export const metadata: Metadata = {
   title: "Your Wishlist | Saved Architectural Furniture",
-  description: "View and manage your saved solid wood furniture pieces and architectural design items.",
+  description:
+    "View and manage your saved solid wood furniture pieces and architectural design items.",
   robots: {
     index: false,
     follow: true,
   },
 };
 
-export default async function WishlistPage() {
+interface WishlistPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function WishlistPage({ searchParams }: WishlistPageProps) {
   const { userId } = await auth();
 
   // 1. Unauthenticated User State
@@ -47,7 +55,6 @@ export default async function WishlistPage() {
             </div>
 
             <Button
-              // asChild
               className="w-full h-11 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs"
             >
               <Link href="/sign-in" className="inline-flex items-center justify-center gap-2">
@@ -61,8 +68,10 @@ export default async function WishlistPage() {
     );
   }
 
-  const client = await graphqlServerClient();
+  const { page } = await searchParams;
+  const currentPage = Math.max(1, Number(page) || 1);
 
+  const client = await graphqlServerClient();
   const { wishlist } = await client.request<WishlistResponse>(GET_WISHLIST);
 
   // 2. Empty Wishlist State
@@ -70,12 +79,19 @@ export default async function WishlistPage() {
     return <EmptyWishlist />;
   }
 
+  const totalItems = wishlist.length;
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+
+  // Slicing for pagination
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const paginatedWishlist = wishlist.slice(startIndex, startIndex + PAGE_SIZE);
+
   // Schema.org Structured Data for ItemList
   const wishlistSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "My Saved Wishlist",
-    "numberOfItems": wishlist.length,
+    "numberOfItems": totalItems,
   };
 
   // 3. Authenticated Active Wishlist State
@@ -105,7 +121,7 @@ export default async function WishlistPage() {
             >
               <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" aria-hidden="true" />
               <span className="text-xs font-medium text-foreground/80 tracking-tight">
-                {wishlist.length} {wishlist.length === 1 ? "Saved Item" : "Saved Items"}
+                {totalItems} {totalItems === 1 ? "Saved Item" : "Saved Items"}
               </span>
             </div>
 
@@ -113,7 +129,6 @@ export default async function WishlistPage() {
               Saved Wishlist
             </h1>
 
-            {/* <p className="text-sm sm:text-base text-muted-foreground font-light leading-relaxed max-w-xl"> */}
             <p className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
               Your curated collection of solid wood pieces and architectural furniture saved for future reference.
             </p>
@@ -124,11 +139,80 @@ export default async function WishlistPage() {
             aria-label="Wishlist items catalog"
             className="space-y-12"
           >
-            <WishlistGrid wishlist={wishlist} />
-          </section>
+            <WishlistGrid wishlist={paginatedWishlist} />
 
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <nav
+                aria-label="Wishlist pagination"
+                className="flex items-center justify-center gap-3 pt-6 pb-2"
+              >
+                {/* Previous Button */}
+                {currentPage > 1 ? (
+                  <Link
+                    href={`/wishlist?page=${currentPage - 1}`}
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                      "h-9 gap-1.5 px-3.5 text-xs font-medium rounded-xl border-input bg-card shadow-xs text-foreground hover:bg-accent hover:text-accent-foreground"
+                    )}
+                    aria-label="Go to previous page"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span className="hidden sm:inline">Previous</span>
+                  </Link>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                      "h-9 gap-1.5 px-3.5 text-xs font-medium rounded-xl border-input bg-card shadow-xs text-foreground opacity-40 pointer-events-none"
+                    )}
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span className="hidden sm:inline">Previous</span>
+                  </span>
+                )}
+
+                {/* Page Indicator */}
+                <div
+                  aria-current="page"
+                  className="flex items-center justify-center min-w-22 h-9 px-3.5 text-xs font-medium text-muted-foreground bg-secondary/60 border border-border/60 rounded-xl shadow-xs select-none"
+                >
+                  <span className="text-foreground font-semibold">{currentPage}</span>
+                  <span className="mx-1.5 text-muted-foreground/60">/</span>
+                  <span>{totalPages}</span>
+                </div>
+
+                {/* Next Button */}
+                {currentPage < totalPages ? (
+                  <Link
+                    href={`/wishlist?page=${currentPage + 1}`}
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                      "h-9 gap-1.5 px-3.5 text-xs font-medium rounded-xl border-input bg-card shadow-xs text-foreground hover:bg-accent hover:text-accent-foreground"
+                    )}
+                    aria-label="Go to next page"
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  </Link>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                      "h-9 gap-1.5 px-3.5 text-xs font-medium rounded-xl border-input bg-card shadow-xs text-foreground opacity-40 pointer-events-none"
+                    )}
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  </span>
+                )}
+              </nav>
+            )}
+          </section>
         </div>
-      </main >
+      </main>
     </>
   );
 }
