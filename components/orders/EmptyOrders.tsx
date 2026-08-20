@@ -69,7 +69,7 @@ export default function EmptyOrders() {
                                     aria-label="Explore products collection to place an order"
                                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap"
                                 >
-                                    <ShoppingBag className="h-4 w-4 stroke-[2] shrink-0" aria-hidden="true" />
+                                    <ShoppingBag className="h-4 w-4 stroke-2 shrink-0" aria-hidden="true" />
                                     <span>Explore Collection</span>
                                 </Link>
                             </Button>
