@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,24 @@ export default function SearchBar({ className, inputClassName, clearButtonClassN
     const setFilter = useFilterStore((s) => s.setFilter);
     const searchFilter = useFilterStore((s) => s.filters.search);
 
+    const [inputValue, setInputValue] = useState(searchFilter ?? "");
+
+    useEffect(() => {
+        setInputValue(searchFilter ?? "");
+    }, [searchFilter]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value;
+        setInputValue(rawValue);
+        const normalized = rawValue.trim().replace(/\s+/g, " ");
+        setFilter("search", normalized.length > 0 ? normalized : undefined);
+    };
+
+    const handleClear = () => {
+        setInputValue("");
+        setFilter("search", undefined);
+    };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (pathname !== "/products") {
@@ -43,8 +61,8 @@ export default function SearchBar({ className, inputClassName, clearButtonClassN
             <Input
                 id={searchId}
                 type="search"
-                value={searchFilter ?? ""}
-                onChange={(e) => setFilter("search", e.target.value || undefined)}
+                value={inputValue}
+                onChange={handleInputChange}
                 placeholder="Search solid wood pieces..."
                 aria-label="Search furniture catalog"
                 className={cn(
@@ -53,13 +71,13 @@ export default function SearchBar({ className, inputClassName, clearButtonClassN
                 )}
             />
 
-            {searchFilter && (
+            {inputValue && (
                 <div className="absolute inset-y-0 right-1 flex items-center z-10">
                     <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        onClick={() => setFilter("search", undefined)}
+                        onClick={handleClear}
                         aria-label="Clear search input"
                         className={cn(
                             "h-7 w-7 text-muted-foreground hover:text-foreground rounded-full transition-colors",

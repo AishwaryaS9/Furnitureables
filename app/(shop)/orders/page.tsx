@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import EmptyOrders from "@/components/orders/EmptyOrders";
-import OrderCard from "@/components/orders/OrderCard";
+import OrdersFeed from "@/components/orders/OrdersFeed";
 import BreadcrumbNavigation from "@/components/common/BreadcrumbNavigation";
 import { GET_ORDERS } from "@/lib/graphql/queries";
 import { graphqlServerClient } from "@/lib/graphql/server-client";
@@ -21,7 +21,7 @@ export default async function OrdersPage() {
     const client = await graphqlServerClient();
     const { orders } = await client.request<OrdersResponse>(GET_ORDERS);
 
-    if (!orders.length) {
+    if (!orders || !orders.length) {
         return <EmptyOrders />;
     }
 
@@ -38,6 +38,7 @@ export default async function OrdersPage() {
                 className="mx-auto max-w-360 px-4 py-8 sm:py-12 lg:py-16 sm:px-6 lg:px-8"
             >
                 <BreadcrumbNavigation value="Orders" />
+
                 {/* Editorial Header Block */}
                 <header className="mb-8 sm:mb-12 border-b border-border/60 pb-6 sm:pb-8">
                     <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-3">
@@ -51,7 +52,10 @@ export default async function OrdersPage() {
                         </div>
 
                         <div className="inline-flex items-center gap-1.5 self-start sm:self-auto px-3 py-1 rounded-full bg-secondary/80 border border-border/50 text-[11px] font-mono text-muted-foreground">
-                            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                            <ShieldCheck
+                                className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+                                aria-hidden="true"
+                            />
                             <span>Verified Purchases</span>
                         </div>
                     </div>
@@ -68,7 +72,7 @@ export default async function OrdersPage() {
                     </p>
                 </header>
 
-                {/* Section Toolbar Feed */}
+                {/* Section Toolbar & Paginated Feed */}
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/40 pb-4">
                         <div className="flex items-center gap-2.5 flex-wrap">
@@ -84,16 +88,8 @@ export default async function OrdersPage() {
                         </div>
                     </div>
 
-                    {/* Orders Feed */}
-                    <div
-                        role="feed"
-                        aria-labelledby="order-list-heading"
-                        className="space-y-4 sm:space-y-5"
-                    >
-                        {orders.map((order) => (
-                            <OrderCard key={order.id} order={order} />
-                        ))}
-                    </div>
+                    {/* Paginated Orders Feed */}
+                    <OrdersFeed orders={orders} />
                 </div>
             </section>
         </main>
