@@ -14,6 +14,8 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 - Multi-address checkout with Stripe and Razorpay payment support
 - Order history, order details, and downloadable PDF invoices
 - AI-powered smart search and chat (Google Gemini)
+- Contact form (Web3Forms), plus About, FAQ, Privacy, Terms, and Cookies pages
+- Branded splash screen on first load
 
 **Admin Dashboard**
 
@@ -57,7 +59,7 @@ app/
   (admin)/         # Admin dashboard routes (products, orders, customers, reviews, analytics, upload)
   (admin-auth)/    # Admin sign-in route
   api/             # REST API routes (AI, GraphQL, Stripe/Clerk webhooks, media & CSV upload)
-components/        # Shared and feature UI components (admin/, product/, cart/, checkout/, orders/, address/, wishlist/, ui/...)
+components/        # Shared and feature UI components (admin/, product/, cart/, checkout/, orders/, address/, wishlist/, common/SplashScreen, ui/...)
 hooks/             # React Query hooks for data fetching and mutations
 lib/               # Server/client utilities: auth, cart, coupons, CSV, GraphQL clients, orders, payments, uploads
 prisma/            # Prisma schema and seed script
@@ -79,9 +81,9 @@ with supporting enums for media type, order status, payment status/method, revie
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20.9+ (required by Next.js 16)
 - A PostgreSQL database
-- Accounts/API keys for Clerk, Stripe, Razorpay, and Google Gemini (as needed for the features you plan to use)
+- Accounts/API keys for Clerk, Stripe, Razorpay, Google Gemini, and Web3Forms (as needed for the features you plan to use)
 
 ### 1. Install dependencies
 
@@ -116,6 +118,9 @@ RAZORPAY_KEY_SECRET=
 GEMINI_API_KEY=
 GEMINI_MODEL=
 
+# Web3Forms (contact form)
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=
+
 # App
 NEXT_PUBLIC_APP_URL=
 ```
@@ -145,12 +150,13 @@ Open [http://localhost:3000](http://localhost:3000) for the storefront. Admin ro
 
 ## Available Scripts
 
-| Command         | Description                                         |
-| --------------- | --------------------------------------------------- |
-| `npm run dev`   | Start the development server                        |
-| `npm run build` | Generate the Prisma client and build for production |
-| `npm run start` | Start the production server                         |
-| `npm run lint`  | Run ESLint                                          |
+| Command         | Description                                                          |
+| --------------- | -------------------------------------------------------------------- |
+| `npm run dev`   | Start the development server                                         |
+| `npm run build` | Generate the Prisma client and build for production                  |
+| `npm run start` | Start the production server                                          |
+| `npm run lint`  | Run ESLint                                                           |
+| `postinstall`   | Runs automatically after `npm install` to generate the Prisma client |
 
 ## Admin Access
 
