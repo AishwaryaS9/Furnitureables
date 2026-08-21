@@ -91,12 +91,12 @@ export default function Navbar() {
               "Cart",
             ],
             "url": [
-              "https://www.furnitureables.com/",
-              "https://www.furnitureables.com/products",
-              "https://www.furnitureables.com/about",
-              "https://www.furnitureables.com/contact",
-              "https://www.furnitureables.com/wishlist",
-              "https://www.furnitureables.com/cart",
+              "https://furnitureables-store.vercel.app",
+              "https://furnitureables-store.vercel.app/products",
+              "https://furnitureables-store.vercel.app/about",
+              "https://furnitureables-store.vercel.app/contact",
+              "https://furnitureables-store.vercel.app/wishlist",
+              "https://furnitureables-store.vercel.app/cart",
             ],
           }),
         }}
@@ -119,7 +119,7 @@ export default function Navbar() {
         >
           <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           <span>
-            Mid-Summer Sale: Up to 40% off premium solid wood furniture! 🪵
+            Mid-Summer Sale: Up to 40% off premium solid wood furniture!
           </span>
         </aside>
 
