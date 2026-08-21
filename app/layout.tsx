@@ -9,6 +9,7 @@ import WishlistSync from "@/components/wishlist/WishlistSync";
 import RazorpayProvider from "@/components/providers/RazorpayProvider";
 import CartLiveSync from "@/components/cart/CartLiveSync";
 import CartLogoutSync from "@/components/cart/CartLogoutSync";
+import SplashScreen from "@/components/common/SplashScreen";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -93,6 +94,8 @@ export default function RootLayout({
         className={`${playfairDisplay.variable} ${montserrat.variable} h-full scroll-smooth antialiased`}
       >
         <body className="min-h-full bg-background font-sans text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
+          <SplashScreen />
+
           {/* WCAG Skip to Main Content Link */}
           <a
             href="#main-content"
