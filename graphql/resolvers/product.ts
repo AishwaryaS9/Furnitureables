@@ -148,28 +148,75 @@ export const productResolvers = {
             });
         },
 
-        adminProducts: async () => {
-            return prisma.product.findMany({
-                orderBy: {
-                    createdAt: "desc",
-                },
-                include: {
-                    media: {
-                        orderBy: {
-                            sortOrder: "asc",
+        adminProducts: async (
+            _parent: unknown,
+            {
+                search,
+                page = 1,
+                limit = 8,
+            }: { search?: string; page?: number; limit?: number }
+        ) => {
+            const where: Prisma.ProductWhereInput = search
+                ? {
+                    OR: [
+                        { title: { contains: search, mode: "insensitive" } },
+                        { sku: { contains: search, mode: "insensitive" } },
+                    ],
+                }
+                : {};
+
+            const [total, items, statsRows] = await Promise.all([
+                prisma.product.count({ where }),
+
+                prisma.product.findMany({
+                    where,
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    orderBy: {
+                        createdAt: "desc",
+                    },
+                    include: {
+                        media: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
                         },
                     },
-                },
-            });
+                }),
+
+                prisma.product.findMany({
+                    where,
+                    select: {
+                        price: true,
+                        stock: true,
+                    },
+                }),
+            ]);
+
+            const lowStockCount = statsRows.filter(
+                (p) => p.stock > 0 && p.stock <= 5
+            ).length;
+
+            const outOfStockCount = statsRows.filter((p) => p.stock === 0).length;
+
+            const inventoryValue = statsRows.reduce(
+                (sum, p) => sum + p.price * p.stock,
+                0
+            );
+
+            return {
+                items,
+                total,
+                lowStockCount,
+                outOfStockCount,
+                inventoryValue,
+            };
         },
     },
 
     Product: {
         isWishlisted: async (parent: { id: string }) => {
-            console.log("Resolving isWishlisted for:", parent.id);
-
             const { userId } = await auth();
-            console.log("userId:", userId);
 
             if (!userId) return false;
 
@@ -181,8 +228,6 @@ export const productResolvers = {
                     id: true,
                 },
             });
-
-            console.log("user:", user);
 
             if (!user) return false;
 
@@ -197,9 +242,6 @@ export const productResolvers = {
                     id: true,
                 },
             });
-
-            console.log("exists:", exists);
-
             return !!exists;
         },
     },

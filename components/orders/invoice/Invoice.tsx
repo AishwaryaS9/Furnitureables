@@ -74,7 +74,7 @@ export default function Invoice({ order }: InvoiceProps) {
 
                         <div className="text-xs font-mono text-muted-foreground space-y-0.5 pt-1 print:text-black/80">
                             <p>support@furnitureables.com</p>
-                            <p>www.furnitureables.com</p>
+                            <p>https://furnitureables-store.vercel.app</p>
                         </div>
                     </div>
 

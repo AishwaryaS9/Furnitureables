@@ -45,27 +45,34 @@ export const GET_PRODUCT_ROOMS = gql`
 `;
 
 export const ADMIN_PRODUCTS = gql`
-  query AdminProducts {
-    adminProducts {
-      id
-      title
-      description
-      price
-      stock
-      type
-      material
-      color
-      room
-      dimensions
-      sku
-      createdAt
-      updatedAt
+  query AdminProducts($search: String, $page: Int, $limit: Int) {
+    adminProducts(search: $search, page: $page, limit: $limit) {
+      total
+      lowStockCount
+      outOfStockCount
+      inventoryValue
 
-      media {
+      items {
         id
-        url
+        title
+        description
+        price
+        stock
         type
-        sortOrder
+        material
+        color
+        room
+        dimensions
+        sku
+        createdAt
+        updatedAt
+
+        media {
+          id
+          url
+          type
+          sortOrder
+        }
       }
     }
   }

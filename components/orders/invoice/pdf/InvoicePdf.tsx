@@ -270,7 +270,7 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                         />
                         <View style={styles.brandMeta}>
                             <Text>support@furnitureables.com</Text>
-                            <Text>www.furnitureables.com</Text>
+                            <Text>https://furnitureables-store.vercel.app</Text>
                         </View>
                     </View>
 

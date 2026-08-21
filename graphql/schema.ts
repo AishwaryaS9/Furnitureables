@@ -467,6 +467,14 @@ export const typeDefs = /* GraphQL */ `
     total: Int!
   }
 
+  type AdminProductsResponse {
+    items: [Product!]!
+    total: Int!
+    lowStockCount: Int!
+    outOfStockCount: Int!
+    inventoryValue: Float!
+  }
+
   type UploadResult {
     inserted: Int!
     updated: Int!
@@ -628,7 +636,11 @@ input PlaceOrderInput {
 
     productCategories(limit: Int): [ProductCategory!]!
 
-    adminProducts: [Product!]!
+    adminProducts(
+      search: String
+      page: Int
+      limit: Int
+    ): AdminProductsResponse!
 
     cart: Cart
 

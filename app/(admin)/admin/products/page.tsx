@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
+import { useDebounce } from "@/hooks/useDebounce";
 import ProductTable from "@/components/admin/products/ProductTable";
 import ProductStats from "@/components/admin/products/ProductStats";
 import ProductSearch from "@/components/admin/products/ProductSearch";
@@ -13,44 +14,25 @@ import ProductPagination from "@/components/admin/products/ProductPagination";
 const PAGE_SIZE = 8;
 
 export default function AdminProductsPage() {
-    const { data } = useAdminProducts();
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+
+    const debouncedSearch = useDebounce(search, 350);
+
+    const { data, isFetching } = useAdminProducts({
+        search: debouncedSearch,
+        page: currentPage,
+        limit: PAGE_SIZE,
+    });
 
     const handleSearchChange = (value: string) => {
         setSearch(value);
         setCurrentPage(1);
     };
 
-    const filteredProducts = (data ?? []).filter((product) => {
-        const keyword = search.toLowerCase();
-
-        return (
-            product.title.toLowerCase().includes(keyword) ||
-            product.sku.toLowerCase().includes(keyword)
-        );
-    });
-
-    // Pagination Slicing
-    const totalItems = filteredProducts.length;
-    const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
-    const paginatedProducts = filteredProducts.slice(
-        (currentPage - 1) * PAGE_SIZE,
-        currentPage * PAGE_SIZE
-    );
-
-    const total = filteredProducts.length;
-
-    const lowStock = filteredProducts.filter(
-        (p) => p.stock <= 5 && p.stock > 0
-    ).length;
-
-    const outOfStock = filteredProducts.filter((p) => p.stock === 0).length;
-
-    const inventoryValue = filteredProducts.reduce(
-        (sum, p) => sum + p.price * p.stock,
-        0
-    );
+    const items = data?.items ?? [];
+    const total = data?.total ?? 0;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
     return (
         <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
@@ -85,9 +67,9 @@ export default function AdminProductsPage() {
             <section aria-label="Product Statistics Overview">
                 <ProductStats
                     total={total}
-                    lowStock={lowStock}
-                    outOfStock={outOfStock}
-                    inventoryValue={inventoryValue}
+                    lowStock={data?.lowStockCount ?? 0}
+                    outOfStock={data?.outOfStockCount ?? 0}
+                    inventoryValue={data?.inventoryValue ?? 0}
                 />
             </section>
 
@@ -97,19 +79,21 @@ export default function AdminProductsPage() {
                     <div className="w-full sm:max-w-md">
                         <ProductSearch value={search} onChange={handleSearchChange} />
                     </div>
-                    {search && (
+                    {debouncedSearch && (
                         <p className="text-xs text-muted-foreground font-medium" aria-live="polite">
-                            Showing {filteredProducts.length} of {data?.length ?? 0} products
+                            Showing {total} {total === 1 ? "result" : "results"} for &quot;{debouncedSearch}&quot;
                         </p>
                     )}
                 </div>
 
-                <ProductTable products={paginatedProducts} />
+                <div className={isFetching ? "opacity-60 transition-opacity" : "transition-opacity"}>
+                    <ProductTable products={items} />
+                </div>
 
                 <ProductPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    totalItems={totalItems}
+                    totalItems={total}
                     pageSize={PAGE_SIZE}
                     onPageChange={setCurrentPage}
                 />

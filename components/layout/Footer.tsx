@@ -1,16 +1,53 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { FaInstagram, FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
-import { Mail } from "lucide-react";
+import { Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { useProductCategories } from "@/hooks/useProductCategories";
 import { formatCategoryLabel } from "@/lib/utils";
+import { submitToWeb3Forms } from "@/lib/web3forms";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 
 export default function Footer() {
   const { data: topCategories = [], isLoading: categoriesLoading } = useProductCategories(5);
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setSubscribing(true);
+
+    try {
+      const result = await submitToWeb3Forms({
+        subject: "New newsletter subscription",
+        name: "Newsletter Subscriber",
+        email,
+        message: `New newsletter subscription request from: ${email}`,
+      });
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+
+      toast.success("You're subscribed! Watch your inbox for new timber drops.");
+      setEmail("");
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 3000);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong. Please try again."
+      );
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   return (
     <footer className="w-full bg-card text-card-foreground border-t border-border/80 transition-colors">
@@ -142,22 +179,38 @@ export default function Footer() {
             <p className="text-xs text-muted-foreground leading-relaxed">
               Subscribe to receive exclusive preview access to new timber drops and seasonal promotions.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
+            <form onSubmit={handleSubscribe} className="space-y-2">
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type="email"
                   placeholder="Enter your email"
                   required
-                  className="w-full h-9 pl-9 pr-3 text-xs bg-muted/50 border border-input rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={subscribing}
+                  className="w-full h-9 pl-9 pr-3 text-xs bg-muted/50 border border-input rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all disabled:opacity-60"
                 />
               </div>
               <Button
                 type="submit"
                 size="sm"
+                disabled={subscribing}
                 className="w-full h-9 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer shadow-none"
               >
-                Subscribe Now
+                {subscribing ? (
+                  <>
+                    <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                    <span>Subscribing...</span>
+                  </>
+                ) : subscribed ? (
+                  <>
+                    <CheckCircle2 className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                    <span>Subscribed!</span>
+                  </>
+                ) : (
+                  <span>Subscribe Now</span>
+                )}
               </Button>
             </form>
           </div>
