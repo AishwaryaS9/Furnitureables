@@ -64,7 +64,7 @@ export default function CartItem({ item }: CartItemProps) {
               className="text-sm font-semibold text-zinc-950 tabular-nums pl-2 shrink-0"
               aria-label={`Line total: $${lineTotal.toLocaleString()} for ${item.quantity} ${item.quantity === 1 ? "item" : "items"}`}
             >
-              ${lineTotal.toLocaleString()}
+              ₹{lineTotal.toLocaleString()}
             </span>
           </div>
 
@@ -74,7 +74,7 @@ export default function CartItem({ item }: CartItemProps) {
             </p>
           )}
           <p className="text-xs text-zinc-500 font-light">
-            ${item.price.toLocaleString()} each
+            ₹{item.price.toLocaleString()} each
           </p>
         </div>
 

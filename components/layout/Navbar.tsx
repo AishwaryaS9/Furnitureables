@@ -11,6 +11,7 @@ import { useProductCategories } from "@/hooks/useProductCategories";
 import { formatCategoryLabel } from "@/lib/utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useActivePromotion } from "@/hooks/useActivePromotion";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +41,7 @@ export default function Navbar() {
 
   const { data: topCategories = [], isLoading: categoriesLoading } =
     useProductCategories(5);
+  const { data: activePromotion } = useActivePromotion();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -111,17 +113,17 @@ export default function Navbar() {
           Skip to main content
         </a>
 
-        {/* Top Promotional Bar */}
-        <aside
-          role="note"
-          aria-label="Current promotions"
-          className="w-full bg-primary text-primary-foreground text-[11px] sm:text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2"
-        >
-          <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          <span>
-            Mid-Summer Sale: Up to 40% off premium solid wood furniture!
-          </span>
-        </aside>
+        {/* Dynamic Promotional Bar — managed from Admin → Coupons */}
+        {activePromotion?.promotionText && (
+          <aside
+            role="note"
+            aria-label={activePromotion.campaignName ? `${activePromotion.campaignName} promotion` : "Current promotion"}
+            className="w-full bg-primary text-primary-foreground text-[11px] sm:text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2"
+          >
+            <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span>{activePromotion.promotionText}</span>
+          </aside>
+        )}
 
         {/* Main Header Container */}
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">

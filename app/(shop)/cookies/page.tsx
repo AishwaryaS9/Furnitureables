@@ -107,10 +107,10 @@ const sections: LegalSection[] = [
                 Questions about our use of cookies? Email{" "}
                 <a
                     href="mailto:skudupi.aishwarya@gmail.com"
-                    aria-label="Send email to skudupi.aishwarya@gmail.com"
+                    aria-label="Send email to support@furnitureables.com"
                     className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
                 >
-                    skudupi.aishwarya@gmail.com
+                    support@furnitureables.com
                 </a>{" "}
                 or visit our{" "}
                 <Link

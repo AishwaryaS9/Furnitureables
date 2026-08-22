@@ -10,6 +10,7 @@ import RazorpayProvider from "@/components/providers/RazorpayProvider";
 import CartLiveSync from "@/components/cart/CartLiveSync";
 import CartLogoutSync from "@/components/cart/CartLogoutSync";
 import SplashScreen from "@/components/common/SplashScreen";
+import { PromotionAuthSync } from "@/components/admin/coupons/PromotionAuthSync";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
@@ -105,17 +106,13 @@ export default function RootLayout({
           </a>
 
           <QueryProvider>
-            {/* Background Sync Helpers */}
             <CartLogoutSync />
             <CartSync />
             <CartLiveSync />
             <WishlistSync />
             <RazorpayProvider />
-
-            {/* Application Tree */}
+            <PromotionAuthSync />
             {children}
-
-            {/* Notification Toaster */}
             <Toaster position="top-right" richColors closeButton />
           </QueryProvider>
         </body>

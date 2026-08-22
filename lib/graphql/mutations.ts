@@ -222,3 +222,24 @@ export const ADMIN_DELETE_REVIEW = gql`
     adminDeleteReview(id: $id)
   }
 `;
+
+
+export const ADMIN_CREATE_COUPON = gql`
+  mutation AdminCreateCoupon($input: CouponInput!) {
+    adminCreateCoupon(input: $input) {
+      id
+      code
+      campaignName
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_COUPON = gql`
+  mutation AdminUpdateCoupon($id: String!, $input: UpdateCouponInput!) {
+    adminUpdateCoupon(id: $id, input: $input) {
+      id
+      code
+      campaignName
+    }
+  }
+`;

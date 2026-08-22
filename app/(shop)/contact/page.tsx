@@ -58,7 +58,7 @@ export default function ContactPage() {
             "@type": "Organization",
             "name": "Furnitureables",
             "telephone": "+91-820-555-0199",
-            "email": "skudupi.aishwarya@gmail.com",
+            "email": "support@furnitureables.com",
             "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "123 Artisan Way, Kadiyali",
@@ -277,10 +277,10 @@ export default function ContactPage() {
                                             <p className="font-semibold text-foreground">Email Care</p>
                                             <a
                                                 href="mailto:skudupi.aishwarya@gmail.com"
-                                                aria-label="Send email to skudupi.aishwarya@gmail.com"
+                                                aria-label="Send email to support@furnitureables.com"
                                                 className="text-muted-foreground hover:text-foreground transition-colors break-all"
                                             >
-                                                skudupi.aishwarya@gmail.com
+                                                support@furnitureables.com
                                             </a>
                                         </div>
                                     </div>

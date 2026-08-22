@@ -110,7 +110,7 @@ export default function CartSummary() {
                     <p className="text-xs font-light text-muted-foreground flex items-center gap-2">
                         <Truck className="w-4 h-4 text-foreground/70 shrink-0" aria-hidden="true" />
                         <span>
-                            Add <strong className="font-semibold text-foreground">${(shippingThreshold - subtotal).toLocaleString()}</strong> more for <strong className="font-semibold text-foreground">Free White Glove Delivery</strong>
+                            Add <strong className="font-semibold text-foreground">₹{(shippingThreshold - subtotal).toLocaleString()}</strong> more for <strong className="font-semibold text-foreground">Free White Glove Delivery</strong>
                         </span>
                     </p>
                     <div
@@ -189,13 +189,13 @@ export default function CartSummary() {
             <div className="space-y-3 text-xs sm:text-sm">
                 <div className="flex justify-between items-center text-muted-foreground font-light">
                     <span>Subtotal</span>
-                    <span className="font-semibold text-foreground tabular-nums">${subtotal.toLocaleString()}</span>
+                    <span className="font-semibold text-foreground tabular-nums">₹{subtotal.toLocaleString()}</span>
                 </div>
 
                 {coupon && (
                     <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400 font-light">
                         <span>Coupon ({coupon?.code})</span>
-                        <span className="font-semibold tabular-nums">-${discount.toLocaleString()}</span>
+                        <span className="font-semibold tabular-nums">-₹{discount.toLocaleString()}</span>
                     </div>
                 )}
 
@@ -213,7 +213,7 @@ export default function CartSummary() {
                 <div className="flex justify-between items-center text-muted-foreground font-light pt-2 border-t border-border/40">
                     <span>Estimated Sales Tax</span>
                     <span className="font-semibold text-foreground tabular-nums">
-                        ${estimatedTax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₹{estimatedTax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                 </div>
 
@@ -221,7 +221,7 @@ export default function CartSummary() {
                     <span className="font-serif font-normal text-lg">Total</span>
                     <div className="text-right">
                         <span className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums text-foreground">
-                            ${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            ₹{grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                     </div>
                 </div>

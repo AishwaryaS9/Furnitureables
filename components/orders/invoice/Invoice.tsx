@@ -249,7 +249,7 @@ export default function Invoice({ order }: InvoiceProps) {
 
                         <div className="flex justify-between pt-1 text-base sm:text-lg font-bold text-foreground print:text-black">
                             <span>Grand Total</span>
-                            <span className="font-serif text-primary print:text-black">
+                            <span className="font-sans text-primary print:text-black">
                                 {formatCurrency(order.total, currency)}
                             </span>
                         </div>

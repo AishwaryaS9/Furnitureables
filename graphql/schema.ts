@@ -244,6 +244,8 @@ export const typeDefs = /* GraphQL */ `
     id: String!
     code: String!
     description: String
+    campaignName: String
+    promotionText: String
 
     discountType: DiscountType!
     discountValue: Float!
@@ -256,6 +258,9 @@ export const typeDefs = /* GraphQL */ `
 
     expiresAt: DateTime
     isActive: Boolean!
+    isPromotional: Boolean!
+    priority: Int!
+    newUserOnly: Boolean!
 
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -600,6 +605,40 @@ input UpdateAddressInput {
   isDefault: Boolean
 }
 
+input CouponInput {
+  code: String!
+  description: String
+  campaignName: String
+  promotionText: String
+  discountType: DiscountType!
+  discountValue: Float!
+  minimumOrder: Float
+  maximumDiscount: Float
+  usageLimit: Int
+  expiresAt: DateTime
+  isActive: Boolean
+  isPromotional: Boolean
+  priority: Int
+  newUserOnly: Boolean
+}
+
+input UpdateCouponInput {
+  code: String
+  description: String
+  campaignName: String
+  promotionText: String
+  discountType: DiscountType
+  discountValue: Float
+  minimumOrder: Float
+  maximumDiscount: Float
+  usageLimit: Int
+  expiresAt: DateTime
+  isActive: Boolean
+  isPromotional: Boolean
+  priority: Int
+  newUserOnly: Boolean
+}
+
 input PlaceOrderInput {
   addressId: String!
   paymentMethod: PaymentMethod!
@@ -659,6 +698,9 @@ input PlaceOrderInput {
       code: String!
       subtotal: Float!
     ): CouponValidationResult!
+
+    adminCoupons: [Coupon!]!
+    activePromotion: Coupon
 
     adminDashboardStats: DashboardStats!
 
@@ -774,5 +816,8 @@ input PlaceOrderInput {
       id: String!
       status: OrderStatus!
     ): AdminOrder!
+
+    adminCreateCoupon(input: CouponInput!): Coupon!
+    adminUpdateCoupon(id: String!, input: UpdateCouponInput!): Coupon!
   }
 `;
