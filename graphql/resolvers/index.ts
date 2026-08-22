@@ -34,6 +34,7 @@ export const resolvers = {
         ...wishlistResolver.Mutation,
         ...paymentResolver.Mutation,
         ...reviewResolver.Mutation,
+        ...couponResolvers.Mutation,
     },
     Product: {
         ...productResolvers.Product

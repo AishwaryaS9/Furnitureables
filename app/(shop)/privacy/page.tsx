@@ -178,7 +178,7 @@ const sections: LegalSection[] = [
             <p>
                 If you have questions about this Privacy Policy or how we handle your
                 information, email us at{" "}
-                <a href="mailto:skudupi.aishwarya@gmail.com">skudupi.aishwarya@gmail.com</a>{" "}
+                <a href="mailto:skudupi.aishwarya@gmail.com">support@furnitureables.com</a>{" "}
                 or visit our <a href="/contact">Contact page</a>.
             </p>
         ),

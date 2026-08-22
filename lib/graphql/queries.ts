@@ -574,3 +574,44 @@ export const ADMIN_REVIEWS = gql`
     }
   }
 `;
+
+
+export const ADMIN_COUPONS = gql`
+  query AdminCoupons {
+    adminCoupons {
+      id
+      code
+      description
+      campaignName
+      promotionText
+      discountType
+      discountValue
+      minimumOrder
+      maximumDiscount
+      usageLimit
+      usedCount
+      expiresAt
+      isActive
+      isPromotional
+      priority
+      newUserOnly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const ACTIVE_PROMOTION = gql`
+  query ActivePromotion {
+    activePromotion {
+      id
+      code
+      campaignName
+      promotionText
+      discountType
+      discountValue
+      maximumDiscount
+      expiresAt
+    }
+  }
+`;

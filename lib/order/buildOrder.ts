@@ -67,7 +67,8 @@ export async function buildOrder(
 
         await validateCoupon(
             coupon.code,
-            subtotal
+            subtotal,
+            userId
         );
 
         discount = calculateDiscount(

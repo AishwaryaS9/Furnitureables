@@ -14066,6 +14066,7 @@ export namespace Prisma {
     maximumDiscount: number | null
     usageLimit: number | null
     usedCount: number | null
+    priority: number | null
   }
 
   export type CouponSumAggregateOutputType = {
@@ -14074,12 +14075,15 @@ export namespace Prisma {
     maximumDiscount: number | null
     usageLimit: number | null
     usedCount: number | null
+    priority: number | null
   }
 
   export type CouponMinAggregateOutputType = {
     id: string | null
     code: string | null
     description: string | null
+    campaignName: string | null
+    promotionText: string | null
     discountType: $Enums.DiscountType | null
     discountValue: number | null
     minimumOrder: number | null
@@ -14088,6 +14092,9 @@ export namespace Prisma {
     usedCount: number | null
     expiresAt: Date | null
     isActive: boolean | null
+    isPromotional: boolean | null
+    priority: number | null
+    newUserOnly: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14096,6 +14103,8 @@ export namespace Prisma {
     id: string | null
     code: string | null
     description: string | null
+    campaignName: string | null
+    promotionText: string | null
     discountType: $Enums.DiscountType | null
     discountValue: number | null
     minimumOrder: number | null
@@ -14104,6 +14113,9 @@ export namespace Prisma {
     usedCount: number | null
     expiresAt: Date | null
     isActive: boolean | null
+    isPromotional: boolean | null
+    priority: number | null
+    newUserOnly: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14112,6 +14124,8 @@ export namespace Prisma {
     id: number
     code: number
     description: number
+    campaignName: number
+    promotionText: number
     discountType: number
     discountValue: number
     minimumOrder: number
@@ -14120,6 +14134,9 @@ export namespace Prisma {
     usedCount: number
     expiresAt: number
     isActive: number
+    isPromotional: number
+    priority: number
+    newUserOnly: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14132,6 +14149,7 @@ export namespace Prisma {
     maximumDiscount?: true
     usageLimit?: true
     usedCount?: true
+    priority?: true
   }
 
   export type CouponSumAggregateInputType = {
@@ -14140,12 +14158,15 @@ export namespace Prisma {
     maximumDiscount?: true
     usageLimit?: true
     usedCount?: true
+    priority?: true
   }
 
   export type CouponMinAggregateInputType = {
     id?: true
     code?: true
     description?: true
+    campaignName?: true
+    promotionText?: true
     discountType?: true
     discountValue?: true
     minimumOrder?: true
@@ -14154,6 +14175,9 @@ export namespace Prisma {
     usedCount?: true
     expiresAt?: true
     isActive?: true
+    isPromotional?: true
+    priority?: true
+    newUserOnly?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14162,6 +14186,8 @@ export namespace Prisma {
     id?: true
     code?: true
     description?: true
+    campaignName?: true
+    promotionText?: true
     discountType?: true
     discountValue?: true
     minimumOrder?: true
@@ -14170,6 +14196,9 @@ export namespace Prisma {
     usedCount?: true
     expiresAt?: true
     isActive?: true
+    isPromotional?: true
+    priority?: true
+    newUserOnly?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14178,6 +14207,8 @@ export namespace Prisma {
     id?: true
     code?: true
     description?: true
+    campaignName?: true
+    promotionText?: true
     discountType?: true
     discountValue?: true
     minimumOrder?: true
@@ -14186,6 +14217,9 @@ export namespace Prisma {
     usedCount?: true
     expiresAt?: true
     isActive?: true
+    isPromotional?: true
+    priority?: true
+    newUserOnly?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14281,6 +14315,8 @@ export namespace Prisma {
     id: string
     code: string
     description: string | null
+    campaignName: string | null
+    promotionText: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder: number | null
@@ -14289,6 +14325,9 @@ export namespace Prisma {
     usedCount: number
     expiresAt: Date | null
     isActive: boolean
+    isPromotional: boolean
+    priority: number
+    newUserOnly: boolean
     createdAt: Date
     updatedAt: Date
     _count: CouponCountAggregateOutputType | null
@@ -14316,6 +14355,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     description?: boolean
+    campaignName?: boolean
+    promotionText?: boolean
     discountType?: boolean
     discountValue?: boolean
     minimumOrder?: boolean
@@ -14324,6 +14365,9 @@ export namespace Prisma {
     usedCount?: boolean
     expiresAt?: boolean
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: boolean
+    newUserOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     orders?: boolean | Coupon$ordersArgs<ExtArgs>
@@ -14334,6 +14378,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     description?: boolean
+    campaignName?: boolean
+    promotionText?: boolean
     discountType?: boolean
     discountValue?: boolean
     minimumOrder?: boolean
@@ -14342,6 +14388,9 @@ export namespace Prisma {
     usedCount?: boolean
     expiresAt?: boolean
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: boolean
+    newUserOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["coupon"]>
@@ -14350,6 +14399,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     description?: boolean
+    campaignName?: boolean
+    promotionText?: boolean
     discountType?: boolean
     discountValue?: boolean
     minimumOrder?: boolean
@@ -14358,6 +14409,9 @@ export namespace Prisma {
     usedCount?: boolean
     expiresAt?: boolean
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: boolean
+    newUserOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["coupon"]>
@@ -14366,6 +14420,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     description?: boolean
+    campaignName?: boolean
+    promotionText?: boolean
     discountType?: boolean
     discountValue?: boolean
     minimumOrder?: boolean
@@ -14374,11 +14430,14 @@ export namespace Prisma {
     usedCount?: boolean
     expiresAt?: boolean
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: boolean
+    newUserOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "description" | "discountType" | "discountValue" | "minimumOrder" | "maximumDiscount" | "usageLimit" | "usedCount" | "expiresAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
+  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "description" | "campaignName" | "promotionText" | "discountType" | "discountValue" | "minimumOrder" | "maximumDiscount" | "usageLimit" | "usedCount" | "expiresAt" | "isActive" | "isPromotional" | "priority" | "newUserOnly" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
   export type CouponInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orders?: boolean | Coupon$ordersArgs<ExtArgs>
     _count?: boolean | CouponCountOutputTypeDefaultArgs<ExtArgs>
@@ -14395,6 +14454,8 @@ export namespace Prisma {
       id: string
       code: string
       description: string | null
+      campaignName: string | null
+      promotionText: string | null
       discountType: $Enums.DiscountType
       discountValue: number
       minimumOrder: number | null
@@ -14403,6 +14464,9 @@ export namespace Prisma {
       usedCount: number
       expiresAt: Date | null
       isActive: boolean
+      isPromotional: boolean
+      priority: number
+      newUserOnly: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["coupon"]>
@@ -14832,6 +14896,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Coupon", 'String'>
     readonly code: FieldRef<"Coupon", 'String'>
     readonly description: FieldRef<"Coupon", 'String'>
+    readonly campaignName: FieldRef<"Coupon", 'String'>
+    readonly promotionText: FieldRef<"Coupon", 'String'>
     readonly discountType: FieldRef<"Coupon", 'DiscountType'>
     readonly discountValue: FieldRef<"Coupon", 'Float'>
     readonly minimumOrder: FieldRef<"Coupon", 'Float'>
@@ -14840,6 +14906,9 @@ export namespace Prisma {
     readonly usedCount: FieldRef<"Coupon", 'Int'>
     readonly expiresAt: FieldRef<"Coupon", 'DateTime'>
     readonly isActive: FieldRef<"Coupon", 'Boolean'>
+    readonly isPromotional: FieldRef<"Coupon", 'Boolean'>
+    readonly priority: FieldRef<"Coupon", 'Int'>
+    readonly newUserOnly: FieldRef<"Coupon", 'Boolean'>
     readonly createdAt: FieldRef<"Coupon", 'DateTime'>
     readonly updatedAt: FieldRef<"Coupon", 'DateTime'>
   }
@@ -15456,6 +15525,8 @@ export namespace Prisma {
     id: 'id',
     code: 'code',
     description: 'description',
+    campaignName: 'campaignName',
+    promotionText: 'promotionText',
     discountType: 'discountType',
     discountValue: 'discountValue',
     minimumOrder: 'minimumOrder',
@@ -15464,6 +15535,9 @@ export namespace Prisma {
     usedCount: 'usedCount',
     expiresAt: 'expiresAt',
     isActive: 'isActive',
+    isPromotional: 'isPromotional',
+    priority: 'priority',
+    newUserOnly: 'newUserOnly',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16528,6 +16602,8 @@ export namespace Prisma {
     id?: StringFilter<"Coupon"> | string
     code?: StringFilter<"Coupon"> | string
     description?: StringNullableFilter<"Coupon"> | string | null
+    campaignName?: StringNullableFilter<"Coupon"> | string | null
+    promotionText?: StringNullableFilter<"Coupon"> | string | null
     discountType?: EnumDiscountTypeFilter<"Coupon"> | $Enums.DiscountType
     discountValue?: FloatFilter<"Coupon"> | number
     minimumOrder?: FloatNullableFilter<"Coupon"> | number | null
@@ -16536,6 +16612,9 @@ export namespace Prisma {
     usedCount?: IntFilter<"Coupon"> | number
     expiresAt?: DateTimeNullableFilter<"Coupon"> | Date | string | null
     isActive?: BoolFilter<"Coupon"> | boolean
+    isPromotional?: BoolFilter<"Coupon"> | boolean
+    priority?: IntFilter<"Coupon"> | number
+    newUserOnly?: BoolFilter<"Coupon"> | boolean
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeFilter<"Coupon"> | Date | string
     orders?: OrderListRelationFilter
@@ -16545,6 +16624,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     description?: SortOrderInput | SortOrder
+    campaignName?: SortOrderInput | SortOrder
+    promotionText?: SortOrderInput | SortOrder
     discountType?: SortOrder
     discountValue?: SortOrder
     minimumOrder?: SortOrderInput | SortOrder
@@ -16553,6 +16634,9 @@ export namespace Prisma {
     usedCount?: SortOrder
     expiresAt?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    isPromotional?: SortOrder
+    priority?: SortOrder
+    newUserOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     orders?: OrderOrderByRelationAggregateInput
@@ -16565,6 +16649,8 @@ export namespace Prisma {
     OR?: CouponWhereInput[]
     NOT?: CouponWhereInput | CouponWhereInput[]
     description?: StringNullableFilter<"Coupon"> | string | null
+    campaignName?: StringNullableFilter<"Coupon"> | string | null
+    promotionText?: StringNullableFilter<"Coupon"> | string | null
     discountType?: EnumDiscountTypeFilter<"Coupon"> | $Enums.DiscountType
     discountValue?: FloatFilter<"Coupon"> | number
     minimumOrder?: FloatNullableFilter<"Coupon"> | number | null
@@ -16573,6 +16659,9 @@ export namespace Prisma {
     usedCount?: IntFilter<"Coupon"> | number
     expiresAt?: DateTimeNullableFilter<"Coupon"> | Date | string | null
     isActive?: BoolFilter<"Coupon"> | boolean
+    isPromotional?: BoolFilter<"Coupon"> | boolean
+    priority?: IntFilter<"Coupon"> | number
+    newUserOnly?: BoolFilter<"Coupon"> | boolean
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeFilter<"Coupon"> | Date | string
     orders?: OrderListRelationFilter
@@ -16582,6 +16671,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     description?: SortOrderInput | SortOrder
+    campaignName?: SortOrderInput | SortOrder
+    promotionText?: SortOrderInput | SortOrder
     discountType?: SortOrder
     discountValue?: SortOrder
     minimumOrder?: SortOrderInput | SortOrder
@@ -16590,6 +16681,9 @@ export namespace Prisma {
     usedCount?: SortOrder
     expiresAt?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    isPromotional?: SortOrder
+    priority?: SortOrder
+    newUserOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CouponCountOrderByAggregateInput
@@ -16606,6 +16700,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Coupon"> | string
     code?: StringWithAggregatesFilter<"Coupon"> | string
     description?: StringNullableWithAggregatesFilter<"Coupon"> | string | null
+    campaignName?: StringNullableWithAggregatesFilter<"Coupon"> | string | null
+    promotionText?: StringNullableWithAggregatesFilter<"Coupon"> | string | null
     discountType?: EnumDiscountTypeWithAggregatesFilter<"Coupon"> | $Enums.DiscountType
     discountValue?: FloatWithAggregatesFilter<"Coupon"> | number
     minimumOrder?: FloatNullableWithAggregatesFilter<"Coupon"> | number | null
@@ -16614,6 +16710,9 @@ export namespace Prisma {
     usedCount?: IntWithAggregatesFilter<"Coupon"> | number
     expiresAt?: DateTimeNullableWithAggregatesFilter<"Coupon"> | Date | string | null
     isActive?: BoolWithAggregatesFilter<"Coupon"> | boolean
+    isPromotional?: BoolWithAggregatesFilter<"Coupon"> | boolean
+    priority?: IntWithAggregatesFilter<"Coupon"> | number
+    newUserOnly?: BoolWithAggregatesFilter<"Coupon"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
   }
@@ -17577,6 +17676,8 @@ export namespace Prisma {
     id?: string
     code: string
     description?: string | null
+    campaignName?: string | null
+    promotionText?: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder?: number | null
@@ -17585,6 +17686,9 @@ export namespace Prisma {
     usedCount?: number
     expiresAt?: Date | string | null
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: number
+    newUserOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderCreateNestedManyWithoutCouponInput
@@ -17594,6 +17698,8 @@ export namespace Prisma {
     id?: string
     code: string
     description?: string | null
+    campaignName?: string | null
+    promotionText?: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder?: number | null
@@ -17602,6 +17708,9 @@ export namespace Prisma {
     usedCount?: number
     expiresAt?: Date | string | null
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: number
+    newUserOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutCouponInput
@@ -17611,6 +17720,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -17619,6 +17730,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUpdateManyWithoutCouponNestedInput
@@ -17628,6 +17742,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -17636,6 +17752,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUncheckedUpdateManyWithoutCouponNestedInput
@@ -17645,6 +17764,8 @@ export namespace Prisma {
     id?: string
     code: string
     description?: string | null
+    campaignName?: string | null
+    promotionText?: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder?: number | null
@@ -17653,6 +17774,9 @@ export namespace Prisma {
     usedCount?: number
     expiresAt?: Date | string | null
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: number
+    newUserOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17661,6 +17785,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -17669,6 +17795,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17677,6 +17806,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -17685,6 +17816,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18554,6 +18688,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     description?: SortOrder
+    campaignName?: SortOrder
+    promotionText?: SortOrder
     discountType?: SortOrder
     discountValue?: SortOrder
     minimumOrder?: SortOrder
@@ -18562,6 +18698,9 @@ export namespace Prisma {
     usedCount?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
+    isPromotional?: SortOrder
+    priority?: SortOrder
+    newUserOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18572,12 +18711,15 @@ export namespace Prisma {
     maximumDiscount?: SortOrder
     usageLimit?: SortOrder
     usedCount?: SortOrder
+    priority?: SortOrder
   }
 
   export type CouponMaxOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
     description?: SortOrder
+    campaignName?: SortOrder
+    promotionText?: SortOrder
     discountType?: SortOrder
     discountValue?: SortOrder
     minimumOrder?: SortOrder
@@ -18586,6 +18728,9 @@ export namespace Prisma {
     usedCount?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
+    isPromotional?: SortOrder
+    priority?: SortOrder
+    newUserOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18594,6 +18739,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     description?: SortOrder
+    campaignName?: SortOrder
+    promotionText?: SortOrder
     discountType?: SortOrder
     discountValue?: SortOrder
     minimumOrder?: SortOrder
@@ -18602,6 +18749,9 @@ export namespace Prisma {
     usedCount?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
+    isPromotional?: SortOrder
+    priority?: SortOrder
+    newUserOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18612,6 +18762,7 @@ export namespace Prisma {
     maximumDiscount?: SortOrder
     usageLimit?: SortOrder
     usedCount?: SortOrder
+    priority?: SortOrder
   }
 
   export type EnumDiscountTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -20990,6 +21141,8 @@ export namespace Prisma {
     id?: string
     code: string
     description?: string | null
+    campaignName?: string | null
+    promotionText?: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder?: number | null
@@ -20998,6 +21151,9 @@ export namespace Prisma {
     usedCount?: number
     expiresAt?: Date | string | null
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: number
+    newUserOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21006,6 +21162,8 @@ export namespace Prisma {
     id?: string
     code: string
     description?: string | null
+    campaignName?: string | null
+    promotionText?: string | null
     discountType: $Enums.DiscountType
     discountValue: number
     minimumOrder?: number | null
@@ -21014,6 +21172,9 @@ export namespace Prisma {
     usedCount?: number
     expiresAt?: Date | string | null
     isActive?: boolean
+    isPromotional?: boolean
+    priority?: number
+    newUserOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21142,6 +21303,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -21150,6 +21313,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21158,6 +21324,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignName?: NullableStringFieldUpdateOperationsInput | string | null
+    promotionText?: NullableStringFieldUpdateOperationsInput | string | null
     discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountValue?: FloatFieldUpdateOperationsInput | number
     minimumOrder?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -21166,6 +21334,9 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPromotional?: BoolFieldUpdateOperationsInput | boolean
+    priority?: IntFieldUpdateOperationsInput | number
+    newUserOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

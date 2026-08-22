@@ -255,6 +255,8 @@ exports.Prisma.CouponScalarFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  campaignName: 'campaignName',
+  promotionText: 'promotionText',
   discountType: 'discountType',
   discountValue: 'discountValue',
   minimumOrder: 'minimumOrder',
@@ -263,6 +265,9 @@ exports.Prisma.CouponScalarFieldEnum = {
   usedCount: 'usedCount',
   expiresAt: 'expiresAt',
   isActive: 'isActive',
+  isPromotional: 'isPromotional',
+  priority: 'priority',
+  newUserOnly: 'newUserOnly',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

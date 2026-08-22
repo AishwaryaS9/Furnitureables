@@ -204,9 +204,11 @@ model Review {
 }
 
 model Coupon {
-  id          String  @id @default(cuid())
-  code        String  @unique
-  description String?
+  id            String  @id @default(cuid())
+  code          String  @unique
+  description   String?
+  campaignName  String?
+  promotionText String?
 
   discountType  DiscountType
   discountValue Float
@@ -217,8 +219,11 @@ model Coupon {
   usageLimit Int?
   usedCount  Int  @default(0)
 
-  expiresAt DateTime?
-  isActive  Boolean   @default(true)
+  expiresAt     DateTime?
+  isActive      Boolean   @default(true)
+  isPromotional Boolean   @default(false)
+  priority      Int       @default(0)
+  newUserOnly   Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

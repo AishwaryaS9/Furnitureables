@@ -1,6 +1,20 @@
-import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
 import { Order } from "@/types/order";
 import logo from "@/public/logo.svg";
+
+Font.register({
+    family: "DejaVu",
+    fonts: [
+        {
+            src: "/fonts/DejaVuSans.ttf",
+            fontWeight: 400,
+        },
+        {
+            src: "/fonts/DejaVuSans-Bold.ttf",
+            fontWeight: 700,
+        },
+    ],
+});
 
 interface InvoicePdfProps {
     order: Order;
@@ -22,8 +36,8 @@ const styles = StyleSheet.create({
     page: {
         padding: 36,
         fontSize: 10,
-        fontFamily: "Helvetica",
-        color: "#111827",
+        fontFamily: "DejaVu",
+        color: COLORS.primary,
         backgroundColor: "#FFFFFF",
     },
 
@@ -68,7 +82,8 @@ const styles = StyleSheet.create({
 
     invoiceTitle: {
         fontSize: 22,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
         letterSpacing: 2,
     },
@@ -78,7 +93,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         borderRadius: 4,
         fontSize: 8,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         textTransform: "uppercase",
     },
 
@@ -89,7 +105,8 @@ const styles = StyleSheet.create({
     },
 
     boldText: {
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
     },
 
@@ -111,7 +128,8 @@ const styles = StyleSheet.create({
 
     sectionHeading: {
         fontSize: 8,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.muted,
         textTransform: "uppercase",
         letterSpacing: 0.8,
@@ -126,7 +144,8 @@ const styles = StyleSheet.create({
 
     recipientName: {
         fontSize: 11,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
         marginBottom: 3,
     },
@@ -152,7 +171,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 8,
         fontSize: 8,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.muted,
         textTransform: "uppercase",
         letterSpacing: 0.5,
@@ -188,7 +208,8 @@ const styles = StyleSheet.create({
 
     productTitle: {
         fontSize: 9,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
     },
 
@@ -228,7 +249,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: COLORS.border,
         fontSize: 11,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
     },
 
@@ -243,7 +265,8 @@ const styles = StyleSheet.create({
 
     footerTitle: {
         fontSize: 9,
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "DejaVu",
+        fontWeight: 700,
         color: COLORS.primary,
         marginBottom: 3,
     },
@@ -254,9 +277,22 @@ const styles = StyleSheet.create({
     },
 });
 
+// Currency formatter
+function formatPdfCurrency(amount: number, currency: string) {
+    try {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(amount);
+    } catch {
+        return `${currency} ${amount.toFixed(2)}`;
+    }
+}
+
 export default function InvoicePdf({ order }: InvoicePdfProps) {
     const isPaid = order.paymentStatus === "PAID";
-    const currencySymbol = order.currency === "INR" ? "₹" : "$";
 
     return (
         <Document>
@@ -268,6 +304,7 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                             src={logo.src}
                             style={styles.logo}
                         />
+
                         <View style={styles.brandMeta}>
                             <Text>support@furnitureables.com</Text>
                             <Text>https://furnitureables-store.vercel.app</Text>
@@ -276,18 +313,25 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
 
                     <View style={styles.invoiceMetaGroup}>
                         <View style={styles.invoiceHeaderRow}>
-                            <Text style={styles.invoiceTitle}>INVOICE</Text>
+                            <Text style={styles.invoiceTitle}>
+                                INVOICE
+                            </Text>
+
                             <View
                                 style={[
                                     styles.statusBadge,
                                     {
-                                        backgroundColor: isPaid ? COLORS.paidBg : COLORS.pendingBg,
+                                        backgroundColor: isPaid
+                                            ? COLORS.paidBg
+                                            : COLORS.pendingBg,
                                     },
                                 ]}
                             >
                                 <Text
                                     style={{
-                                        color: isPaid ? COLORS.paidText : COLORS.pendingText,
+                                        color: isPaid
+                                            ? COLORS.paidText
+                                            : COLORS.pendingText,
                                     }}
                                 >
                                     {order.paymentStatus}
@@ -296,12 +340,18 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                         </View>
 
                         <Text style={styles.invoiceDetailText}>
-                            Invoice No: <Text style={styles.boldText}>#{order.orderNumber}</Text>
+                            Invoice No:{" "}
+                            <Text style={styles.boldText}>
+                                #{order.orderNumber}
+                            </Text>
                         </Text>
+
                         <Text style={styles.invoiceDetailText}>
                             Issued Date:{" "}
                             <Text style={styles.boldText}>
-                                {new Date(order.createdAt).toLocaleDateString()}
+                                {new Date(
+                                    order.createdAt
+                                ).toLocaleDateString("en-IN")}
                             </Text>
                         </Text>
                     </View>
@@ -309,41 +359,111 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
 
                 {/* Billed To & Payment Meta */}
                 <View style={styles.sectionGrid}>
+                    {/* Billing */}
                     <View style={styles.columnBox}>
-                        <Text style={styles.sectionHeading}>Billed To</Text>
+                        <Text style={styles.sectionHeading}>
+                            Billed To
+                        </Text>
+
                         <View style={styles.columnContent}>
-                            <Text style={styles.recipientName}>{order.fullName}</Text>
-                            <Text style={{ marginBottom: 2 }}>{order.phone}</Text>
-                            <Text>{order.addressLine1}</Text>
-                            {order.addressLine2 ? <Text>{order.addressLine2}</Text> : null}
-                            <Text>
-                                {order.city}, {order.state} - {order.postalCode}
+                            <Text style={styles.recipientName}>
+                                {order.fullName}
                             </Text>
-                            <Text style={{ fontFamily: "Helvetica-Bold", marginTop: 2 }}>
+
+                            <Text style={{ marginBottom: 2 }}>
+                                {order.phone}
+                            </Text>
+
+                            <Text>{order.addressLine1}</Text>
+
+                            {order.addressLine2 ? (
+                                <Text>{order.addressLine2}</Text>
+                            ) : null}
+
+                            <Text>
+                                {order.city}, {order.state} -{" "}
+                                {order.postalCode}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    fontFamily: "DejaVu",
+                                    fontWeight: 700,
+                                    marginTop: 2,
+                                }}
+                            >
                                 {order.country}
                             </Text>
                         </View>
                     </View>
 
+                    {/* Payment Details */}
                     <View style={styles.columnBox}>
-                        <Text style={styles.sectionHeading}>Payment Details</Text>
+                        <Text style={styles.sectionHeading}>
+                            Payment Details
+                        </Text>
+
                         <View style={styles.columnContent}>
                             <View style={styles.keyValRow}>
-                                <Text style={{ color: COLORS.muted }}>Method</Text>
-                                <Text style={styles.boldText}>{order.paymentMethod}</Text>
+                                <Text style={{ color: COLORS.muted }}>
+                                    Method
+                                </Text>
+
+                                <Text style={styles.boldText}>
+                                    {order.paymentMethod}
+                                </Text>
                             </View>
+
                             <View style={styles.keyValRow}>
-                                <Text style={{ color: COLORS.muted }}>Payment Status</Text>
-                                <Text style={styles.boldText}>{order.paymentStatus}</Text>
+                                <Text style={{ color: COLORS.muted }}>
+                                    Payment Status
+                                </Text>
+
+                                <Text style={styles.boldText}>
+                                    {order.paymentStatus}
+                                </Text>
                             </View>
-                            <View style={[styles.keyValRow, { borderBottomWidth: 0 }]}>
-                                <Text style={{ color: COLORS.muted }}>Fulfillment</Text>
-                                <Text style={styles.boldText}>{order.status}</Text>
+
+                            <View
+                                style={[
+                                    styles.keyValRow,
+                                    { borderBottomWidth: 0 },
+                                ]}
+                            >
+                                <Text style={{ color: COLORS.muted }}>
+                                    Fulfillment
+                                </Text>
+
+                                <Text style={styles.boldText}>
+                                    {order.status}
+                                </Text>
                             </View>
+
                             {order.razorpayPaymentId ? (
-                                <View style={[styles.keyValRow, { borderBottomWidth: 0, marginTop: 4 }]}>
-                                    <Text style={{ color: COLORS.muted }}>Txn ID</Text>
-                                    <Text style={{ fontSize: 7, fontFamily: "Helvetica-Bold" }}>
+                                <View
+                                    style={[
+                                        styles.keyValRow,
+                                        {
+                                            borderBottomWidth: 0,
+                                            marginTop: 4,
+                                        },
+                                    ]}
+                                >
+                                    <Text
+                                        style={{
+                                            color: COLORS.muted,
+                                        }}
+                                    >
+                                        Txn ID
+                                    </Text>
+
+                                    <Text
+                                        style={{
+                                            fontSize: 7,
+                                            fontFamily: "DejaVu",
+                                            fontWeight: 700,
+                                        }}
+                                    >
                                         {order.razorpayPaymentId}
                                     </Text>
                                 </View>
@@ -355,14 +475,26 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                 {/* Line Items Table */}
                 <View style={styles.table}>
                     <View style={styles.tableHeader}>
-                        <Text style={styles.colProduct}>Product Description</Text>
-                        <Text style={styles.colQty}>Qty</Text>
-                        <Text style={styles.colPrice}>Unit Price</Text>
-                        <Text style={styles.colTotal}>Subtotal</Text>
+                        <Text style={styles.colProduct}>
+                            Product Description
+                        </Text>
+
+                        <Text style={styles.colQty}>
+                            Qty
+                        </Text>
+
+                        <Text style={styles.colPrice}>
+                            Unit Price
+                        </Text>
+
+                        <Text style={styles.colTotal}>
+                            Subtotal
+                        </Text>
                     </View>
 
                     {order.items.map((item, index) => {
-                        const itemTotal = item.price * item.quantity;
+                        const itemTotal =
+                            item.price * item.quantity;
 
                         return (
                             <View
@@ -371,78 +503,154 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                                     styles.tableRow,
                                     {
                                         backgroundColor:
-                                            index % 2 === 0 ? "#FFFFFF" : COLORS.lightBg,
+                                            index % 2 === 0
+                                                ? "#FFFFFF"
+                                                : COLORS.lightBg,
                                     },
                                 ]}
                             >
                                 <View style={styles.colProduct}>
-                                    <Text style={styles.productTitle}>{item.title}</Text>
+                                    <Text style={styles.productTitle}>
+                                        {item.title}
+                                    </Text>
+
                                     {item.sku ? (
-                                        <Text style={styles.productSku}>SKU: {item.sku}</Text>
+                                        <Text style={styles.productSku}>
+                                            SKU: {item.sku}
+                                        </Text>
                                     ) : null}
                                 </View>
 
-                                <Text style={styles.colQty}>{item.quantity}</Text>
-
-                                <Text style={styles.colPrice}>
-                                    {currencySymbol}
-                                    {item.price.toFixed(2)}
+                                <Text style={styles.colQty}>
+                                    {item.quantity}
                                 </Text>
 
-                                <Text style={[styles.colTotal, styles.boldText]}>
-                                    {currencySymbol}
-                                    {itemTotal.toFixed(2)}
+                                <Text style={styles.colPrice}>
+                                    {formatPdfCurrency(
+                                        item.price,
+                                        order.currency
+                                    )}
+                                </Text>
+
+                                <Text
+                                    style={[
+                                        styles.colTotal,
+                                        styles.boldText,
+                                    ]}
+                                >
+                                    {formatPdfCurrency(
+                                        itemTotal,
+                                        order.currency
+                                    )}
                                 </Text>
                             </View>
                         );
                     })}
                 </View>
 
-                {/* Summary Totals Ledger */}
+                {/* Summary Totals */}
                 <View style={styles.summaryContainer}>
                     <View style={styles.totalsBox}>
+                        {/* Subtotal */}
                         <View style={styles.totalRow}>
-                            <Text style={{ color: COLORS.muted }}>Subtotal</Text>
+                            <Text
+                                style={{
+                                    color: COLORS.muted,
+                                }}
+                            >
+                                Subtotal
+                            </Text>
+
                             <Text style={styles.boldText}>
-                                {currencySymbol}
-                                {order.subtotal.toFixed(2)}
+                                {formatPdfCurrency(
+                                    order.subtotal,
+                                    order.currency
+                                )}
                             </Text>
                         </View>
 
+                        {/* Shipping */}
                         <View style={styles.totalRow}>
-                            <Text style={{ color: COLORS.muted }}>Shipping</Text>
+                            <Text
+                                style={{
+                                    color: COLORS.muted,
+                                }}
+                            >
+                                Shipping
+                            </Text>
+
                             <Text style={styles.boldText}>
                                 {order.shipping === 0
                                     ? "Free"
-                                    : `${currencySymbol}${order.shipping.toFixed(2)}`}
+                                    : formatPdfCurrency(
+                                        order.shipping,
+                                        order.currency
+                                    )}
                             </Text>
                         </View>
 
+                        {/* Discount */}
                         {order.discount > 0 ? (
                             <View style={styles.totalRow}>
-                                <Text style={{ color: COLORS.paidText }}>
-                                    Discount {order.coupon ? `(${order.coupon.code})` : ""}
+                                <Text
+                                    style={{
+                                        color: COLORS.paidText,
+                                    }}
+                                >
+                                    Discount
+                                    {order.coupon
+                                        ? ` (${order.coupon.code})`
+                                        : ""}
                                 </Text>
-                                <Text style={{ color: COLORS.paidText, fontFamily: "Helvetica-Bold" }}>
-                                    -{currencySymbol}
-                                    {order.discount.toFixed(2)}
+
+                                <Text
+                                    style={{
+                                        color: COLORS.paidText,
+                                        fontFamily: "DejaVu",
+                                        fontWeight: 700,
+                                    }}
+                                >
+                                    -
+                                    {formatPdfCurrency(
+                                        order.discount,
+                                        order.currency
+                                    )}
                                 </Text>
                             </View>
                         ) : null}
 
+                        {/* Tax */}
                         <View style={styles.totalRow}>
-                            <Text style={{ color: COLORS.muted }}>Estimated Tax</Text>
+                            <Text
+                                style={{
+                                    color: COLORS.muted,
+                                }}
+                            >
+                                Estimated Tax
+                            </Text>
+
                             <Text style={styles.boldText}>
-                                {currencySymbol}
-                                {order.tax.toFixed(2)}
+                                {formatPdfCurrency(
+                                    order.tax,
+                                    order.currency
+                                )}
                             </Text>
                         </View>
 
-                        <View style={[styles.totalRow, styles.grandTotalRow]}>
+                        {/* Grand Total */}
+                        <View
+                            style={[
+                                styles.totalRow,
+                                styles.grandTotalRow,
+                            ]}
+                        >
                             <Text>Grand Total</Text>
+
                             <Text>
-                                {currencySymbol}
-                                {order.total.toFixed(2)}
+                                {formatPdfCurrency(
+                                    order.total,
+                                    order.currency
+                                )}
                             </Text>
                         </View>
                     </View>
@@ -453,8 +661,10 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                     <Text style={styles.footerTitle}>
                         Thank you for shopping with Furnitureables.
                     </Text>
+
                     <Text style={styles.footerSubtitle}>
-                        This is a computer-generated tax invoice and does not require a physical signature.
+                        This is a computer-generated tax invoice and does
+                        not require a physical signature.
                     </Text>
                 </View>
             </Page>

@@ -166,7 +166,7 @@ const sections: LegalSection[] = [
         content: (
             <p>
                 Questions about these Terms of Service can be sent to{" "}
-                <a href="mailto:skudupi.aishwarya@gmail.com">skudupi.aishwarya@gmail.com</a>{" "}
+                <a href="mailto:skudupi.aishwarya@gmail.com">support@furnitureables.com</a>{" "}
                 or via our <a href="/contact">Contact page</a>.
             </p>
         ),

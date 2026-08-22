@@ -1,4 +1,4 @@
-import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Ship, Hammer, TreePine, Award, ShieldCheck, Compass } from "lucide-react";
+import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Ship, Hammer, TreePine, Award, ShieldCheck, Compass, TicketPercent } from "lucide-react";
 import { PaymentMethod } from "@/generated/prisma";
 import { CustomerSort } from "@/types/customer";
 import { AboutProcessStep, AboutStat, AboutTestimonial, AboutValue } from "@/types/about";
@@ -73,6 +73,11 @@ export const menuItems = [
         title: "Reviews",
         href: "/admin/reviews",
         icon: Star,
+    },
+    {
+        title: "Coupons",
+        href: "/admin/coupons",
+        icon: TicketPercent,
     },
     {
         title: "Analytics",
@@ -237,109 +242,109 @@ export const COOKIE_CATEGORIES: CookieCategoryMeta[] = [
 import { FaqCategory } from "@/types/faq";
 
 export const FAQ_CATEGORIES: FaqCategory[] = [
-  {
-    id: "orders-shipping",
-    title: "Orders & Shipping",
-    items: [
-      {
-        question: "How long does an order take to arrive?",
-        answer:
-          "In-stock pieces typically ship within 3–5 business days and arrive within 1–2 weeks depending on your location. Custom or made-to-order pieces have longer production timelines, which we'll share with you at the time of purchase.",
-      },
-      {
-        question: "Do you ship internationally?",
-        answer:
-          "We currently ship across India with select international shipping available on request. Reach out through our Contact page with your location and we'll confirm availability and costs.",
-      },
-      {
-        question: "Can I track my order?",
-        answer:
-          "Yes — once your order ships, you'll receive a tracking link by email. You can also view order status anytime from your Orders page after signing in.",
-      },
-      {
-        question: "Can I change or cancel my order after placing it?",
-        answer:
-          "We begin processing orders quickly, so changes or cancellations are only possible within a short window after checkout. Contact us as soon as possible and we'll do our best to accommodate the request.",
-      },
-    ],
-  },
-  {
-    id: "products-materials",
-    title: "Products & Materials",
-    items: [
-      {
-        question: "What wood do you use?",
-        answer:
-          "We work primarily with solid oak, walnut, and teak, all sourced from FSC-certified, responsibly managed forests. Each product page lists the specific material and finish used for that piece.",
-      },
-      {
-        question: "Do you offer custom dimensions or finishes?",
-        answer:
-          "Yes — many of our pieces can be customized in size, wood tone, or finish. Send us your requirements through the Contact page and our team will follow up with options and a quote.",
-      },
-      {
-        question: "How do I care for solid wood furniture?",
-        answer:
-          "Wipe with a soft, dry cloth and avoid direct sunlight or excess moisture. We recommend re-oiling exposed wood surfaces every 12–18 months to maintain the finish — care instructions are included with every delivery.",
-      },
-      {
-        question: "Are your finishes safe for households with children or pets?",
-        answer:
-          "Yes, all our finishing oils are non-toxic and food-safe once fully cured, typically within 7 days of application.",
-      },
-    ],
-  },
-  {
-    id: "returns-warranty",
-    title: "Returns & Warranty",
-    items: [
-      {
-        question: "What is your return policy?",
-        answer:
-          "Most items can be returned within 30 days of delivery in original, unused condition. Custom-built pieces are generally non-returnable unless there's a manufacturing defect. Full details are on our Terms of Service page.",
-      },
-      {
-        question: "What does the structural warranty cover?",
-        answer:
-          "Our furniture carries a 10-year warranty against structural and manufacturing defects under normal household use. It doesn't cover normal wear, accidental damage, or improper care.",
-      },
-      {
-        question: "How do I start a return or warranty claim?",
-        answer:
-          "Contact our team with your order number and a short description (plus photos, if relevant). We'll guide you through the next steps and, if approved, arrange pickup or a repair.",
-      },
-      {
-        question: "Who pays for return shipping?",
-        answer:
-          "If the return is due to a defect or our error, we cover return shipping. For other eligible returns, standard return shipping costs apply and will be shared before you send anything back.",
-      },
-    ],
-  },
-  {
-    id: "account-payments",
-    title: "Account & Payments",
-    items: [
-      {
-        question: "What payment methods do you accept?",
-        answer:
-          "We accept major credit/debit cards, UPI, and other methods supported through our payment partners (Stripe and Razorpay) at checkout.",
-      },
-      {
-        question: "Is it safe to save my payment details?",
-        answer:
-          "Yes — payments are processed securely by Stripe and Razorpay. We never store your full card details on our own servers.",
-      },
-      {
-        question: "Do I need an account to place an order?",
-        answer:
-          "You can browse the catalog without an account, but you'll need to sign in to check out, track orders, and access your wishlist.",
-      },
-      {
-        question: "How do I delete my account or data?",
-        answer:
-          "Contact us and we'll process your request in line with our Privacy Policy. We'll confirm once your account and associated data have been removed.",
-      },
-    ],
-  },
+    {
+        id: "orders-shipping",
+        title: "Orders & Shipping",
+        items: [
+            {
+                question: "How long does an order take to arrive?",
+                answer:
+                    "In-stock pieces typically ship within 3–5 business days and arrive within 1–2 weeks depending on your location. Custom or made-to-order pieces have longer production timelines, which we'll share with you at the time of purchase.",
+            },
+            {
+                question: "Do you ship internationally?",
+                answer:
+                    "We currently ship across India with select international shipping available on request. Reach out through our Contact page with your location and we'll confirm availability and costs.",
+            },
+            {
+                question: "Can I track my order?",
+                answer:
+                    "Yes — once your order ships, you'll receive a tracking link by email. You can also view order status anytime from your Orders page after signing in.",
+            },
+            {
+                question: "Can I change or cancel my order after placing it?",
+                answer:
+                    "We begin processing orders quickly, so changes or cancellations are only possible within a short window after checkout. Contact us as soon as possible and we'll do our best to accommodate the request.",
+            },
+        ],
+    },
+    {
+        id: "products-materials",
+        title: "Products & Materials",
+        items: [
+            {
+                question: "What wood do you use?",
+                answer:
+                    "We work primarily with solid oak, walnut, and teak, all sourced from FSC-certified, responsibly managed forests. Each product page lists the specific material and finish used for that piece.",
+            },
+            {
+                question: "Do you offer custom dimensions or finishes?",
+                answer:
+                    "Yes — many of our pieces can be customized in size, wood tone, or finish. Send us your requirements through the Contact page and our team will follow up with options and a quote.",
+            },
+            {
+                question: "How do I care for solid wood furniture?",
+                answer:
+                    "Wipe with a soft, dry cloth and avoid direct sunlight or excess moisture. We recommend re-oiling exposed wood surfaces every 12–18 months to maintain the finish — care instructions are included with every delivery.",
+            },
+            {
+                question: "Are your finishes safe for households with children or pets?",
+                answer:
+                    "Yes, all our finishing oils are non-toxic and food-safe once fully cured, typically within 7 days of application.",
+            },
+        ],
+    },
+    {
+        id: "returns-warranty",
+        title: "Returns & Warranty",
+        items: [
+            {
+                question: "What is your return policy?",
+                answer:
+                    "Most items can be returned within 30 days of delivery in original, unused condition. Custom-built pieces are generally non-returnable unless there's a manufacturing defect. Full details are on our Terms of Service page.",
+            },
+            {
+                question: "What does the structural warranty cover?",
+                answer:
+                    "Our furniture carries a 10-year warranty against structural and manufacturing defects under normal household use. It doesn't cover normal wear, accidental damage, or improper care.",
+            },
+            {
+                question: "How do I start a return or warranty claim?",
+                answer:
+                    "Contact our team with your order number and a short description (plus photos, if relevant). We'll guide you through the next steps and, if approved, arrange pickup or a repair.",
+            },
+            {
+                question: "Who pays for return shipping?",
+                answer:
+                    "If the return is due to a defect or our error, we cover return shipping. For other eligible returns, standard return shipping costs apply and will be shared before you send anything back.",
+            },
+        ],
+    },
+    {
+        id: "account-payments",
+        title: "Account & Payments",
+        items: [
+            {
+                question: "What payment methods do you accept?",
+                answer:
+                    "We accept major credit/debit cards, UPI, and other methods supported through our payment partners (Stripe and Razorpay) at checkout.",
+            },
+            {
+                question: "Is it safe to save my payment details?",
+                answer:
+                    "Yes — payments are processed securely by Stripe and Razorpay. We never store your full card details on our own servers.",
+            },
+            {
+                question: "Do I need an account to place an order?",
+                answer:
+                    "You can browse the catalog without an account, but you'll need to sign in to check out, track orders, and access your wishlist.",
+            },
+            {
+                question: "How do I delete my account or data?",
+                answer:
+                    "Contact us and we'll process your request in line with our Privacy Policy. We'll confirm once your account and associated data have been removed.",
+            },
+        ],
+    },
 ];
 
