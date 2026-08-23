@@ -274,6 +274,24 @@ export const typeDefs = /* GraphQL */ `
   }
 
   ############################
+  ## ADMIN NOTIFICATIONS
+  ############################
+
+  enum AdminNotificationType {
+    ORDER_PLACED
+  }
+
+  type AdminNotification {
+    id: String!
+    type: AdminNotificationType!
+    title: String!
+    message: String!
+    orderId: String
+    isRead: Boolean!
+    createdAt: DateTime!
+  }
+
+  ############################
   ## RAZORPAY
   ############################
 
@@ -702,6 +720,9 @@ input PlaceOrderInput {
     adminCoupons: [Coupon!]!
     activePromotion: Coupon
 
+    adminNotifications(limit: Int): [AdminNotification!]!
+    adminUnreadNotificationCount: Int!
+
     adminDashboardStats: DashboardStats!
 
     adminSalesChart(months: Int): [SalesChartPoint!]!
@@ -819,5 +840,9 @@ input PlaceOrderInput {
 
     adminCreateCoupon(input: CouponInput!): Coupon!
     adminUpdateCoupon(id: String!, input: UpdateCouponInput!): Coupon!
+    adminDeleteCoupon(id: String!): Boolean!
+
+    adminMarkNotificationRead(id: String!): AdminNotification!
+    adminMarkAllNotificationsRead: Boolean!
   }
 `;

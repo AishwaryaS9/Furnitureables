@@ -5,6 +5,7 @@ import { razorpay } from "@/lib/razorpay";
 import { getStripe } from "@/lib/stripe";
 import { PlaceOrderInput } from "@/types/order";
 import { OrderStatus } from "@/generated/prisma";
+import { sendOrderConfirmedSideEffects } from "@/lib/order/onOrderConfirmed";
 
 const VALID_ORDER_STATUSES: OrderStatus[] = [
     "PENDING",
@@ -78,41 +79,6 @@ export const orderResolver = {
                 },
             });
         },
-
-        // adminOrders: async () => {
-        //     const orders = await prisma.order.findMany({
-        //         orderBy: {
-        //             createdAt: "desc",
-        //         },
-        //         include: {
-        //             user: {
-        //                 select: {
-        //                     email: true,
-        //                 },
-        //             },
-        //             items: {
-        //                 select: {
-        //                     id: true,
-        //                 },
-        //             },
-        //         },
-        //     });
-
-        //     return orders.map((order) => ({
-        //         id: order.id,
-        //         orderNumber: order.orderNumber,
-        //         customerName: order.fullName,
-        //         customerEmail: order.user.email,
-        //         itemsCount: order.items.length,
-        //         total: order.total,
-        //         currency: order.currency,
-        //         status: order.status,
-        //         paymentStatus: order.paymentStatus,
-        //         paymentMethod: order.paymentMethod,
-        //         createdAt: order.createdAt.toISOString(),
-        //     }));
-        // },
-
 
         adminOrders: async () => {
             const orders = await prisma.order.findMany({
@@ -367,7 +333,6 @@ export const orderResolver = {
                         postalCode: address.postalCode,
                         country: address.country,
                         couponId: coupon?.id,
-                        // couponCode: coupon?.code,
                     },
                 });
 
@@ -428,8 +393,7 @@ export const orderResolver = {
                     input.couponId
                 );
 
-                // return prisma.$transaction(async (tx) => {
-                return await prisma.$transaction(async (tx) => {
+                const createdOrder = await prisma.$transaction(async (tx) => {
 
                     // 1. Create Order
                     const order = await tx.order.create({
@@ -449,10 +413,8 @@ export const orderResolver = {
 
                             paymentMethod: input.paymentMethod,
 
-                            // status: "PENDING",
                             status: "CONFIRMED",
 
-                            // paymentStatus: "PENDING",
                             paymentStatus:
                                 input.paymentMethod === "COD"
                                     ? "PENDING"
@@ -476,7 +438,6 @@ export const orderResolver = {
 
                             country: address.country,
                             couponId: coupon?.id,
-                            // couponCode: coupon?.code,
                         },
                     });
 
@@ -542,6 +503,12 @@ export const orderResolver = {
                     });
                     return order;
                 });
+
+                void sendOrderConfirmedSideEffects(createdOrder.id).catch((error) => {
+                    console.error("Failed to run post-order side effects:", error);
+                });
+
+                return createdOrder;
             } catch (error) {
                 console.error("========== PLACE ORDER ERROR ==========");
                 console.error(error);
@@ -769,7 +736,6 @@ export const orderResolver = {
                             id: existing.id,
                         },
                         data: {
-                            // quantity: existing.quantity + quantity,
                             quantity: Math.min(
                                 existing.quantity + quantity,
                                 product.stock

@@ -232,6 +232,23 @@ model Coupon {
   orders            Order[]
 }
 
+model AdminNotification {
+  id        String                @id @default(cuid())
+  type      AdminNotificationType @default(ORDER_PLACED)
+  title     String
+  message   String
+  orderId   String?
+  isRead    Boolean               @default(false)
+  createdAt DateTime              @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+enum AdminNotificationType {
+  ORDER_PLACED
+}
+
 enum MediaType {
   IMAGE
   VIDEO

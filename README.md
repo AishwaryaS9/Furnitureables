@@ -12,7 +12,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 - Product detail pages with reviews and related products
 - Cart and wishlist with sync across sessions
 - Multi-address checkout with Stripe and Razorpay payment support
-- Order history, order details, and downloadable PDF invoices
+- Order history, order details, and downloadable PDF invoices, plus an emailed invoice (PDF attached) when an order is confirmed
 - AI-powered smart search and chat (Google Gemini)
 - Contact form (Web3Forms), plus About, FAQ, Privacy, Terms, and Cookies pages
 - Branded splash screen on first load
@@ -21,6 +21,8 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 
 - Product management with CSV bulk upload/export and AI-generated product descriptions
 - Order management with status updates and search
+- Coupon management, including deletion (coupons already used on an order are protected — deactivate instead)
+- Real-time order notifications in the admin header (Server-Sent Events), with read/unread state
 - Customer management
 - Review moderation
 - Analytics dashboard (revenue, category performance, order funnel, ratings, stock vs. sales, and more)
@@ -73,7 +75,7 @@ types/             # Shared TypeScript types
 
 Defined in `prisma/schema.prisma`, the core models include:
 
-`User`, `Product`, `ProductMedia`, `Cart`, `CartItem`, `Address`, `Order`, `OrderItem`, `Wishlist`, `Review`, `Coupon`
+`User`, `Product`, `ProductMedia`, `Cart`, `CartItem`, `Address`, `Order`, `OrderItem`, `Wishlist`, `Review`, `Coupon`, `AdminNotification`
 
 with supporting enums for media type, order status, payment status/method, review status, and discount type.
 
@@ -121,9 +123,21 @@ GEMINI_MODEL=
 # Web3Forms (contact form)
 NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=
 
+# SMTP (order invoice emails)
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASSWORD=
+SMTP_SECURE=
+SMTP_FROM_EMAIL=
+SMTP_FROM_NAME=
+SMTP_SUPPORT_EMAIL=
+
 # App
 NEXT_PUBLIC_APP_URL=
 ```
+
+SMTP settings are optional in development — if unset, invoice emails are skipped (logged to the console) instead of failing order placement.
 
 ### 3. Set up the database
 

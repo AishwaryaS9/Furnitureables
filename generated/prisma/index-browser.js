@@ -272,6 +272,16 @@ exports.Prisma.CouponScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AdminNotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  orderId: 'orderId',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -323,6 +333,10 @@ exports.DiscountType = exports.$Enums.DiscountType = {
   FIXED: 'FIXED'
 };
 
+exports.AdminNotificationType = exports.$Enums.AdminNotificationType = {
+  ORDER_PLACED: 'ORDER_PLACED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Product: 'Product',
@@ -334,7 +348,8 @@ exports.Prisma.ModelName = {
   OrderItem: 'OrderItem',
   Wishlist: 'Wishlist',
   Review: 'Review',
-  Coupon: 'Coupon'
+  Coupon: 'Coupon',
+  AdminNotification: 'AdminNotification'
 };
 
 /**

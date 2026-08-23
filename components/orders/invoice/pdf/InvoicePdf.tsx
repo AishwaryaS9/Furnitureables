@@ -1,23 +1,13 @@
-import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { Order } from "@/types/order";
 import logo from "@/public/logo.svg";
 
-Font.register({
-    family: "DejaVu",
-    fonts: [
-        {
-            src: "/fonts/DejaVuSans.ttf",
-            fontWeight: 400,
-        },
-        {
-            src: "/fonts/DejaVuSans-Bold.ttf",
-            fontWeight: 700,
-        },
-    ],
-});
-
 interface InvoicePdfProps {
     order: Order;
+}
+
+interface InvoiceDocumentProps extends InvoicePdfProps {
+    logoSrc: string;
 }
 
 const COLORS = {
@@ -41,7 +31,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
     },
 
-    // Header Section
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -110,7 +99,6 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
     },
 
-    // Customer & Payment Grid Section
     sectionGrid: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -158,7 +146,6 @@ const styles = StyleSheet.create({
         borderBottomColor: COLORS.border,
     },
 
-    // Table Section
     table: {
         marginBottom: 24,
     },
@@ -219,7 +206,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
 
-    // Summary Totals Section
     summaryContainer: {
         flexDirection: "row",
         justifyContent: "flex-end",
@@ -254,7 +240,6 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
     },
 
-    // Footer Section
     footer: {
         marginTop: "auto",
         borderTopWidth: 1,
@@ -277,7 +262,6 @@ const styles = StyleSheet.create({
     },
 });
 
-// Currency formatter
 function formatPdfCurrency(amount: number, currency: string) {
     try {
         return new Intl.NumberFormat("en-IN", {
@@ -291,23 +275,25 @@ function formatPdfCurrency(amount: number, currency: string) {
     }
 }
 
-export default function InvoicePdf({ order }: InvoicePdfProps) {
+export function InvoiceDocument({ order, logoSrc }: InvoiceDocumentProps) {
     const isPaid = order.paymentStatus === "PAID";
 
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                {/* Header Block */}
+                {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.brandGroup}>
                         <Image
-                            src={logo.src}
+                            src={logoSrc}
                             style={styles.logo}
                         />
 
                         <View style={styles.brandMeta}>
                             <Text>support@furnitureables.com</Text>
-                            <Text>https://furnitureables-store.vercel.app</Text>
+                            <Text>
+                                https://furnitureables-store.vercel.app
+                            </Text>
                         </View>
                     </View>
 
@@ -357,9 +343,8 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                     </View>
                 </View>
 
-                {/* Billed To & Payment Meta */}
+                {/* Customer & Payment */}
                 <View style={styles.sectionGrid}>
-                    {/* Billing */}
                     <View style={styles.columnBox}>
                         <Text style={styles.sectionHeading}>
                             Billed To
@@ -397,7 +382,6 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                         </View>
                     </View>
 
-                    {/* Payment Details */}
                     <View style={styles.columnBox}>
                         <Text style={styles.sectionHeading}>
                             Payment Details
@@ -472,7 +456,7 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                     </View>
                 </View>
 
-                {/* Line Items Table */}
+                {/* Items */}
                 <View style={styles.table}>
                     <View style={styles.tableHeader}>
                         <Text style={styles.colProduct}>
@@ -548,16 +532,11 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                     })}
                 </View>
 
-                {/* Summary Totals */}
+                {/* Totals */}
                 <View style={styles.summaryContainer}>
                     <View style={styles.totalsBox}>
-                        {/* Subtotal */}
                         <View style={styles.totalRow}>
-                            <Text
-                                style={{
-                                    color: COLORS.muted,
-                                }}
-                            >
+                            <Text style={{ color: COLORS.muted }}>
                                 Subtotal
                             </Text>
 
@@ -569,13 +548,8 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                             </Text>
                         </View>
 
-                        {/* Shipping */}
                         <View style={styles.totalRow}>
-                            <Text
-                                style={{
-                                    color: COLORS.muted,
-                                }}
-                            >
+                            <Text style={{ color: COLORS.muted }}>
                                 Shipping
                             </Text>
 
@@ -589,7 +563,6 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                             </Text>
                         </View>
 
-                        {/* Discount */}
                         {order.discount > 0 ? (
                             <View style={styles.totalRow}>
                                 <Text
@@ -619,13 +592,8 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                             </View>
                         ) : null}
 
-                        {/* Tax */}
                         <View style={styles.totalRow}>
-                            <Text
-                                style={{
-                                    color: COLORS.muted,
-                                }}
-                            >
+                            <Text style={{ color: COLORS.muted }}>
                                 Estimated Tax
                             </Text>
 
@@ -637,7 +605,6 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                             </Text>
                         </View>
 
-                        {/* Grand Total */}
                         <View
                             style={[
                                 styles.totalRow,
@@ -669,5 +636,14 @@ export default function InvoicePdf({ order }: InvoicePdfProps) {
                 </View>
             </Page>
         </Document>
+    );
+}
+
+export default function InvoicePdf({ order }: InvoicePdfProps) {
+    return (
+        <InvoiceDocument
+            order={order}
+            logoSrc={logo.src}
+        />
     );
 }

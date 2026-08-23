@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { sendOrderConfirmedSideEffects } from "@/lib/order/onOrderConfirmed";
 
 export async function POST(req: NextRequest) {
     const body = await req.text();
@@ -35,12 +36,10 @@ export async function POST(req: NextRequest) {
 
     switch (event.type) {
         case "payment_intent.succeeded": {
-            console.log("Stripe webhook fired");
 
-            const paymentIntent =
-                event.data.object as Stripe.PaymentIntent;
+            const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
-            console.log("payment intend Id", paymentIntent.id);
+            let confirmedOrderId: string | null = null;
 
             await prisma.$transaction(async (tx) => {
                 const orderId = paymentIntent.metadata.orderId;
@@ -142,7 +141,16 @@ export async function POST(req: NextRequest) {
                 });
 
                 console.log("Items after delete:", itemsAfter);
+
+                confirmedOrderId = order.id;
             });
+
+            if (confirmedOrderId) {
+                void sendOrderConfirmedSideEffects(confirmedOrderId).catch((error) => {
+                    console.error("Failed to run post-order side effects:", error);
+                });
+            }
+
             break;
         }
 

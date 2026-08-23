@@ -10,6 +10,7 @@ import { dashboardResolver } from "./dashboard";
 import { customerResolver } from "./customer";
 import { reviewResolver } from "./review";
 import { analyticsResolver } from "./analytics";
+import { notificationResolvers } from "./notification";
 
 export const resolvers = {
     Query: {
@@ -23,6 +24,7 @@ export const resolvers = {
         ...customerResolver.Query,
         ...reviewResolver.Query,
         ...analyticsResolver.Query,
+        ...notificationResolvers.Query,
     },
 
     Mutation: {
@@ -35,6 +37,7 @@ export const resolvers = {
         ...paymentResolver.Mutation,
         ...reviewResolver.Mutation,
         ...couponResolvers.Mutation,
+        ...notificationResolvers.Mutation,
     },
     Product: {
         ...productResolvers.Product

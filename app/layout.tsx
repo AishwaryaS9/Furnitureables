@@ -10,6 +10,7 @@ import RazorpayProvider from "@/components/providers/RazorpayProvider";
 import CartLiveSync from "@/components/cart/CartLiveSync";
 import CartLogoutSync from "@/components/cart/CartLogoutSync";
 import SplashScreen from "@/components/common/SplashScreen";
+import ScrollToTop from "@/components/common/ScrollToTop";
 import { PromotionAuthSync } from "@/components/admin/coupons/PromotionAuthSync";
 
 const playfairDisplay = Playfair_Display({
@@ -106,6 +107,7 @@ export default function RootLayout({
           </a>
 
           <QueryProvider>
+            <ScrollToTop />
             <CartLogoutSync />
             <CartSync />
             <CartLiveSync />
