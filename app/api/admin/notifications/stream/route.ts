@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAdminUser } from "@/lib/auth/admin";
-import { subscribeToAdminNotifications, type AdminNotificationEvent } from "@/lib/notifications/events";
+import { subscribeToAdminNotifications } from "@/lib/notifications/events";
+import { AdminNotificationEvent } from "@/types/notification";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -34,7 +35,6 @@ export async function GET(request: NextRequest) {
                 try {
                     controller.enqueue(encoder.encode(": heartbeat\n\n"));
                 } catch {
-                    // Controller already closed; cleanup happens in `cancel`.
                 }
             }, HEARTBEAT_INTERVAL_MS);
         },
