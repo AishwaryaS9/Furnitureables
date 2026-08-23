@@ -615,3 +615,23 @@ export const ACTIVE_PROMOTION = gql`
     }
   }
 `;
+
+export const ADMIN_NOTIFICATIONS = gql`
+  query AdminNotifications($limit: Int) {
+    adminNotifications(limit: $limit) {
+      id
+      type
+      title
+      message
+      orderId
+      isRead
+      createdAt
+    }
+  }
+`;
+
+export const ADMIN_UNREAD_NOTIFICATION_COUNT = gql`
+  query AdminUnreadNotificationCount {
+    adminUnreadNotificationCount
+  }
+`;

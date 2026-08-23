@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, UserRound, Pencil, MoreHorizontal, Copy, TicketPercent } from "lucide-react";
+import { Sparkles, UserRound, Pencil, MoreHorizontal, Copy, TicketPercent, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
@@ -11,6 +11,7 @@ interface Props {
     coupons: Coupon[];
     loading: boolean;
     onEdit: (coupon: Coupon) => void;
+    onDeleteRequest: (coupon: Coupon) => void;
 }
 
 function money(value?: number | null) {
@@ -33,7 +34,7 @@ function status(coupon: Coupon) {
     return { label: "Active", className: "bg-primary/10 text-primary" };
 }
 
-export default function CouponTable({ coupons, loading, onEdit }: Props) {
+export default function CouponTable({ coupons, loading, onEdit, onDeleteRequest }: Props) {
     const handleCopyCode = async (code: string) => {
         try {
             await navigator.clipboard.writeText(code);
@@ -196,6 +197,14 @@ export default function CouponTable({ coupons, loading, onEdit }: Props) {
                                                     >
                                                         <Copy className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
                                                         <span>Copy Coupon Code</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => onDeleteRequest(coupon)}
+                                                        aria-label={`Delete coupon ${coupon.code}`}
+                                                        className="cursor-pointer gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg transition-colors text-destructive focus:bg-destructive/80 focus:text-destructive"
+                                                    >
+                                                        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                                                        <span>Delete Coupon</span>
                                                     </DropdownMenuItem>
                                                 </DropdownMenuGroup>
                                             </DropdownMenuContent>

@@ -243,3 +243,24 @@ export const ADMIN_UPDATE_COUPON = gql`
     }
   }
 `;
+
+export const ADMIN_DELETE_COUPON = gql`
+  mutation AdminDeleteCoupon($id: String!) {
+    adminDeleteCoupon(id: $id)
+  }
+`;
+
+export const ADMIN_MARK_NOTIFICATION_READ = gql`
+  mutation AdminMarkNotificationRead($id: String!) {
+    adminMarkNotificationRead(id: $id) {
+      id
+      isRead
+    }
+  }
+`;
+
+export const ADMIN_MARK_ALL_NOTIFICATIONS_READ = gql`
+  mutation AdminMarkAllNotificationsRead {
+    adminMarkAllNotificationsRead
+  }
+`;

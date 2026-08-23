@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import { Bell, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import NotificationBell from "@/components/admin/notifications/NotificationBell";
 import AdminSidebar from "./AdminSidebar";
 
 export default function AdminNavbar() {
@@ -40,16 +41,7 @@ export default function AdminNavbar() {
 
                 {/* Right side */}
                 <div className="flex items-center gap-3 sm:gap-4">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        aria-label="View notifications (3 unread)"
-                        className="relative h-10 w-10 p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-all duration-200"
-                    >
-                        <Bell className="h-5 w-5" aria-hidden="true" />
-                        <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-destructive ring-4 ring-card animate-pulse" />
-                    </Button>
+                    <NotificationBell />
 
                     <Separator orientation="vertical" className="h-6 bg-border/60 hidden sm:block" />
 

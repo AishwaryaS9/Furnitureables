@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { VerifyRazorpayPaymentInput } from "@/types/razorpay";
+import { sendOrderConfirmedSideEffects } from "@/lib/order/onOrderConfirmed";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -48,7 +49,7 @@ export const paymentResolver = {
                 throw new Error("Order not found.");
             }
 
-            // Already verified (avoid double-processing on retries)
+            // Already verified
             if (order.paymentStatus === "PAID") {
                 return prisma.order.findUnique({
                     where: {
@@ -85,7 +86,7 @@ export const paymentResolver = {
                 throw new Error("Payment verification failed.");
             }
 
-            return prisma.$transaction(async (tx) => {
+            const confirmedOrder = await prisma.$transaction(async (tx) => {
                 // Reduce stock now that payment is confirmed
                 for (const item of order.items) {
                     const updated = await tx.product.updateMany({
@@ -149,6 +150,12 @@ export const paymentResolver = {
                     },
                 });
             });
+
+            void sendOrderConfirmedSideEffects(confirmedOrder.id).catch((error) => {
+                console.error("Failed to run post-order side effects:", error);
+            });
+
+            return confirmedOrder;
         },
     },
 };

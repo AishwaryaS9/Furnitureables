@@ -280,5 +280,30 @@ export const couponResolvers = {
                 },
             });
         },
+
+        adminDeleteCoupon: async (_: unknown, { id }: { id: string }) => {
+            await assertAdmin();
+
+            const existing = await prisma.coupon.findUnique({
+                where: { id },
+                include: {
+                    _count: {
+                        select: { orders: true },
+                    },
+                },
+            });
+
+            if (!existing) throw new Error("Coupon not found.");
+
+            if (existing._count.orders > 0) {
+                throw new Error(
+                    "This coupon has already been used on customer orders and cannot be deleted. Deactivate it instead to stop future use."
+                );
+            }
+
+            const result = await prisma.coupon.deleteMany({ where: { id } });
+
+            return result.count > 0;
+        },
     },
 };
