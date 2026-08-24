@@ -1,4 +1,4 @@
-import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Ship, Hammer, TreePine, Award, ShieldCheck, Compass, TicketPercent } from "lucide-react";
+import { CreditCard, Truck, Landmark, LayoutDashboard, Package, Upload, ShoppingCart, Users, Star, BarChart3, Sparkles, Ship, Hammer, TreePine, Award, ShieldCheck, Compass, TicketPercent, Bell } from "lucide-react";
 import { PaymentMethod } from "@/generated/prisma";
 import { CustomerSort } from "@/types/customer";
 import { AboutProcessStep, AboutStat, AboutTestimonial, AboutValue } from "@/types/about";
@@ -83,6 +83,11 @@ export const menuItems = [
         title: "Analytics",
         href: "/admin/analytics",
         icon: BarChart3,
+    },
+    {
+        title: "Notifications",
+        href: "/admin/notifications",
+        icon: Bell,
     },
 ];
 

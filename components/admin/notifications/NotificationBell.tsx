@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, CheckCheck, Loader2, PackageCheck } from "lucide-react";
+import { ArrowRight, Bell, CheckCheck, Loader2, PackageCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
@@ -12,6 +12,7 @@ import { useAdminNotificationsStream } from "@/hooks/useAdminNotificationsStream
 import { AdminNotification } from "@/types/notification";
 
 const MAX_BADGE_COUNT = 5;
+const BELL_PREVIEW_COUNT = 5;
 
 function formatRelativeTime(iso: string) {
     try {
@@ -101,7 +102,7 @@ export default function NotificationBell() {
     useAdminNotificationsStream();
 
     const { data: unreadCount = 0 } = useAdminUnreadNotificationCount();
-    const { data: notifications = [], isLoading } = useAdminNotifications(20);
+    const { data: notifications = [], isLoading } = useAdminNotifications(BELL_PREVIEW_COUNT);
     const markOneRead = useMarkNotificationRead();
     const markAllRead = useMarkAllNotificationsRead();
 
@@ -193,6 +194,20 @@ export default function NotificationBell() {
                             />
                         ))}
                     </ul>
+                )}
+
+                {!isLoading && notifications.length > 0 && (
+                    <>
+                        <Separator className="bg-border/60" />
+                        <Link
+                            href="/admin/notifications"
+                            onClick={() => setOpen(false)}
+                            className="flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-primary hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
+                        >
+                            View more
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                        </Link>
+                    </>
                 )}
             </PopoverContent>
         </Popover>
