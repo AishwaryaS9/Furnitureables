@@ -19,3 +19,15 @@ export interface AdminNotificationEvent {
     isRead: boolean;
     createdAt: string;
 }
+
+export interface NotificationsTableProps {
+    notifications: AdminNotification[];
+    loading: boolean;
+    actionId: string | null;
+    onMarkRead: (id: string) => void;
+    onViewOrder: (orderId: string) => void;
+    currentPage?: number;
+    pageSize?: number;
+    totalNotifications?: number;
+    onPageChange?: (page: number) => void;
+}
