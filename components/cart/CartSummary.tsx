@@ -231,10 +231,11 @@ export default function CartSummary() {
             <Button
                 disabled={items.length === 0}
                 onClick={handleCheckout}
-                className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-xs uppercase tracking-widest rounded-xl shadow-xs transition-all cursor-pointer active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full h-auto min-h-12 py-3 px-4 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-[11px] sm:text-xs uppercase tracking-wide sm:tracking-widest rounded-xl shadow-xs transition-all cursor-pointer active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 whitespace-normal text-center"
             >
-                <span>{user ? "Proceed to Secure Checkout" : "Login to Checkout"}</span>
-                <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                <span className="sm:hidden">{user ? "Proceed to Checkout" : "Login to Checkout"}</span>
+                <span className="hidden sm:inline">{user ? "Proceed to Secure Checkout" : "Login to Checkout"}</span>
+                <ArrowRight className="w-4 h-4 ml-2 shrink-0" aria-hidden="true" />
             </Button>
 
             {/* Security Check */}
