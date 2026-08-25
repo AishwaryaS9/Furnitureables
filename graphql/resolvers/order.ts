@@ -123,7 +123,6 @@ export const orderResolver = {
                     price: item.price,
                 })),
             }));
-            // console.log("Ordre iremmss", JSON.stringify(orderItem, null, 2))
             return orderItem
         },
     },
@@ -593,8 +592,16 @@ export const orderResolver = {
             if (!existingOrder) {
                 throw new Error("Order not found.");
             }
+            const shouldMarkCodAsPaid =
+                status === "DELIVERED" &&
+                existingOrder.paymentMethod === "COD" &&
+                existingOrder.paymentStatus === "PENDING";
 
-            // Restore stock if an order is being cancelled from a non-cancelled state
+            const updateData = shouldMarkCodAsPaid
+                ? { status, paymentStatus: "PAID" as const }
+                : { status };
+
+            // Restore stock if order is being cancelled
             if (
                 status === "CANCELLED" &&
                 existingOrder.status !== "CANCELLED"
@@ -617,13 +624,13 @@ export const orderResolver = {
 
                     await tx.order.update({
                         where: { id },
-                        data: { status },
+                        data: updateData,
                     });
                 });
             } else {
                 await prisma.order.update({
                     where: { id },
-                    data: { status },
+                    data: updateData,
                 });
             }
 
