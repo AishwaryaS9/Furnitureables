@@ -20,7 +20,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 **Admin Dashboard**
 
 - Product management with CSV bulk upload/export and AI-generated product descriptions
-- Order management with status updates and search
+- Order management with status updates and search (for COD orders, payment status automatically moves from `PENDING` to `PAID` once the order is marked `DELIVERED`; prepaid Stripe/Razorpay orders are `PAID` from the moment the order is placed)
 - Coupon management, including deletion (coupons already used on an order are protected — deactivate instead)
 - Real-time order notifications in the admin header (Server-Sent Events), with read/unread state
 - Customer management
@@ -78,6 +78,15 @@ Defined in `prisma/schema.prisma`, the core models include:
 `User`, `Product`, `ProductMedia`, `Cart`, `CartItem`, `Address`, `Order`, `OrderItem`, `Wishlist`, `Review`, `Coupon`, `AdminNotification`
 
 with supporting enums for media type, order status, payment status/method, review status, and discount type.
+
+## Order & Payment Status Logic
+
+`Order` tracks `status` (`PENDING`, `CONFIRMED`, `SHIPPED`, `DELIVERED`, `CANCELLED`) and `paymentStatus` (`PENDING`, `PAID`, ...) independently, since they don't always change together.
+
+- **Stripe / Razorpay (prepaid):** `paymentStatus` is set to `PAID` at order creation, since payment is captured before the order is placed. `status` starts at `CONFIRMED` and is advanced by the admin through `SHIPPED` / `DELIVERED` / `CANCELLED` without affecting `paymentStatus`.
+- **Cash on Delivery (COD):** `paymentStatus` starts at `PENDING`, since no payment has been collected yet. It stays `PENDING` through `CONFIRMED` and `SHIPPED`. When the admin marks the order `DELIVERED`, `paymentStatus` is automatically updated to `PAID` in the same update, reflecting that cash is collected at the point of delivery. If a COD order is `CANCELLED` before delivery, `paymentStatus` remains `PENDING` (no payment was ever collected).
+
+This logic lives in `adminUpdateOrderStatus` in `graphql/resolvers/order.ts`.
 
 ## Getting Started
 
