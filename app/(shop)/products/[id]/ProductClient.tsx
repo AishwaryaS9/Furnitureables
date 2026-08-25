@@ -3,11 +3,13 @@
 import { useState, useRef, MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Truck, ShieldCheck, Minus, Plus, Maximize2, X, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Truck, ShieldCheck, Minus, Plus, Maximize2, X, AlertCircle, ShoppingBag } from "lucide-react";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import ProductReviews from "@/components/product/ProductReviews";
 import { Product } from "@/types/product";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import { useCartStore } from "@/store/cart";
 import WishlistButton from "@/components/wishlist/WishlistButton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
@@ -16,7 +18,11 @@ import { ProductReviews as ProductReviewsData } from "@/types/review";
 
 export default function ProductClient({ product, reviews }: { product: Product; reviews: ProductReviewsData }) {
     const addToCart = useAddToCart();
+    const router = useRouter();
     const [quantity, setQuantity] = useState(1);
+    const isInCart = useCartStore((s) =>
+        s.items.some((item) => item.id === product.id)
+    );
 
     // Modal & Zoom State
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +47,10 @@ export default function ProductClient({ product, reviews }: { product: Product; 
     );
 
     const handleAddToCart = () => {
+        if (isInCart) {
+            router.push("/cart");
+            return;
+        }
         addToCart(product, quantity);
     };
 
@@ -318,13 +328,22 @@ export default function ProductClient({ product, reviews }: { product: Product; 
                                         </Button>
                                     </div>
 
-                                    {/* Add to Bag Button */}
+                                    {/* Add to Bag / Go to Cart Button */}
                                     <Button
                                         disabled={isOutOfStock}
                                         onClick={handleAddToCart}
-                                        className="flex-1 h-11 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-xl text-xs transition-all shadow-xs cursor-pointer disabled:cursor-not-allowed"
+                                        className="flex-1 h-11 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-xl text-xs transition-all shadow-xs cursor-pointer disabled:cursor-not-allowed gap-1.5"
                                     >
-                                        {isOutOfStock ? "Out of Stock" : "Add to Bag"}
+                                        {isOutOfStock ? (
+                                            "Out of Stock"
+                                        ) : isInCart ? (
+                                            <>
+                                                <ShoppingBag className="w-3.5 h-3.5" aria-hidden="true" />
+                                                Go to Cart
+                                            </>
+                                        ) : (
+                                            "Add to Bag"
+                                        )}
                                     </Button>
 
                                     {/* Wishlist Toggle Button */}
