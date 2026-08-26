@@ -76,6 +76,16 @@ export default function Navbar() {
 
   const isActive = (href: string) => pathname === href;
 
+  const handleCopyPromoCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast.success(`Code "${code}" copied!`);
+    } catch (error) {
+      console.error("Failed to copy promo code:", error);
+      toast.error("Couldn't copy the code. Please try again.");
+    }
+  };
+
   return (
     <>
       <script
@@ -105,7 +115,6 @@ export default function Navbar() {
       />
 
       <div className="w-full bg-background transition-colors">
-        {/* Skip to Main Content Link (WCAG 2.2 AA) */}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-1 focus:ring-ring"
@@ -113,16 +122,17 @@ export default function Navbar() {
           Skip to main content
         </a>
 
-        {/* Dynamic Promotional Bar — managed from Admin → Coupons */}
+        {/* Dynamic Promotional Bar */}
         {activePromotion?.promotionText && (
-          <aside
-            role="note"
-            aria-label={activePromotion.campaignName ? `${activePromotion.campaignName} promotion` : "Current promotion"}
-            className="w-full bg-primary text-primary-foreground text-[11px] sm:text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2"
+          <button
+            type="button"
+            onClick={() => handleCopyPromoCode(activePromotion.code)}
+            aria-label={`${activePromotion.promotionText}. Copy code ${activePromotion.code} to clipboard`}
+            className="w-full bg-primary text-primary-foreground text-[11px] sm:text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             <span>{activePromotion.promotionText}</span>
-          </aside>
+          </button>
         )}
 
         {/* Main Header Container */}
