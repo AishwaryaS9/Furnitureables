@@ -15,6 +15,7 @@ import EmptyAddress from "./EmptyAddress";
 import { toast } from "sonner";
 import AddressCardSkeleton from "./AddressCardSkeleton";
 import { cn } from "@/lib/utils";
+import { MAX_ADDRESSES } from "@/lib/constants/address";
 
 export default function AddressList() {
   const { user } = useUser();
@@ -30,7 +31,14 @@ export default function AddressList() {
   // Delete Dialog State
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const addressCount = addresses?.length ?? 0;
+  const isMaxReached = addressCount >= MAX_ADDRESSES;
+
   function handleAdd() {
+    if (isMaxReached) {
+      toast.error(`You can only save a maximum of ${MAX_ADDRESSES} addresses.`);
+      return;
+    }
     setEditingAddress(undefined);
     setDialogOpen(true);
   }
@@ -86,8 +94,6 @@ export default function AddressList() {
     );
   }
 
-  const addressCount = addresses?.length ?? 0;
-
   return (
     <section aria-labelledby="address-list-heading" className="space-y-6">
       {/* Section Header Toolbar */}
@@ -101,7 +107,7 @@ export default function AddressList() {
           </h2>
           {addressCount > 0 && (
             <span className="text-[11px] font-mono font-medium text-muted-foreground bg-secondary px-2.5 py-0.5 rounded-full border border-border/50 shrink-0">
-              {addressCount} {addressCount === 1 ? "Location" : "Locations"}
+              {addressCount}/{MAX_ADDRESSES} {addressCount === 1 ? "Location" : "Locations"}
             </span>
           )}
         </div>
@@ -109,9 +115,11 @@ export default function AddressList() {
         <Button
           type="button"
           onClick={handleAdd}
+          disabled={isMaxReached}
           className={cn(
             "h-10 px-4 text-xs font-semibold tracking-wide uppercase rounded-xl transition-all shadow-xs cursor-pointer w-fit shrink-0 self-start sm:self-auto",
-            "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring"
+            "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring",
+            "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
           <Plus className="mr-1.5 h-3.5 w-3.5 stroke-[2.5]" aria-hidden="true" />

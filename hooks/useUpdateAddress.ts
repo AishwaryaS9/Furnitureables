@@ -4,13 +4,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { graphqlClient } from "@/lib/graphql/client";
 import { UPDATE_ADDRESS } from "@/lib/graphql/mutations";
 import {
-    AddressInput,
+    UpdateAddressInput,
     UpdateAddressResponse,
 } from "@/types/address";
 
 interface Variables {
     id: string;
-    input: AddressInput;
+    input: UpdateAddressInput;
 }
 
 export function useUpdateAddress() {

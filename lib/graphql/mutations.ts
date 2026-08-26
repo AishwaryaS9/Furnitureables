@@ -46,7 +46,7 @@ export const CREATE_ADDRESS = gql`
 export const UPDATE_ADDRESS = gql`
   mutation UpdateAddress(
     $id: String!
-    $input: AddressInput!
+    $input: UpdateAddressInput!
   ) {
     updateAddress(
       id: $id

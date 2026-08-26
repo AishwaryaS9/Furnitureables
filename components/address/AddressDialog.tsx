@@ -41,10 +41,15 @@ export default function AddressDialog({ open, onOpenChange, address, onSuccess }
     } catch (err) {
       console.error(err);
 
+      const serverMessage = (
+        err as { response?: { errors?: { message?: string }[] } }
+      )?.response?.errors?.[0]?.message;
+
       toast.error(
-        address
+        serverMessage ??
+        (address
           ? "Failed to update address. Please try again."
-          : "Failed to add address. Please try again."
+          : "Failed to add address. Please try again.")
       );
     }
   }

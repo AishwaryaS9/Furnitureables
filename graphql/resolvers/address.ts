@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { AddressInput } from "@/types/address";
+import { MAX_ADDRESSES } from "@/lib/constants/address";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -56,6 +57,12 @@ export const addressResolver = {
                         userId: user.id,
                     },
                 });
+
+                if (addressCount >= MAX_ADDRESSES) {
+                    throw new Error(
+                        `You can only save a maximum of ${MAX_ADDRESSES} addresses.`
+                    );
+                }
 
                 const shouldBeDefault =
                     input.isDefault || addressCount === 0;

@@ -7,14 +7,13 @@ import { Button } from "@/components/ui/button";
 import AddressCard from "@/components/address/AddressCard";
 import AddressDialog from "@/components/address/AddressDialog";
 import { toast } from "sonner";
+import { MAX_ADDRESSES } from "@/lib/constants/address";
 
 interface AddressSelectorProps {
     addresses: Address[];
     selectedAddressId?: string;
     onSelect: (id: string) => void;
 }
-
-const MAX_ADDRESSES = 3;
 
 export default function AddressSelector({
     addresses,
