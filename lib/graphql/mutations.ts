@@ -149,7 +149,25 @@ export const CREATE_STRIPE_PAYMENT_INTENT = gql`
   ) {
     createStripePaymentIntent(input: $input) {
       orderId
+      paymentIntentId
       clientSecret
+    }
+  }
+`;
+
+export const CONFIRM_STRIPE_PAYMENT = gql`
+  mutation ConfirmStripePayment(
+    $orderId: String!
+    $paymentIntentId: String!
+  ) {
+    confirmStripePayment(
+      orderId: $orderId
+      paymentIntentId: $paymentIntentId
+    ) {
+      id
+      orderNumber
+      status
+      paymentStatus
     }
   }
 `;

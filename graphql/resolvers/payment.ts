@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { VerifyRazorpayPaymentInput } from "@/types/razorpay";
 import { sendOrderConfirmedSideEffects } from "@/lib/order/onOrderConfirmed";
+import { confirmStripeOrderPayment } from "@/lib/order/confirmStripeOrder";
+import { getStripe } from "@/lib/stripe";
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -156,6 +158,79 @@ export const paymentResolver = {
             });
 
             return confirmedOrder;
+        },
+
+        confirmStripePayment: async (
+            _: unknown,
+            {
+                orderId,
+                paymentIntentId,
+            }: {
+                orderId: string;
+                paymentIntentId: string;
+            }
+        ) => {
+            const user = await getCurrentUser();
+
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: orderId,
+                    userId: user.id,
+                },
+                include: {
+                    coupon: true,
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
+            });
+
+            if (!order) {
+                throw new Error("Order not found.");
+            }
+
+            if (order.paymentStatus === "PAID") {
+                return order;
+            }
+
+            if (order.stripePaymentIntentId !== paymentIntentId) {
+                throw new Error("Order mismatch.");
+            }
+
+            const stripeClient = getStripe();
+            const paymentIntent = await stripeClient.paymentIntents.retrieve(
+                paymentIntentId
+            );
+
+            if (paymentIntent.status !== "succeeded") {
+                return order;
+            }
+
+            const result = await confirmStripeOrderPayment(orderId);
+
+            if (!result) {
+                throw new Error("Order not found.");
+            }
+
+            if (result.justConfirmed) {
+                void sendOrderConfirmedSideEffects(result.order.id).catch((error) => {
+                    console.error("Failed to run post-order side effects:", error);
+                });
+            }
+
+            return prisma.order.findUnique({
+                where: { id: result.order.id },
+                include: {
+                    coupon: true,
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
+            });
         },
     },
 };

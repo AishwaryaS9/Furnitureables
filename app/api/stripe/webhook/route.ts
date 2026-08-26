@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
-import { prisma } from "@/lib/prisma";
 import { sendOrderConfirmedSideEffects } from "@/lib/order/onOrderConfirmed";
+import { confirmStripeOrderPayment } from "@/lib/order/confirmStripeOrder";
 
 export async function POST(req: NextRequest) {
     const body = await req.text();
@@ -39,114 +39,17 @@ export async function POST(req: NextRequest) {
 
             const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
-            let confirmedOrderId: string | null = null;
+            const orderId = paymentIntent.metadata.orderId;
 
-            await prisma.$transaction(async (tx) => {
-                const orderId = paymentIntent.metadata.orderId;
+            if (!orderId) {
+                console.error("Missing orderId in Stripe metadata");
+                break;
+            }
 
-                if (!orderId) {
-                    throw new Error("Missing orderId in Stripe metadata");
-                }
+            const result = await confirmStripeOrderPayment(orderId);
 
-                const order = await tx.order.findUnique({
-                    where: {
-                        id: orderId,
-                    },
-                    include: {
-                        items: true,
-                        coupon: true,
-                    },
-                });
-
-                if (!order) return;
-
-                if (order.paymentStatus === "PAID") {
-                    return;
-                }
-
-                // Reduce stock
-                for (const item of order.items) {
-                    const updated = await tx.product.updateMany({
-                        where: {
-                            id: item.productId,
-                            stock: {
-                                gte: item.quantity,
-                            },
-                        },
-                        data: {
-                            stock: {
-                                decrement: item.quantity,
-                            },
-                        },
-                    });
-
-                    if (updated.count === 0) {
-                        throw new Error(`${item.title} is out of stock`);
-                    }
-                }
-
-                // Increment coupon usage
-                if (order.couponId) {
-                    await tx.coupon.update({
-                        where: {
-                            id: order.couponId,
-                        },
-                        data: {
-                            usedCount: {
-                                increment: 1,
-                            },
-                        },
-                    });
-                }
-
-                // Update order
-                await tx.order.update({
-                    where: {
-                        id: order.id,
-                    },
-                    data: {
-                        paymentStatus: "PAID",
-                        status: "CONFIRMED",
-                    },
-                });
-
-                const itemsBefore = await tx.cartItem.findMany({
-                    where: {
-                        cart: {
-                            userId: order.userId,
-                        },
-                    },
-                });
-
-                console.log("Items before delete:", itemsBefore);
-
-                // Clear cart
-
-                const deleted = await tx.cartItem.deleteMany({
-                    where: {
-                        cart: {
-                            userId: order.userId,
-                        },
-                    },
-                });
-
-                console.log("Deleted count:", deleted.count);
-
-                const itemsAfter = await tx.cartItem.findMany({
-                    where: {
-                        cart: {
-                            userId: order.userId,
-                        },
-                    },
-                });
-
-                console.log("Items after delete:", itemsAfter);
-
-                confirmedOrderId = order.id;
-            });
-
-            if (confirmedOrderId) {
-                void sendOrderConfirmedSideEffects(confirmedOrderId).catch((error) => {
+            if (result?.justConfirmed) {
+                void sendOrderConfirmedSideEffects(result.order.id).catch((error) => {
                     console.error("Failed to run post-order side effects:", error);
                 });
             }

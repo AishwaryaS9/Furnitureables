@@ -310,6 +310,7 @@ export const typeDefs = /* GraphQL */ `
 
   type StripePaymentIntentResponse {
     orderId: String!
+    paymentIntentId: String!
     clientSecret: String
   }
 
@@ -832,6 +833,11 @@ input PlaceOrderInput {
     createStripePaymentIntent(
       input: PlaceOrderInput!
     ): StripePaymentIntentResponse!
+
+    confirmStripePayment(
+      orderId: String!
+      paymentIntentId: String!
+    ): Order!
 
     adminUpdateOrderStatus(
       id: String!
