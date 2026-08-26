@@ -109,7 +109,7 @@ export default function Shop() {
                     </div>
 
                     <div className="pt-4">
-                        <ProductGrid />
+                        <ProductGrid ignoreGlobalFilters />
                     </div>
 
                     <div className="mt-16 flex justify-center">
