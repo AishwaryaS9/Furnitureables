@@ -153,6 +153,7 @@ export const GET_ADDRESSES = gql`
 
       addressLine1
       addressLine2
+      landmark
 
       city
       state
