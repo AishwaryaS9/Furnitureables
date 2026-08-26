@@ -6,8 +6,12 @@ import { AlertCircle, Sparkles, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function ProductGrid() {
-  const { data, isLoading, isError } = useProducts();
+interface ProductGridProps {
+  ignoreGlobalFilters?: boolean;
+}
+
+export default function ProductGrid({ ignoreGlobalFilters = false }: ProductGridProps) {
+  const { data, isLoading, isError } = useProducts({ ignoreGlobalFilters });
 
   const items = data?.items ?? [];
 

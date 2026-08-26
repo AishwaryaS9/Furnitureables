@@ -11,14 +11,23 @@ interface ProductsResponse {
   };
 }
 
-export const useProducts = () => {
-  const filters = useFilterStore((state) => state.filters);
+interface UseProductsOptions {
+  ignoreGlobalFilters?: boolean;
+  page?: number;
+}
+
+export const useProducts = (options: UseProductsOptions = {}) => {
+  const { ignoreGlobalFilters = false, page: pageOverride } = options;
+
+  const storeFilters = useFilterStore((state) => state.filters);
+  const storePage = useFilterStore((state) => state.page);
+
+  const filters = ignoreGlobalFilters ? {} : storeFilters;
+  const page = pageOverride ?? (ignoreGlobalFilters ? 1 : storePage);
 
   const cleanFilters = Object.fromEntries(
     Object.entries(filters).filter(([_, value]) => value !== "" && value !== undefined)
   );
-
-  const page = useFilterStore((state) => state.page);
 
   return useQuery({
     queryKey: ["products", cleanFilters, page],

@@ -229,6 +229,7 @@ export default function Navbar() {
                           key={cat.type}
                           href={`/products?category=${encodeURIComponent(cat.type)}`}
                           role="menuitem"
+                          onClick={() => setIsDropdownOpen(false)}
                           className="block rounded-xl px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary hover:text-primary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
                         >
                           {formatCategoryLabel(cat.type)}
@@ -239,6 +240,7 @@ export default function Navbar() {
                     <Link
                       href="/products"
                       role="menuitem"
+                      onClick={() => setIsDropdownOpen(false)}
                       className="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-primary hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:bg-secondary"
                     >
                       <span>Browse All Collections</span>
