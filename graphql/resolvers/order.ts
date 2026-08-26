@@ -256,6 +256,7 @@ export const orderResolver = {
 
             return {
                 orderId: order.id,
+                paymentIntentId: paymentIntent.id,
                 clientSecret: paymentIntent.client_secret,
             };
         },

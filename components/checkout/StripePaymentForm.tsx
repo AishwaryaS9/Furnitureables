@@ -11,6 +11,7 @@ import { useCartStore } from "@/store/cart";
 import { useUser } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateStripePaymentIntent } from "@/hooks/useCreateStripePaymentIntent";
+import { useConfirmStripePayment } from "@/hooks/useConfirmStripePayment";
 import { Address } from "@/types/address";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -34,6 +35,7 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
         const { user } = useUser();
 
         const createStripePaymentIntent = useCreateStripePaymentIntent();
+        const confirmStripePayment = useConfirmStripePayment();
 
         const { selectedAddressId, clearCheckout } = useCheckoutStore();
         const clearCart = useCartStore((s) => s.clearCart);
@@ -85,6 +87,18 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                         confirmation.error.message ?? "Payment failed."
                     );
                     return;
+                }
+
+                try {
+                    await confirmStripePayment.mutateAsync({
+                        orderId: payment.orderId,
+                        paymentIntentId: payment.paymentIntentId,
+                    });
+                } catch (error) {
+                    console.error(
+                        "Failed to confirm order immediately, webhook will finalize it:",
+                        error
+                    );
                 }
 
                 toast.success("Payment successful!");
