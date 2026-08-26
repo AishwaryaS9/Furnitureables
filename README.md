@@ -10,7 +10,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 
 - Product catalog with filtering, search, and category pills
 - Product detail pages with reviews and related products
-- Cart and wishlist with sync across sessions
+- Cart and wishlist with sync across sessions, including a "Quick Add" button on product cards that switches to "Go to Cart" once an item has been added
 - Multi-address checkout with Stripe and Razorpay payment support
 - Order history, order details, and downloadable PDF invoices, plus an emailed invoice (PDF attached) when an order is confirmed
 - AI-powered smart search and chat (Google Gemini)
@@ -83,10 +83,11 @@ with supporting enums for media type, order status, payment status/method, revie
 
 `Order` tracks `status` (`PENDING`, `CONFIRMED`, `SHIPPED`, `DELIVERED`, `CANCELLED`) and `paymentStatus` (`PENDING`, `PAID`, ...) independently, since they don't always change together.
 
-- **Stripe / Razorpay (prepaid):** `paymentStatus` is set to `PAID` at order creation, since payment is captured before the order is placed. `status` starts at `CONFIRMED` and is advanced by the admin through `SHIPPED` / `DELIVERED` / `CANCELLED` without affecting `paymentStatus`.
-- **Cash on Delivery (COD):** `paymentStatus` starts at `PENDING`, since no payment has been collected yet. It stays `PENDING` through `CONFIRMED` and `SHIPPED`. When the admin marks the order `DELIVERED`, `paymentStatus` is automatically updated to `PAID` in the same update, reflecting that cash is collected at the point of delivery. If a COD order is `CANCELLED` before delivery, `paymentStatus` remains `PENDING` (no payment was ever collected).
+- **Cash on Delivery (COD):** the order is created as `CONFIRMED` / `PENDING` payment in a single request (`placeOrder`), since there's nothing further to confirm. `paymentStatus` stays `PENDING` through `CONFIRMED` and `SHIPPED`. When the admin marks the order `DELIVERED`, `paymentStatus` is automatically updated to `PAID` in the same update, reflecting that cash is collected at the point of delivery. If a COD order is `CANCELLED` before delivery, `paymentStatus` remains `PENDING` (no payment was ever collected).
+- **Razorpay (prepaid):** the order is created as `PENDING` while the Razorpay order/payment is opened client-side, then immediately confirmed to `CONFIRMED` / `PAID` in the same request once the client calls `verifyRazorpayPayment` with the signed payment details.
+- **Stripe (prepaid):** the order is created as `PENDING` alongside the PaymentIntent. Once `stripe.confirmCardPayment` succeeds client-side, the client calls the `confirmStripePayment` mutation, which re-verifies the PaymentIntent directly against Stripe's API and, if it's genuinely `succeeded`, updates the order to `CONFIRMED` / `PAID` in the same request — so the order page reflects the correct status immediately, without needing a refresh. The `/api/stripe/webhook` route runs the same confirmation logic (`lib/order/confirmStripeOrder.ts`) as a fallback, in case the client-side call never completes (e.g. the tab is closed right after payment). Both paths are idempotent, so whichever one confirms the order first is the only one that triggers the admin notification and confirmation email.
 
-This logic lives in `adminUpdateOrderStatus` in `graphql/resolvers/order.ts`.
+Once an order is `CONFIRMED`, the admin is notified in real time and a confirmation/invoice email is sent (`lib/order/onOrderConfirmed.ts`). Post-confirmation status changes (`SHIPPED` / `DELIVERED` / `CANCELLED`) are made by the admin and live in `adminUpdateOrderStatus` in `graphql/resolvers/order.ts`.
 
 ## Getting Started
 
