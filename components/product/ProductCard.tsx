@@ -2,16 +2,23 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowUpRight } from "lucide-react";
+import { Plus, ArrowUpRight, Check } from "lucide-react";
 import { Product } from "@/types/product";
 import { getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import { useCartStore } from "@/store/cart";
 import WishlistButton from "../wishlist/WishlistButton";
 import { formatCurrency } from "@/lib/order";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const router = useRouter();
   const addToCart = useAddToCart();
+
+  const isInCart = useCartStore((s) =>
+    s.items.some((item) => item.id === product.id)
+  );
 
   const isNewProduct = (() => {
     const rawDate = product.createdAt;
@@ -35,6 +42,12 @@ export default function ProductCard({ product }: { product: Product }) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (isInCart) {
+      router.push("/cart");
+      return;
+    }
+
     addToCart(product);
   };
 
@@ -130,11 +143,24 @@ export default function ProductCard({ product }: { product: Product }) {
               type="button"
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              aria-label={`Quick add ${product.title} to cart`}
+              aria-label={
+                isInCart
+                  ? `Go to cart, ${product.title} added`
+                  : `Quick add ${product.title} to cart`
+              }
               className="w-full justify-between rounded-xl bg-primary/95 text-xs font-medium tracking-wide text-primary-foreground backdrop-blur-md hover:bg-primary shadow-xs disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <span>Quick Add</span>
-              <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+              {isInCart ? (
+                <>
+                  <span>Go to Cart</span>
+                  <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                </>
+              ) : (
+                <>
+                  <span>Quick Add</span>
+                  <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                </>
+              )}
             </Button>
           </div>
         )}
