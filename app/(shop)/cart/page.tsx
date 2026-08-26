@@ -31,7 +31,6 @@ export default function CartPage() {
             <p
               role="status"
               aria-live="polite"
-              // className="text-[10px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest truncate"
               className="mt-3 max-w-2xl text-xs sm:text-sm text-muted-foreground font-light leading-relaxed"
             >
               Review your items ({totalItemCount} {totalItemCount === 1 ? 'item' : 'items'})

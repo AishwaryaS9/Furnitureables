@@ -1,10 +1,11 @@
 "use client";
 
+import { useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowUpRight, Check } from "lucide-react";
+import { Plus, ArrowUpRight, Check, Loader2 } from "lucide-react";
 import { Product } from "@/types/product";
 import { getProductThumbnail } from "@/lib/utils";
 import { useAddToCart } from "@/hooks/useAddToCart";
@@ -15,6 +16,7 @@ import { formatCurrency } from "@/lib/order";
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
   const addToCart = useAddToCart();
+  const [isNavigating, startTransition] = useTransition();
 
   const isInCart = useCartStore((s) =>
     s.items.some((item) => item.id === product.id)
@@ -54,6 +56,17 @@ export default function ProductCard({ product }: { product: Product }) {
   const thumbnailUrl = getProductThumbnail(product);
   const productUrl = `/products/${product.id}`;
 
+  const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+      return;
+    }
+
+    e.preventDefault();
+    startTransition(() => {
+      router.push(productUrl);
+    });
+  };
+
   return (
     <article
       itemScope
@@ -61,7 +74,20 @@ export default function ProductCard({ product }: { product: Product }) {
       aria-labelledby={`product-title-${product.id}`}
       className="group relative flex flex-col rounded-2xl border border-border/60 bg-card/50 p-3 backdrop-blur-xs hover:border-border"
     >
-      {/* Hidden Structured Data for SEO */}
+      {isNavigating && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-background/40 backdrop-blur-sm"
+        >
+          <Loader2
+            className="h-6 w-6 animate-spin text-primary"
+            aria-hidden="true"
+          />
+          <span className="sr-only">Loading {product.title}…</span>
+        </div>
+      )}
+
       <meta itemProp="name" content={product.title} />
       {thumbnailUrl && <meta itemProp="image" content={thumbnailUrl} />}
       {product.material && <meta itemProp="material" content={product.material} />}
@@ -90,6 +116,7 @@ export default function ProductCard({ product }: { product: Product }) {
           href={productUrl}
           tabIndex={-1}
           aria-hidden="true"
+          onClick={handleNavigate}
           className="block h-full w-full focus:outline-none"
         >
           {thumbnailUrl ? (
@@ -136,7 +163,7 @@ export default function ProductCard({ product }: { product: Product }) {
           />
         </div>
 
-        {/* Quick Add Bar — Accessible hover & focus-within */}
+        {/* Quick Add Bar */}
         {product.stock > 0 && (
           <div className="absolute inset-x-3 bottom-3 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus-within:opacity-100">
             <Button
@@ -182,6 +209,7 @@ export default function ProductCard({ product }: { product: Product }) {
             >
               <Link
                 href={productUrl}
+                onClick={handleNavigate}
                 className="hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-xs"
               >
                 {product.title}
@@ -189,6 +217,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </h3>
             <Link
               href={productUrl}
+              onClick={handleNavigate}
               aria-label={`View details for ${product.title}`}
               className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-xs"
             >
