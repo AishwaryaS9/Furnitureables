@@ -31,6 +31,7 @@ export const GET_PRODUCT_CATEGORIES = gql`
     productCategories(limit: $limit) {
       type
       count
+      image
     }
   }
 `;

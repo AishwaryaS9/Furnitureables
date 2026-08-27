@@ -124,11 +124,42 @@ export const productResolvers = {
                 take: limit ?? 5,
             });
 
+            const types = grouped.filter((g) => !!g.type).map((g) => g.type);
+
+            const thumbnails = await Promise.all(
+                types.map((type) =>
+                    prisma.product.findFirst({
+                        where: {
+                            type,
+                            media: {
+                                some: { type: "IMAGE" },
+                            },
+                        },
+                        orderBy: { createdAt: "desc" },
+                        include: {
+                            media: {
+                                where: { type: "IMAGE" },
+                                orderBy: { sortOrder: "asc" },
+                                take: 1,
+                            },
+                        },
+                    })
+                )
+            );
+
+            const imageByType = new Map(
+                types.map((type, index) => [
+                    type,
+                    thumbnails[index]?.media[0]?.url ?? null,
+                ])
+            );
+
             return grouped
                 .filter((g) => !!g.type)
                 .map((g) => ({
                     type: g.type,
                     count: g._count.type,
+                    image: imageByType.get(g.type) ?? null,
                 }));
         },
 

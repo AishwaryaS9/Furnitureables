@@ -51,6 +51,7 @@ export const typeDefs = /* GraphQL */ `
   type ProductCategory {
     type: String!
     count: Int!
+    image: String
   }
 
   type Product {

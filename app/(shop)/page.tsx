@@ -1,9 +1,11 @@
 "use client";
 
 import ProductGrid from "@/components/product/ProductGrid";
+import ShopByCategory from "@/components/product/ShopByCategory";
+import DesignedForYou from "@/components/layout/DesignedForYou";
 import Image from "next/image";
-import heroFurniture from "@/public/images/hero-sofa.webp";
 import Link from "next/link";
+import heroFurniture from "@/public/images/hero-sofa.webp";
 
 export default function Shop() {
     return (
@@ -69,9 +71,7 @@ export default function Shop() {
                     </div>
                 </div>
 
-
                 {/* Floating Card */}
-
                 <div className="absolute right-4 lg:right-10 bottom-6 lg:bottom-12 hidden md:block">
                     <div className="rounded-3xl border border-primary-foreground/15 bg-primary-foreground/10 backdrop-blur-xl p-6 w-60 lg:w-72 shadow-2xl">
                         <p className="text-xs uppercase tracking-[0.3em] text-primary-foreground/60">
@@ -96,9 +96,10 @@ export default function Shop() {
                 </div>
             </section>
 
+            <ShopByCategory />
+
             <section className="py-14 md:py-20 px-5 sm:px-6 lg:px-10">
                 <div className="max-w-360 mx-auto space-y-12">
-
                     <div className="text-center space-y-3 max-w-2xl mx-auto">
                         <h2 className="text-3xl sm:text-4xl font-normal tracking-tight font-serif text-foreground">
                             Explore Our Collection
@@ -122,6 +123,8 @@ export default function Shop() {
                     </div>
                 </div>
             </section>
+
+            <DesignedForYou />
         </main>
     );
 }
