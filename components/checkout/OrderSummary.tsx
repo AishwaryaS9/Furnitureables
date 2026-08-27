@@ -105,7 +105,7 @@ export default function OrderSummary({
                                     >
                                         <div className="relative h-12 w-12 shrink-0 rounded-lg overflow-hidden bg-secondary/50 border border-border/40">
                                             <Image
-                                                src={item.product.media?.[0]?.url ?? "/images/placeholder.jpg"}
+                                                src={item.product.media?.[0]?.url ?? "/images/placeholder.webp"}
                                                 alt={item.product.title}
                                                 fill
                                                 sizes="48px"

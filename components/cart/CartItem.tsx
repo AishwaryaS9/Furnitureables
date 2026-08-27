@@ -43,7 +43,7 @@ export default function CartItem({ item }: CartItemProps) {
         className="relative w-16 h-20 sm:w-24 sm:h-30 rounded-xl overflow-hidden bg-muted border border-border shrink-0 block focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-foreground"
       >
         <Image
-          src={item.image || "/images/placeholder.jpg"}
+          src={item.image || "/images/placeholder.webp"}
           alt={item.title}
           fill
           sizes="112px"

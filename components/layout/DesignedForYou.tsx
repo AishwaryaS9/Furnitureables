@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import designedForYou from "@/public/images/designed-for-you.png";
+import designedForYou from "@/public/images/designed-for-you.webp";
 import { ArrowUpRight } from "lucide-react";
 
 export default function DesignedForYou() {

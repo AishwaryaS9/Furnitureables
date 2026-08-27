@@ -81,7 +81,7 @@ export default function ShopByCategory() {
                                         className="group relative w-full h-full overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                     >
                                         <Image
-                                            src={cat.image || "/images/placeholder.jpg"}
+                                            src={cat.image || "/images/placeholder.webp"}
                                             alt={`${formattedLabel} interior furniture collection showcase`}
                                             fill
                                             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 33vw, 50vw"

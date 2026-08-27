@@ -36,7 +36,7 @@ export const metadata: Metadata = {
       "Sustainably engineered solid wood furniture designed for modern architectural living. Shop handcrafted tables, sofas, and interior collections.",
     images: [
       {
-        url: `${baseUrl}/og-shop.jpg`,
+        url: `${baseUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "Furnitureables Premium Solid Wood Furniture Collection",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "Furnitureables — Handcrafted Modern Solid Wood Furniture",
     description:
       "Sustainably engineered solid wood furniture designed for modern architectural living.",
-    images: [`${baseUrl}/og-shop.jpg`],
+    images: [`${baseUrl}/og-image.jpg`],
     creator: "@furnitureables",
   },
   robots: {
