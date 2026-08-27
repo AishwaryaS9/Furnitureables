@@ -72,7 +72,7 @@ export default function ProductCard({ product }: { product: Product }) {
       itemScope
       itemType="https://schema.org/Product"
       aria-labelledby={`product-title-${product.id}`}
-      className="group relative flex flex-col rounded-2xl border border-border/60 bg-card/50 p-3 backdrop-blur-xs hover:border-border"
+      className="group relative flex flex-col rounded-2xl border border-border/50 bg-card/50 p-3 backdrop-blur-xs hover:border-border"
     >
       {isNavigating && (
         <div
@@ -227,7 +227,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Footer info: Price & Color */}
-        <div className="flex items-center justify-between border-t border-border/50 pt-1.5">
+        <div className="flex items-center justify-between border-border/50 pt-2">
           <p
             className="text-sm font-semibold tracking-tight text-foreground"
             aria-label={`Price: ${formatCurrency(product.price)}`}
