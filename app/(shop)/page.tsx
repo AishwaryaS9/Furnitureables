@@ -28,6 +28,7 @@ export default function Shop() {
                         alt="Minimalist modern sofa in a contemporary living space showcasing the autumn collection"
                         fill
                         priority
+                        fetchPriority="high"
                         sizes="100vw"
                         className="object-cover object-center scale-105 animate-[subtle-zoom_25s_ease-out_forwards]"
                     />

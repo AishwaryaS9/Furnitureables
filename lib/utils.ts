@@ -12,7 +12,7 @@ export function getProductThumbnail(product: {
 }) {
   return (
     product.media?.find((m) => m.type === "IMAGE")?.url ??
-    "/images/placeholder.jpg"
+    "/images/placeholder.webp"
   );
 }
 

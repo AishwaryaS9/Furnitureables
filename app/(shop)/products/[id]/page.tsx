@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const primaryImage =
       product.media && product.media.length > 0
         ? product.media[0].url
-        : "/images/placeholder.jpg";
+        : "/images/placeholder.webp";
 
     return {
       title,

@@ -35,7 +35,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
             : [
                 {
                     id: "placeholder",
-                    url: "/images/placeholder.jpg",
+                    url: "/images/placeholder.webp",
                     type: "IMAGE",
                     altText: null,
                     sortOrder: 0,
@@ -43,7 +43,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
             ];
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const selectedImage = images[activeIndex]?.url ?? "/images/placeholder.jpg";
+    const selectedImage = images[activeIndex]?.url ?? "/images/placeholder.webp";
     const hasMultipleImages = images.length > 1;
 
     const goToIndex = useCallback(
