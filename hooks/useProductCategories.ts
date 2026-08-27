@@ -5,6 +5,7 @@ import { GET_PRODUCT_CATEGORIES } from "@/lib/graphql/queries";
 export interface ProductCategory {
     type: string;
     count: number;
+    image?: string | null;
 }
 
 interface ProductCategoriesResponse {
