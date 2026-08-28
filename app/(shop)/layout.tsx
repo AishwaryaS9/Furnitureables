@@ -28,12 +28,12 @@ export const metadata: Metadata = {
   creator: "Furnitureables",
   publisher: "Furnitureables",
   alternates: {
-    canonical: `${baseUrl}/shop`,
+    canonical: `${baseUrl}`,
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: `${baseUrl}/shop`,
+    url: `${baseUrl}`,
     siteName: "Furnitureables",
     title: "Furnitureables — Handcrafted Modern Solid Wood Furniture",
     description:
@@ -117,7 +117,7 @@ export default function ShopLayout({
         "@type": "ListItem",
         "position": 2,
         "name": "Shop",
-        "item": `${baseUrl}/shop`,
+        "item": `${baseUrl}`,
       },
     ],
   };
