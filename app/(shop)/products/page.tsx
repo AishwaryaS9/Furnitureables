@@ -138,7 +138,7 @@ export default function ProductsPage() {
                         />
                     </header>
 
-                    {/* Top Toolbar (Filter button on mobile & Sort options) */}
+                    {/* Top Toolbar */}
                     <div className="flex items-center justify-between gap-3 mb-8 sm:mb-12 pb-4 border-b border-border/80">
                         {/* Mobile Filter Trigger Button */}
                         <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
@@ -185,8 +185,7 @@ export default function ProductsPage() {
                         </aside>
 
                         {/* Product Feed Area */}
-                        <div className="lg:col-span-3 min-w-0" id="product-grid" aria-live="polite">
-                            {/* Skeleton Loading State */}
+                        <div className="lg:col-span-3 min-w-0 scroll-mt-24" id="product-grid" aria-live="polite">
                             {isLoading && (
                                 <div
                                     role="status"

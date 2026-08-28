@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useFilterStore } from "@/store/useFilterStore";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -54,6 +55,15 @@ export default function Pagination({ totalPages, currentPage, onPageChange }: Pr
 
     const page = currentPage ?? storePage;
     const setPage = onPageChange ?? setStorePage;
+
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        document.getElementById("product-grid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [page]);
 
     if (totalPages <= 1) return null;
 
