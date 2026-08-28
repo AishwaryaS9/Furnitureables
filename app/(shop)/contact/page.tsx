@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { submitToWeb3Forms } from "@/lib/web3forms";
 import { CONTACT_TRUST_STATS, CONTACT_QUICK_TOPICS } from "@/lib/data";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 export default function ContactPage() {
     const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ export default function ContactPage() {
             "@type": "Organization",
             "name": "Furnitureables",
             "telephone": "+91-820-555-0199",
-            "email": "support@furnitureables.com",
+            "email": SUPPORT_EMAIL,
             "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "123 Artisan Way, Kadiyali",
@@ -276,11 +277,11 @@ export default function ContactPage() {
                                         <div className="space-y-0.5">
                                             <p className="font-semibold text-foreground">Email Care</p>
                                             <a
-                                                href="mailto:skudupi.aishwarya@gmail.com"
-                                                aria-label="Send email to support@furnitureables.com"
+                                                href={`mailto:${SUPPORT_EMAIL}`}
+                                                aria-label={`Send email to ${SUPPORT_EMAIL}`}
                                                 className="text-muted-foreground hover:text-foreground transition-colors break-all"
                                             >
-                                                support@furnitureables.com
+                                                {SUPPORT_EMAIL}
                                             </a>
                                         </div>
                                     </div>

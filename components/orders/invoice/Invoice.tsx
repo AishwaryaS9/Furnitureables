@@ -4,6 +4,7 @@ import { formatCurrency, formatOrderDate } from "@/lib/order";
 import DownloadInvoiceButton from "./DownloadInvoiceButton";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 interface InvoiceProps {
     order: Order;
@@ -73,8 +74,8 @@ export default function Invoice({ order }: InvoiceProps) {
                         </p>
 
                         <div className="text-xs font-mono text-muted-foreground space-y-0.5 pt-1 print:text-black/80">
-                            <p>support@furnitureables.com</p>
-                            <p>https://furnitureables-store.vercel.app</p>
+                            <p>{SUPPORT_EMAIL}</p>
+                            <p>{process.env.NEXT_PUBLIC_APP_URL}</p>
                         </div>
                     </div>
 

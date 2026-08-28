@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://furnitureables.com",
+    url: "https://furnitureables-store.vercel.app/",
     title: "Furnitureables — Premium Handcrafted Furniture & Home Decor",
     description:
       "Transform your space with timeless, modern furniture crafted for lifestyle and elegance.",
@@ -98,7 +98,6 @@ export default function RootLayout({
         <body className="min-h-full bg-background font-sans text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
           <SplashScreen />
 
-          {/* WCAG Skip to Main Content Link */}
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
