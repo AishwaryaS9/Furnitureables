@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import LegalPageLayout from "@/components/legal/LegalPageLayout";
 import { LegalSection } from "@/types/legal";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 const sections: LegalSection[] = [
     {
@@ -178,7 +179,7 @@ const sections: LegalSection[] = [
             <p>
                 If you have questions about this Privacy Policy or how we handle your
                 information, email us at{" "}
-                <a href="mailto:skudupi.aishwarya@gmail.com">support@furnitureables.com</a>{" "}
+                <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
                 or visit our <a href="/contact">Contact page</a>.
             </p>
         ),

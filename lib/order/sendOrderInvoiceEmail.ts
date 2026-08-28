@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email/mailer";
 import { renderInvoiceEmailHtml, renderInvoiceEmailText } from "@/lib/email/templates/invoiceEmail";
 import { renderInvoicePdfBuffer } from "./renderInvoicePdf";
 import { Order } from "@/types/order";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 type OrderWithRelations = Awaited<ReturnType<typeof loadOrderWithRelations>>;
 
@@ -115,7 +116,7 @@ export async function sendOrderInvoiceEmail(orderId: string): Promise<void> {
                 country: order.country,
             },
             orderUrl: `${getAppUrl()}/orders/${order.id}`,
-            supportEmail: process.env.SMTP_SUPPORT_EMAIL || "support@furnitureables.com",
+            supportEmail: process.env.SMTP_SUPPORT_EMAIL || SUPPORT_EMAIL,
             logoCid: logoAttachment ? "brand-logo" : undefined,
         };
 
@@ -156,8 +157,3 @@ async function loadLogoAttachment() {
         return null;
     }
 }
-
-
-
-
-

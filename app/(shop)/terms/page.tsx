@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import LegalPageLayout from "@/components/legal/LegalPageLayout";
 import { LegalSection } from "@/types/legal";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 export const metadata: Metadata = {
     title: "Terms of Service | Furnitureables",
@@ -166,7 +167,7 @@ const sections: LegalSection[] = [
         content: (
             <p>
                 Questions about these Terms of Service can be sent to{" "}
-                <a href="mailto:skudupi.aishwarya@gmail.com">support@furnitureables.com</a>{" "}
+                <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
                 or via our <a href="/contact">Contact page</a>.
             </p>
         ),

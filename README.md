@@ -42,7 +42,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 | ---------------- | -------------------------------------------------------------- |
 | Framework        | [Next.js 16](https://nextjs.org) (App Router)                  |
 | Language         | TypeScript                                                     |
-| UI               | React 19, Tailwind CSS 4, shadcn/ui, Base UI primitives  |
+| UI               | React 19, Tailwind CSS 4, shadcn/ui, Base UI primitives        |
 | Database         | PostgreSQL, [Prisma ORM](https://www.prisma.io)                |
 | Auth             | [Clerk](https://clerk.com)                                     |
 | Payments         | [Stripe](https://stripe.com), [Razorpay](https://razorpay.com) |
@@ -150,12 +150,15 @@ SMTP_SUPPORT_EMAIL=
 
 # App
 NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_SUPPORT_EMAIL=
 
 # Google Analytics 4 (optional)
 NEXT_PUBLIC_GA_MEASUREMENT_ID=
 ```
 
 SMTP settings are optional in development — if unset, invoice emails are skipped (logged to the console) instead of failing order placement.
+
+`NEXT_PUBLIC_SUPPORT_EMAIL` is the public contact address shown on the Contact, Terms, Privacy, and Cookies pages and on invoices. It's optional — if unset, it falls back to `support@furnitureables.com`.
 
 `NEXT_PUBLIC_GA_MEASUREMENT_ID` is also optional — if unset, all GA tracking code no-ops safely and nothing is sent to Google. See [Analytics](#analytics) below.
 

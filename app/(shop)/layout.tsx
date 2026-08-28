@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import GoogleAnalyticsPageTracker from "@/components/analytics/GoogleAnalyticsPageTracker";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics/gtag";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://furnitureables-store.vercel.app/";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -28,12 +28,12 @@ export const metadata: Metadata = {
   creator: "Furnitureables",
   publisher: "Furnitureables",
   alternates: {
-    canonical: `${baseUrl}`,
+    canonical: baseUrl,
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: `${baseUrl}`,
+    url: baseUrl,
     siteName: "Furnitureables",
     title: "Furnitureables — Handcrafted Modern Solid Wood Furniture",
     description:
@@ -117,7 +117,7 @@ export default function ShopLayout({
         "@type": "ListItem",
         "position": 2,
         "name": "Shop",
-        "item": `${baseUrl}`,
+        "item": `${baseUrl}/products`,
       },
     ],
   };
@@ -136,7 +136,6 @@ export default function ShopLayout({
       />
 
       <div className="relative flex min-h-screen flex-col bg-background text-foreground antialiased selection:bg-foreground selection:text-background">
-        {/* WCAG 2.2 Accessibility: Skip link for keyboard/screen reader navigation */}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-foreground focus:outline-ring focus:ring-2"
@@ -144,7 +143,6 @@ export default function ShopLayout({
           Skip to main content
         </a>
 
-        {/* Header & Navigation */}
         <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/40">
           <Navbar />
         </header>

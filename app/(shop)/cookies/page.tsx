@@ -4,6 +4,7 @@ import Link from "next/link";
 import CookiePreferencesPanel from "@/components/legal/CookiePreferencesPanel";
 import { LegalSection } from "@/types/legal";
 import LegalPageLayout from "@/components/legal/LegalPageLayout";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 export const metadata: Metadata = {
     title: "Cookie Preferences",
@@ -106,11 +107,11 @@ const sections: LegalSection[] = [
             <p>
                 Questions about our use of cookies? Email{" "}
                 <a
-                    href="mailto:skudupi.aishwarya@gmail.com"
-                    aria-label="Send email to support@furnitureables.com"
+                    href={`mailto:${SUPPORT_EMAIL}`}
+                    aria-label={`Send email to ${SUPPORT_EMAIL}`}
                     className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
                 >
-                    support@furnitureables.com
+                    {SUPPORT_EMAIL}
                 </a>{" "}
                 or visit our{" "}
                 <Link

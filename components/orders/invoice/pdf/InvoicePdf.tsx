@@ -1,6 +1,7 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { Order } from "@/types/order";
 import logo from "@/public/logo.svg";
+import { SUPPORT_EMAIL } from "@/lib/constants/contact";
 
 interface InvoicePdfProps {
     order: Order;
@@ -290,9 +291,9 @@ export function InvoiceDocument({ order, logoSrc }: InvoiceDocumentProps) {
                         />
 
                         <View style={styles.brandMeta}>
-                            <Text>support@furnitureables.com</Text>
+                            <Text>{SUPPORT_EMAIL}</Text>
                             <Text>
-                                https://furnitureables-store.vercel.app
+                                {process.env.NEXT_PUBLIC_APP_URL}
                             </Text>
                         </View>
                     </View>
