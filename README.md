@@ -13,7 +13,6 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 - Cart and wishlist with sync across sessions, including a "Quick Add" button on product cards that switches to "Go to Cart" once an item has been added
 - Multi-address checkout with Stripe and Razorpay payment support
 - Order history, order details, and downloadable PDF invoices, plus an emailed invoice (PDF attached) when an order is confirmed
-- AI-powered smart search and chat (Google Gemini)
 - Contact form (Web3Forms), plus About, FAQ, Privacy, Terms, and Cookies pages
 - Branded splash screen on first load
 - Animated home page (Framer Motion): staggered hero entrance, plus scroll-triggered reveals for the Shop by Category, Featured Collection, and Designed for You sections
@@ -43,7 +42,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 | ---------------- | -------------------------------------------------------------- |
 | Framework        | [Next.js 16](https://nextjs.org) (App Router)                  |
 | Language         | TypeScript                                                     |
-| UI               | React 19, Tailwind CSS 4, shadcn/ui, Radix/Base UI primitives  |
+| UI               | React 19, Tailwind CSS 4, shadcn/ui, Base UI primitives  |
 | Database         | PostgreSQL, [Prisma ORM](https://www.prisma.io)                |
 | Auth             | [Clerk](https://clerk.com)                                     |
 | Payments         | [Stripe](https://stripe.com), [Razorpay](https://razorpay.com) |
