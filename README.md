@@ -16,6 +16,8 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 - AI-powered smart search and chat (Google Gemini)
 - Contact form (Web3Forms), plus About, FAQ, Privacy, Terms, and Cookies pages
 - Branded splash screen on first load
+- Animated home page (Framer Motion): staggered hero entrance, plus scroll-triggered reveals for the Shop by Category, Featured Collection, and Designed for You sections
+- Custom branded 404 (not found) page with search and quick navigation back into the store
 
 **Admin Dashboard**
 
@@ -33,6 +35,7 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 - GraphQL API layer alongside REST API routes
 - PostgreSQL database via Prisma ORM
 - Media uploads via Vercel Blob
+- Google Analytics 4 (GA4) tracking across the storefront — automatic pageviews on every client-side route change, plus custom events (cart/wishlist icon clicks, newsletter signup, hero CTA clicks, product list views)
 
 ## Tech Stack
 
@@ -52,6 +55,8 @@ Furnitureables is a full-stack furniture e-commerce platform built with Next.js.
 | Forms/validation | React Hook Form, Zod                                           |
 | Charts           | Recharts                                                       |
 | PDF generation   | `@react-pdf/renderer`                                          |
+| Animation        | [Framer Motion](https://www.framer.com/motion)                 |
+| Analytics        | Google Analytics 4 (`@next/third-parties`)                     |
 
 ## Project Structure
 
@@ -61,9 +66,10 @@ app/
   (admin)/         # Admin dashboard routes (products, orders, customers, reviews, analytics, upload)
   (admin-auth)/    # Admin sign-in route
   api/             # REST API routes (AI, GraphQL, Stripe/Clerk webhooks, media & CSV upload)
-components/        # Shared and feature UI components (admin/, product/, cart/, checkout/, orders/, address/, wishlist/, common/SplashScreen, ui/...)
+  not-found.tsx    # Custom branded 404 page (site-wide)
+components/        # Shared and feature UI components (admin/, product/, cart/, checkout/, orders/, address/, wishlist/, common/SplashScreen, analytics/, ui/...)
 hooks/             # React Query hooks for data fetching and mutations
-lib/               # Server/client utilities: auth, cart, coupons, CSV, GraphQL clients, orders, payments, uploads
+lib/               # Server/client utilities: auth, cart, coupons, CSV, GraphQL clients, orders, payments, uploads, analytics
 prisma/            # Prisma schema and seed script
 graphql/           # GraphQL schema/type definitions
 providers/         # App-level React providers (React Query, etc.)
@@ -145,9 +151,14 @@ SMTP_SUPPORT_EMAIL=
 
 # App
 NEXT_PUBLIC_APP_URL=
+
+# Google Analytics 4 (optional)
+NEXT_PUBLIC_GA_MEASUREMENT_ID=
 ```
 
 SMTP settings are optional in development — if unset, invoice emails are skipped (logged to the console) instead of failing order placement.
+
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` is also optional — if unset, all GA tracking code no-ops safely and nothing is sent to Google. See [Analytics](#analytics) below.
 
 ### 3. Set up the database
 
@@ -185,6 +196,18 @@ Open [http://localhost:3000](http://localhost:3000) for the storefront. Admin ro
 ## Admin Access
 
 Admin routes (`/admin/*`, except `/admin/sign-in`) are protected by Clerk middleware. To grant a user admin access, set `role: "admin"` in that user's `publicMetadata` in your Clerk dashboard.
+
+## Analytics
+
+Storefront pages (`app/(shop)/**`, including the home page, product listing/detail, cart, checkout, and every page sharing `app/(shop)/layout.tsx`) send data to Google Analytics 4 via [`@next/third-parties`](https://www.npmjs.com/package/@next/third-parties). Admin routes are intentionally excluded.
+
+- **Setup:** set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (format `G-XXXXXXXXXX`) from your GA4 property's Web data stream. Without it, tracking is a no-op.
+- **Pageviews:** `components/analytics/GoogleAnalyticsPageTracker.tsx` reports a `page_view` event on every client-side route change (App Router navigations don't trigger a full page load, so this is needed in addition to GA's automatic initial pageview).
+- **Custom events:** defined via the `event()` helper in `lib/analytics/gtag.ts`, currently fired for:
+  - `select_content` — cart icon click, wishlist icon click, hero CTA clicks
+  - `sign_up` — newsletter signup (footer)
+  - `view_item_list` — product listing page, whenever the visible result set changes (filter, search, pagination)
+- **Verifying locally:** run the dev server with the env var set, open GA4 → Reports → Realtime, and interact with the site — events should appear within seconds.
 
 ## Deployment
 
