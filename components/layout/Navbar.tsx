@@ -12,6 +12,7 @@ import { formatCategoryLabel } from "@/lib/utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useActivePromotion } from "@/hooks/useActivePromotion";
+import { event as trackEvent } from "@/lib/analytics/gtag";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -332,7 +333,12 @@ export default function Navbar() {
                     e.preventDefault();
                     toast.info("Please sign in to view your wishlist.");
                     openSignIn();
+                    return;
                   }
+                  trackEvent("select_content", {
+                    content_type: "wishlist_icon",
+                    items_in_wishlist: wishlistCount,
+                  });
                 }}
               >
                 <Heart className="h-5 w-5" aria-hidden="true" />
@@ -352,6 +358,12 @@ export default function Navbar() {
                   totalItems > 0 ? `Shopping Cart, ${totalItems} items` : "Shopping Cart"
                 }
                 className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                onClick={() =>
+                  trackEvent("select_content", {
+                    content_type: "cart_icon",
+                    items_in_cart: totalItems,
+                  })
+                }
               >
                 <ShoppingCart className="h-5 w-5" aria-hidden="true" />
                 {totalItems > 0 && (

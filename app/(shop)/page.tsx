@@ -1,11 +1,41 @@
 "use client";
 
+import { motion, type Variants } from "framer-motion";
 import ProductGrid from "@/components/product/ProductGrid";
 import ShopByCategory from "@/components/product/ShopByCategory";
 import DesignedForYou from "@/components/layout/DesignedForYou";
 import Image from "next/image";
 import Link from "next/link";
 import heroFurniture from "@/public/images/hero-sofa.webp";
+import { event as trackEvent } from "@/lib/analytics/gtag";
+
+const heroContainer: Variants = {
+    hidden: {},
+    show: {
+        transition: {
+            staggerChildren: 0.12,
+            delayChildren: 0.2,
+        },
+    },
+};
+
+const heroItem: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
+};
+
+const revealUp: Variants = {
+    hidden: { opacity: 0, y: 32 },
+    show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    },
+};
 
 export default function Shop() {
     return (
@@ -19,9 +49,12 @@ export default function Shop() {
                 className="relative min-h-162.5 h-[85vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden"
             >
                 {/* Background Image Container */}
-                <div
+                <motion.div
                     aria-hidden="true"
                     className="absolute inset-0 z-0 overflow-hidden rounded-b-[2.5rem]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
                 >
                     <Image
                         src={heroFurniture}
@@ -33,14 +66,20 @@ export default function Shop() {
                         className="object-cover object-center scale-105 animate-[subtle-zoom_25s_ease-out_forwards]"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/40 to-foreground/20" />
-                </div>
+                </motion.div>
 
                 {/* Hero Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <div className="max-w-360 mx-auto w-full px-5 sm:px-8 lg:px-10">
+                    <motion.div
+                        className="max-w-360 mx-auto w-full px-5 sm:px-8 lg:px-10"
+                        variants={heroContainer}
+                        initial="hidden"
+                        animate="show"
+                    >
                         <div className="max-w-xl md:max-w-2xl lg:max-w-3xl">
                             {/* Badge */}
-                            <div
+                            <motion.div
+                                variants={heroItem}
                                 role="status"
                                 aria-label="Announcement: New Autumn Collection"
                                 className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md px-3 py-2 sm:px-4"
@@ -52,32 +91,43 @@ export default function Shop() {
                                 <span className="text-xs uppercase tracking-[0.3em] text-primary-foreground/90">
                                     New Autumn Collection
                                 </span>
-                            </div>
+                            </motion.div>
 
                             {/* Heading */}
-                            <h1
+                            <motion.h1
+                                variants={heroItem}
                                 id="hero-heading"
                                 className="font-serif text-5xl sm:text-7xl md:text-8xl tracking-tight text-primary-foreground leading-[1.03]"
                             >
                                 Elevate Your <br />
                                 <span className="italic font-light text-primary-foreground/80">Living</span> Space.
-                            </h1>
+                            </motion.h1>
 
                             {/* Description */}
-                            <p className="mt-5 max-w-128.5 text-primary-foreground/80 text-base sm:text-md leading-7 sm:leading-8">
+                            <motion.p
+                                variants={heroItem}
+                                className="mt-5 max-w-128.5 text-primary-foreground/80 text-base sm:text-md leading-7 sm:leading-8"
+                            >
                                 Timeless furniture crafted with premium materials,
                                 modern aesthetics, and exceptional comfort for
                                 contemporary homes.
-                            </p>
+                            </motion.p>
 
                             {/* CTA Actions */}
-                            <nav
+                            <motion.nav
+                                variants={heroItem}
                                 aria-label="Hero quick navigation"
                                 className="mt-8 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
                             >
                                 <Link
                                     href="/products"
                                     aria-label="Explore the full autumn furniture collection"
+                                    onClick={() =>
+                                        trackEvent("select_content", {
+                                            content_type: "hero_cta",
+                                            item_id: "explore_collection",
+                                        })
+                                    }
                                     className="flex justify-center rounded-xl bg-primary-foreground px-8 py-4 text-sm font-semibold text-primary transition-all hover:scale-[1.03] hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                 >
                                     Explore Collection
@@ -85,19 +135,28 @@ export default function Shop() {
                                 <Link
                                     href="/about"
                                     aria-label="Learn about our design ethos and craftsmanship"
+                                    onClick={() =>
+                                        trackEvent("select_content", {
+                                            content_type: "hero_cta",
+                                            item_id: "our_design_ethos",
+                                        })
+                                    }
                                     className="flex justify-center rounded-xl border border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-md px-8 py-4 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                 >
                                     Our Design Ethos
                                 </Link>
-                            </nav>
+                            </motion.nav>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Floating Card */}
-                <aside
+                <motion.aside
                     aria-label="Design philosophy spotlight"
                     className="absolute right-4 lg:right-10 bottom-6 lg:bottom-12 hidden md:block"
+                    initial={{ opacity: 0, x: 32 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.7, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <div className="rounded-3xl border border-primary-foreground/15 bg-primary-foreground/10 backdrop-blur-xl p-6 w-60 lg:w-72 shadow-2xl">
                         <p
@@ -122,11 +181,18 @@ export default function Shop() {
                             </span>
                         </div>
                     </div>
-                </aside>
+                </motion.aside>
             </section>
 
             {/* Product Categories Section */}
-            <ShopByCategory />
+            <motion.div
+                variants={revealUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-100px" }}
+            >
+                <ShopByCategory />
+            </motion.div>
 
             {/* Featured Collection Section */}
             <section
@@ -134,7 +200,13 @@ export default function Shop() {
                 className="py-14 md:py-20 px-5 sm:px-6 lg:px-10"
             >
                 <div className="max-w-360 mx-auto space-y-12">
-                    <header className="text-center space-y-3 max-w-2xl mx-auto">
+                    <motion.header
+                        variants={revealUp}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="text-center space-y-3 max-w-2xl mx-auto"
+                    >
                         <h2
                             id="collection-heading"
                             className="text-3xl sm:text-4xl font-normal tracking-tight font-serif text-foreground"
@@ -144,13 +216,27 @@ export default function Shop() {
                         <p className="text-muted-foreground text-sm sm:text-base font-light max-w-md mx-auto leading-relaxed">
                             Carefully curated signature pieces designed to establish clean lines, warm minimalism, and structural purpose.
                         </p>
-                    </header>
+                    </motion.header>
 
-                    <div className="pt-4" role="region" aria-label="Featured Products Grid">
+                    <motion.div
+                        variants={revealUp}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="pt-4"
+                        role="region"
+                        aria-label="Featured Products Grid"
+                    >
                         <ProductGrid ignoreGlobalFilters />
-                    </div>
+                    </motion.div>
 
-                    <div className="mt-16 flex justify-center">
+                    <motion.div
+                        variants={revealUp}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="mt-16 flex justify-center"
+                    >
                         <Link
                             href="/products"
                             aria-label="View our full furniture catalog and available products"
@@ -158,12 +244,19 @@ export default function Shop() {
                         >
                             View Full Catalog
                         </Link>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* Value Proposition / Recommendations Section */}
-            <DesignedForYou />
+            {/* Recommendations Section */}
+            <motion.div
+                variants={revealUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-100px" }}
+            >
+                <DesignedForYou />
+            </motion.div>
         </main>
     );
 }

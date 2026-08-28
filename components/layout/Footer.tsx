@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useProductCategories } from "@/hooks/useProductCategories";
 import { formatCategoryLabel } from "@/lib/utils";
 import { submitToWeb3Forms } from "@/lib/web3forms";
+import { event as trackEvent } from "@/lib/analytics/gtag";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
@@ -37,6 +38,7 @@ export default function Footer() {
       }
 
       toast.success("You're subscribed! Watch your inbox for new timber drops.");
+      trackEvent("sign_up", { method: "newsletter_footer" });
       setEmail("");
       setSubscribed(true);
       setTimeout(() => setSubscribed(false), 3000);

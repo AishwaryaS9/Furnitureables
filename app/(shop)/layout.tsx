@@ -1,6 +1,10 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import GoogleAnalyticsPageTracker from "@/components/analytics/GoogleAnalyticsPageTracker";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics/gtag";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://furnitureables-store.vercel.app/";
 
@@ -145,7 +149,6 @@ export default function ShopLayout({
           <Navbar />
         </header>
 
-        {/* Main Semantic Content Node */}
         <main
           id="main-content"
           tabIndex={-1}
@@ -154,9 +157,17 @@ export default function ShopLayout({
           {children}
         </main>
 
-        {/* Global Shop Footer */}
         <Footer />
       </div>
+
+      {GA_MEASUREMENT_ID && (
+        <>
+          <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
+          <Suspense fallback={null}>
+            <GoogleAnalyticsPageTracker />
+          </Suspense>
+        </>
+      )}
     </>
   );
 }
