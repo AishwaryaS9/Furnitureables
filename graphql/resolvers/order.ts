@@ -567,6 +567,9 @@ export const orderResolver = {
                     },
                     data: {
                         status: "CANCELLED",
+                        ...(order.paymentStatus === "PAID"
+                            ? { paymentStatus: "REFUNDED" as const }
+                            : {}),
                     },
                 });
             });
@@ -598,9 +601,14 @@ export const orderResolver = {
                 existingOrder.paymentMethod === "COD" &&
                 existingOrder.paymentStatus === "PENDING";
 
+            const shouldFlagRefund =
+                status === "CANCELLED" && existingOrder.paymentStatus === "PAID";
+
             const updateData = shouldMarkCodAsPaid
                 ? { status, paymentStatus: "PAID" as const }
-                : { status };
+                : shouldFlagRefund
+                    ? { status, paymentStatus: "REFUNDED" as const }
+                    : { status };
 
             // Restore stock if order is being cancelled
             if (

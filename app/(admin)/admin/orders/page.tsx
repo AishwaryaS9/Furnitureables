@@ -37,10 +37,10 @@ export default function OrdersPage() {
 
     const filteredOrders = useMemo(() => {
         return orders.filter((order) => {
-            const keyword = search.toLowerCase();
+            const keyword = search.trim().toLowerCase();
 
             const matchesSearch =
-                !search ||
+                !keyword ||
                 order.orderNumber.toLowerCase().includes(keyword) ||
                 order.customerName.toLowerCase().includes(keyword) ||
                 order.customerEmail.toLowerCase().includes(keyword);
@@ -69,7 +69,7 @@ export default function OrdersPage() {
         .filter((o) => o.status !== "CANCELLED")
         .reduce((sum, o) => sum + o.total, 0);
 
-    const isFiltered = Boolean(search) || status !== "ALL" || paymentStatus !== "ALL";
+    const isFiltered = Boolean(search.trim()) || status !== "ALL" || paymentStatus !== "ALL";
 
     return (
         <main
@@ -77,7 +77,6 @@ export default function OrdersPage() {
             tabIndex={-1}
             aria-labelledby="orders-page-title"
             className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 focus:outline-none"
-        // className="space-y-6 sm:space-y-8 max-w-7xl mx-auto"
         >
             {/* Header Landmark */}
             <header className="space-y-2">
@@ -124,7 +123,6 @@ export default function OrdersPage() {
                         onPaymentStatusChange={handlePaymentStatusChange}
                     />
 
-                    {/* Live status container for screen reader announcements */}
                     <div
                         role="status"
                         aria-live="polite"

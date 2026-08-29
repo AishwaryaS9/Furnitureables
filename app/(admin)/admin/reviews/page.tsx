@@ -154,7 +154,8 @@ export default function ReviewsPage() {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search customer, product, or review..."
-                                className="h-11 w-full rounded-2xl border-border/60 bg-card/60 pl-10 pr-4 text-sm backdrop-blur-xl shadow-xs transition-all duration-200 placeholder:text-muted-foreground/70 focus-visible:bg-card focus-visible:ring-1 focus-visible:ring-primary/30"
+                                className="h-11 w-full rounded-2xl border-border/60 bg-card/60 pl-10 pr-4 text-sm backdrop-blur-xl shadow-xs transition-all 
+                                duration-200 placeholder:text-muted-foreground/70 focus-visible:bg-card focus-visible:ring-1 focus-visible:ring-primary/30"
                                 autoComplete="off"
                                 autoCorrect="off"
                                 spellCheck={false}

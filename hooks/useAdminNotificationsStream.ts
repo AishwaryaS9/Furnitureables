@@ -38,6 +38,8 @@ export function useAdminNotificationsStream() {
                 (old) => (old ?? 0) + 1
             );
 
+            queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+
             toast.info(notification.title, {
                 description: notification.message,
             });
