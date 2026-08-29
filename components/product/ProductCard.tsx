@@ -205,12 +205,12 @@ export default function ProductCard({ product }: { product: Product }) {
           <div className="mt-0.5 flex items-start justify-between gap-2">
             <h3
               id={`product-title-${product.id}`}
-              className="text-sm font-medium text-foreground line-clamp-1"
+              className="text-sm font-medium text-foreground line-clamp-1 hover:text-accent"
             >
               <Link
                 href={productUrl}
                 onClick={handleNavigate}
-                className="hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-xs"
+                className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-xs"
               >
                 {product.title}
               </Link>

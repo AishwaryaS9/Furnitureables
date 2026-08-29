@@ -58,7 +58,7 @@ export default function Shop() {
                 >
                     <Image
                         src={heroFurniture}
-                        alt="Minimalist modern sofa in a contemporary living space showcasing the autumn collection"
+                        alt="Minimalist modern sofa in a contemporary living space showcasing the featured collection"
                         fill
                         priority
                         fetchPriority="high"
@@ -81,7 +81,7 @@ export default function Shop() {
                             <motion.div
                                 variants={heroItem}
                                 role="status"
-                                aria-label="Announcement: New Autumn Collection"
+                                aria-label="Announcement: New Collection"
                                 className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md px-3 py-2 sm:px-4"
                             >
                                 <span
@@ -89,7 +89,7 @@ export default function Shop() {
                                     className="h-2 w-2 rounded-full bg-success animate-pulse"
                                 />
                                 <span className="text-xs uppercase tracking-[0.3em] text-primary-foreground/90">
-                                    New Autumn Collection
+                                    New Collection
                                 </span>
                             </motion.div>
 
@@ -121,7 +121,7 @@ export default function Shop() {
                             >
                                 <Link
                                     href="/products"
-                                    aria-label="Explore the full autumn furniture collection"
+                                    aria-label="Explore the full furniture collection"
                                     onClick={() =>
                                         trackEvent("select_content", {
                                             content_type: "hero_cta",
