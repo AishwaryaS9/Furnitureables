@@ -176,7 +176,7 @@ export default function CustomerTable({ customers }: Props) {
                             {/* Empty State */}
                             {customers.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="h-64 text-center">
+                                    <TableCell colSpan={6} className="h-64 whitespace-normal text-center">
                                         <div className="flex flex-col items-center justify-center p-8 text-center" role="status" aria-live="polite" aria-atomic="true">
                                             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 border border-border/80 mb-3" aria-hidden="true">
                                                 <UsersRound className="h-7 w-7 text-muted-foreground/60" aria-hidden="true" />

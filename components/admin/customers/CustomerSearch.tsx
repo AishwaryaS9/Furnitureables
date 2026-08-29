@@ -28,7 +28,7 @@ export default function CustomerSearch({ value, onChange, sort, onSortChange }: 
             {/* Search Input */}
             <div className="relative w-full lg:max-w-md flex-1">
                 <label htmlFor="customer-search-input" className="sr-only">
-                    Search customers by name or email address
+                    Search customers by name, email address, or customer ID
                 </label>
 
                 <div
@@ -45,23 +45,26 @@ export default function CustomerSearch({ value, onChange, sort, onSortChange }: 
                     autoComplete="off"
                     autoCorrect="off"
                     spellCheck={false}
-                    placeholder="Search by name or email..."
+                    placeholder="Search by name, email, or customer ID..."
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="h-11 w-full rounded-2xl border-border/60 bg-card/60 pl-10 pr-10 text-sm backdrop-blur-xl shadow-xs transition-all duration-200 placeholder:text-muted-foreground/70 focus-visible:bg-card focus-visible:ring-1 focus-visible:ring-primary/30 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+                    className="h-11 w-full rounded-2xl border-border/60 bg-card/60 pl-10 pr-10 text-sm backdrop-blur-xl shadow-xs transition-all duration-200 placeholder:text-muted-foreground/70 focus-visible:bg-card 
+                    focus-visible:ring-1 focus-visible:ring-primary/30 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
                 />
 
                 {value && (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onChange("")}
-                        className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                        aria-label="Clear search input query"
-                    >
-                        <X className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                    <div className="absolute inset-y-0 right-1.5 flex items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onChange("")}
+                            className="h-8 w-8 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                            aria-label="Clear search input query"
+                        >
+                            <X className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                    </div>
                 )}
             </div>
 

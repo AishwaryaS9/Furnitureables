@@ -148,7 +148,7 @@ export default function ProductTable({ products }: Props) {
 
               {products.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-56 text-center">
+                  <TableCell colSpan={7} className="h-56 whitespace-normal text-center">
                     <div className="flex flex-col items-center justify-center space-y-2 text-muted-foreground">
                       <PackageSearch className="h-10 w-10 text-muted-foreground/40" />
                       <p className="text-sm font-semibold">No products match your filter.</p>

@@ -110,7 +110,7 @@ export default function ReviewTable({
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-64 text-center">
+                                <TableCell colSpan={4} className="h-64 whitespace-normal text-center">
                                     <div className="flex flex-col items-center justify-center p-8 text-sm text-muted-foreground" role="status" aria-live="polite">
                                         <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground mb-2" aria-hidden="true" />
                                         <span>Loading customer reviews...</span>
@@ -119,7 +119,7 @@ export default function ReviewTable({
                             </TableRow>
                         ) : displayedReviews.length === 0 ? (
                             <TableRow className="hover:bg-transparent">
-                                <TableCell colSpan={4} className="h-64 p-0 text-center">
+                                <TableCell colSpan={4} className="h-64 whitespace-normal p-0 text-center">
                                     <div className="flex flex-col items-center justify-center p-8 text-center" role="status" aria-live="polite">
                                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 border border-border/80 mb-3" aria-hidden="true">
                                             <MessageSquareQuote className="h-7 w-7 text-muted-foreground/60" />

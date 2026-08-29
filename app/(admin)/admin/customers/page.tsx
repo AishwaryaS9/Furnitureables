@@ -36,7 +36,8 @@ export default function CustomersPage() {
             return (
                 !keyword ||
                 customer.name.toLowerCase().includes(keyword) ||
-                customer.email.toLowerCase().includes(keyword)
+                customer.email.toLowerCase().includes(keyword) ||
+                customer.id.toLowerCase().includes(keyword)
             );
         });
 

@@ -59,16 +59,18 @@ export default function FaqContent({ categories }: FaqContentProps) {
                     className="w-full h-11 pl-11 pr-10 text-sm bg-card border border-border/60 rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
                 />
                 {query && (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setQuery("")}
-                        className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
-                        aria-label="Clear FAQ search query"
-                    >
-                        <X className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                    <div className="absolute inset-y-0 right-1.5 flex items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setQuery("")}
+                            className="h-8 w-8 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+                            aria-label="Clear FAQ search query"
+                        >
+                            <X className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                    </div>
                 )}
             </form>
 

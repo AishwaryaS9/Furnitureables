@@ -66,7 +66,7 @@ export default function AdminProductsPage() {
             {/* Product Statistics Landmark */}
             <section aria-label="Product Statistics Overview">
                 <ProductStats
-                    total={total}
+                    total={data?.totalProducts ?? 0}
                     lowStock={data?.lowStockCount ?? 0}
                     outOfStock={data?.outOfStockCount ?? 0}
                     inventoryValue={data?.inventoryValue ?? 0}

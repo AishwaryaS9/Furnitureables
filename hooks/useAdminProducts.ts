@@ -12,6 +12,7 @@ interface UseAdminProductsParams {
 export interface AdminProductsResult {
     items: Product[];
     total: number;
+    totalProducts: number;
     lowStockCount: number;
     outOfStockCount: number;
     inventoryValue: number;
