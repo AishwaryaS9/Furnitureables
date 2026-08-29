@@ -49,6 +49,7 @@ export const ADMIN_PRODUCTS = gql`
   query AdminProducts($search: String, $page: Int, $limit: Int) {
     adminProducts(search: $search, page: $page, limit: $limit) {
       total
+      totalProducts
       lowStockCount
       outOfStockCount
       inventoryValue

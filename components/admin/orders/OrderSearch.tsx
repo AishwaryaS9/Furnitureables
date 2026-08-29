@@ -63,16 +63,18 @@ export default function OrderSearch({
                 />
 
                 {value && (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onChange("")}
-                        className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                        aria-label="Clear search input query"
-                    >
-                        <X className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                    <div className="absolute inset-y-0 right-1.5 flex items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onChange("")}
+                            className="h-8 w-8 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                            aria-label="Clear search input query"
+                        >
+                            <X className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                    </div>
                 )}
             </div>
 

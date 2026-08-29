@@ -2,7 +2,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Plus, RefreshCw, Search } from "lucide-react";
+import { Plus, RefreshCw, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { graphqlClient } from "@/lib/graphql/client";
 import { ADMIN_COUPONS } from "@/lib/graphql/queries";
@@ -138,8 +138,24 @@ export default function CouponsPage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search code, campaign, or description..."
-                            className="h-11 rounded-2xl bg-card/60 pl-10"
+                            className="h-11 w-full rounded-2xl border-border/60 bg-card/60 pl-10 pr-10 text-sm backdrop-blur-xl shadow-xs transition-all duration-200 placeholder:text-muted-foreground/70 focus-visible:bg-card 
+                    focus-visible:ring-1 focus-visible:ring-primary/30 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
                         />
+
+                        {search && (
+                            <div className="absolute inset-y-0 right-1.5 flex items-center">
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setSearch("")}
+                                    className="h-8 w-8 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                                    aria-label="Clear review search input"
+                                >
+                                    <X className="h-4 w-4" aria-hidden="true" />
+                                </Button>
+                            </div>
+                        )}
                     </div>
 
                     <Badge

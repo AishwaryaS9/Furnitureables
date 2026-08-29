@@ -197,7 +197,7 @@ export const productResolvers = {
                 }
                 : {};
 
-            const [total, items, statsRows] = await Promise.all([
+            const [total, items, totalProducts, statsRows] = await Promise.all([
                 prisma.product.count({ where }),
 
                 prisma.product.findMany({
@@ -215,9 +215,8 @@ export const productResolvers = {
                         },
                     },
                 }),
-
+                prisma.product.count(),
                 prisma.product.findMany({
-                    where,
                     select: {
                         price: true,
                         stock: true,
@@ -239,6 +238,7 @@ export const productResolvers = {
             return {
                 items,
                 total,
+                totalProducts,
                 lowStockCount,
                 outOfStockCount,
                 inventoryValue,

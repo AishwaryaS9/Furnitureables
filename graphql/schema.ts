@@ -495,6 +495,7 @@ export const typeDefs = /* GraphQL */ `
   type AdminProductsResponse {
     items: [Product!]!
     total: Int!
+    totalProducts: Int!
     lowStockCount: Int!
     outOfStockCount: Int!
     inventoryValue: Float!
