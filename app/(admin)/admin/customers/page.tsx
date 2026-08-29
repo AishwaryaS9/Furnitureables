@@ -30,11 +30,11 @@ export default function CustomersPage() {
     const customers = data ?? [];
 
     const filteredCustomers = useMemo(() => {
-        const keyword = search.toLowerCase();
+        const keyword = search.trim().toLowerCase();
 
         const filtered = customers.filter((customer) => {
             return (
-                !search ||
+                !keyword ||
                 customer.name.toLowerCase().includes(keyword) ||
                 customer.email.toLowerCase().includes(keyword)
             );
@@ -79,7 +79,7 @@ export default function CustomersPage() {
     const repeatCustomers = customers.filter((c) => c.totalOrders > 1).length;
     const totalRevenue = customers.reduce((sum, c) => sum + c.totalSpent, 0);
 
-    const isFiltered = Boolean(search) || sort !== "newest";
+    const isFiltered = Boolean(search.trim()) || sort !== "newest";
 
     return (
         <main

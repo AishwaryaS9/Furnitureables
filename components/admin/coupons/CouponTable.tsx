@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Coupon } from "@/types/coupon";
+import { cn } from "@/lib/utils";
 
 interface Props {
     coupons: Coupon[];
@@ -69,7 +70,10 @@ export default function CouponTable({ coupons, loading, onEdit, onDeleteRequest 
                 role="region"
                 aria-label="Coupons Data Table Scrollable Area"
             >
-                <Table aria-label="Coupons Table" className="w-full min-w-225 text-left">
+                <Table
+                    aria-label="Coupons Table"
+                    className={cn("w-full text-left", coupons.length > 0 && "min-w-225")}
+                >
                     <TableHeader>
                         <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
                             <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Coupon</TableHead>

@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { AdminCustomer } from "@/types/customer";
 import { formatCurrency, formatOrderDate } from "@/lib/order";
 import CustomerDetailsModal from "./CustomerDetailsModal";
+import { cn } from "@/lib/utils";
 
 interface Props {
     customers: AdminCustomer[];
@@ -47,7 +48,10 @@ export default function CustomerTable({ customers }: Props) {
                     role="region"
                     aria-label="Customers Data Table Scrollable Area"
                 >
-                    <Table aria-label="Customers Table" className="w-full min-w-200 text-left">
+                    <Table
+                        aria-label="Customers Table"
+                        className={cn("w-full text-left", customers.length > 0 && "min-w-200")}
+                    >
                         <TableHeader>
                             <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
                                 <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Customer ID</TableHead>

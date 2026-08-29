@@ -32,9 +32,9 @@ export const productResolvers = {
                     where.color = filter.color;
                 }
 
-                if (filter.search) {
+                if (filter.search?.trim()) {
                     where.title = {
-                        contains: filter.search,
+                        contains: filter.search.trim(),
                         mode: "insensitive",
                     };
                 }
@@ -187,11 +187,12 @@ export const productResolvers = {
                 limit = 8,
             }: { search?: string; page?: number; limit?: number }
         ) => {
-            const where: Prisma.ProductWhereInput = search
+            const trimmedSearch = search?.trim();
+            const where: Prisma.ProductWhereInput = trimmedSearch
                 ? {
                     OR: [
-                        { title: { contains: search, mode: "insensitive" } },
-                        { sku: { contains: search, mode: "insensitive" } },
+                        { title: { contains: trimmedSearch, mode: "insensitive" } },
+                        { sku: { contains: trimmedSearch, mode: "insensitive" } },
                     ],
                 }
                 : {};

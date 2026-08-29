@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { AdminOrder, OrderStatus } from "@/types/order";
 import { formatCurrency, formatOrderDate, getPaymentMethodLabel } from "@/lib/order";
 import PaymentStatusBadge from "@/components/orders/PaymentStatusBadge";
+import { cn } from "@/lib/utils";
 import OrderDetailsModal from "./OrderDetailsModal";
 import OrderStatusSelect from "./OrderStatusSelect";
 
@@ -56,7 +57,10 @@ export default function OrderTable({ orders, onViewOrder }: Props) {
                     role="region"
                     aria-label="Orders Data Table Scrollable Area"
                 >
-                    <Table aria-label="Customer Orders Table" className="w-full min-w-220 text-left">
+                    <Table
+                        aria-label="Customer Orders Table"
+                        className={cn("w-full text-left", orders.length > 0 && "min-w-220")}
+                    >
                         <TableHeader>
                             <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
                                 <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Order</TableHead>

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { REVIEW_STATUS_OPTIONS } from "@/lib/data";
 import { formatOrderDate } from "@/lib/order";
 import ProductPagination from "../products/ProductPagination";
+import { cn } from "@/lib/utils";
 
 interface ReviewTableProps {
     reviews: Review[];
@@ -76,6 +77,8 @@ export default function ReviewTable({
         ? reviews
         : reviews.slice((activePage - 1) * pageSize, activePage * pageSize);
 
+    const hasRows = !loading && displayedReviews.length > 0;
+
     return (
         <div
             aria-label="Customer Reviews Management Overview"
@@ -90,16 +93,16 @@ export default function ReviewTable({
                 <Table className="w-full text-left">
                     <TableHeader>
                         <TableRow className="border-b border-border/70 bg-muted/50 hover:bg-muted/50">
-                            <TableHead scope="col" className="py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[30%] min-w-50">
+                            <TableHead scope="col" className={cn("py-3.5 pl-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[30%]", hasRows && "min-w-50")}>
                                 Product
                             </TableHead>
                             <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[45%]">
                                 Feedback
                             </TableHead>
-                            <TableHead scope="col" className="py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[15%] min-w-32.5">
+                            <TableHead scope="col" className={cn("py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground w-[15%]", hasRows && "min-w-32.5")}>
                                 Status
                             </TableHead>
-                            <TableHead scope="col" className="py-3.5 pr-6 w-[10%] min-w-12.5 text-right sr-only">
+                            <TableHead scope="col" className={cn("py-3.5 pr-6 w-[10%] text-right sr-only", hasRows && "min-w-12.5")}>
                                 Actions
                             </TableHead>
                         </TableRow>
