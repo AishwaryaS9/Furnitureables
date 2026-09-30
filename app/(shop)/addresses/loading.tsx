@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 
 export default function AddressesLoading() {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             aria-busy="true"
@@ -82,6 +82,6 @@ export default function AddressesLoading() {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

@@ -1,15 +1,17 @@
 import { Metadata } from "next";
 import DashboardCards from "@/components/admin/dashboard/DashboardCards";
-import RevenueTrendChart from "@/components/admin/analytics/RevenueTrendChart";
-import CustomerGrowthChart from "@/components/admin/analytics/CustomerGrowthChart";
-import PaymentMethodChart from "@/components/admin/analytics/PaymentMethodChart";
-import CategoryPerformanceChart from "@/components/admin/analytics/CategoryPerformanceChart";
-import RatingDistributionChart from "@/components/admin/analytics/RatingDistributionChart";
-import OrderFunnelChart from "@/components/admin/analytics/OrderFunnelChart";
-import OrderStatusChart from "@/components/admin/analytics/OrderStatusChart";
-import TopProductsChart from "@/components/admin/analytics/TopProductsChart";
-import StockVsSalesChart from "@/components/admin/analytics/StockVsSalesChart";
-import RevenueByCategoryChart from "@/components/admin/analytics/RevenueByCategoryChart";
+import {
+    RevenueTrendChart,
+    CustomerGrowthChart,
+    PaymentMethodChart,
+    CategoryPerformanceChart,
+    RatingDistributionChart,
+    OrderFunnelChart,
+    OrderStatusChart,
+    TopProductsChart,
+    StockVsSalesChart,
+    RevenueByCategoryChart,
+} from "@/components/admin/analytics/LazyCharts";
 
 export const metadata: Metadata = {
     title: "Analytics | Admin Portal — Furnitureables",

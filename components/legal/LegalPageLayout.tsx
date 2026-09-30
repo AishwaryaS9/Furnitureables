@@ -3,7 +3,7 @@ import { LegalPageLayoutProps } from "@/types/legal";
 
 export default function LegalPageLayout({ eyebrow, title, description, lastUpdated, sections }: LegalPageLayoutProps) {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             aria-labelledby="legal-page-title"
@@ -96,6 +96,6 @@ export default function LegalPageLayout({ eyebrow, title, description, lastUpdat
                     </Link>
                 </footer>
             </div>
-        </main>
+        </div>
     );
 }

@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "react-phone-number-input/style.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -132,18 +131,4 @@
 
 ::-webkit-scrollbar-track {
   background: transparent;
-}
-
-@keyframes splash-bar {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  50% {
-    transform: translateX(150%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
 }

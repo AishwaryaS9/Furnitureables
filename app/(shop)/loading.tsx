@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ShopLoading() {
     return (
-        <main
+        <div
             className="min-h-screen bg-background text-foreground antialiased"
             role="status"
             aria-busy="true"
@@ -60,6 +60,6 @@ export default function ShopLoading() {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

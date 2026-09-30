@@ -1,5 +1,6 @@
 import { Prisma } from "@/generated/prisma/index";
 import { prisma } from "@/lib/prisma";
+import { fetchProductCategories } from "@/lib/data/catalog";
 import { auth } from "@clerk/nextjs/server";
 import { CreateProductArgs, ProductsArgs, UpdateProductArgs } from "@/types/product";
 
@@ -58,10 +59,6 @@ export const productResolvers = {
                 }
             }
 
-            const total = await prisma.product.count({
-                where,
-            });
-
             let orderBy: Prisma.ProductOrderByWithRelationInput = {
                 createdAt: "desc",
             };
@@ -87,22 +84,51 @@ export const productResolvers = {
                     orderBy = { createdAt: "desc" };
             }
 
-            const items = await prisma.product.findMany({
-                where,
-                skip: related ? undefined : (page - 1) * limit,
-                take: related ? 4 : limit,
-                orderBy,
-                include: {
-                    media: {
-                        orderBy: {
-                            sortOrder: "asc",
+            const [total, items] = await Promise.all([
+                prisma.product.count({ where }),
+                prisma.product.findMany({
+                    where,
+                    skip: related ? undefined : (page - 1) * limit,
+                    take: related ? 4 : limit,
+                    orderBy,
+                    include: {
+                        media: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
                         },
                     },
-                },
-            });
+                }),
+            ]);
+
+            // Resolve `isWishlisted` for the whole page with (at most) two
+            // queries instead of two queries per product.
+            const { userId: clerkUserId } = await auth();
+            let wishlistedIds = new Set<string>();
+
+            if (clerkUserId && items.length > 0) {
+                const dbUser = await prisma.user.findUnique({
+                    where: { clerkId: clerkUserId },
+                    select: { id: true },
+                });
+
+                if (dbUser) {
+                    const saved = await prisma.wishlist.findMany({
+                        where: {
+                            userId: dbUser.id,
+                            productId: { in: items.map((item) => item.id) },
+                        },
+                        select: { productId: true },
+                    });
+                    wishlistedIds = new Set(saved.map((w) => w.productId));
+                }
+            }
 
             return {
-                items,
+                items: items.map((item) => ({
+                    ...item,
+                    isWishlisted: wishlistedIds.has(item.id),
+                })),
                 total,
             };
         },
@@ -110,58 +136,7 @@ export const productResolvers = {
         productCategories: async (
             _parent: unknown,
             { limit = 5 }: { limit?: number }
-        ) => {
-            const grouped = await prisma.product.groupBy({
-                by: ["type"],
-                _count: {
-                    type: true,
-                },
-                orderBy: {
-                    _count: {
-                        type: "desc",
-                    },
-                },
-                take: limit ?? 5,
-            });
-
-            const types = grouped.filter((g) => !!g.type).map((g) => g.type);
-
-            const thumbnails = await Promise.all(
-                types.map((type) =>
-                    prisma.product.findFirst({
-                        where: {
-                            type,
-                            media: {
-                                some: { type: "IMAGE" },
-                            },
-                        },
-                        orderBy: { createdAt: "desc" },
-                        include: {
-                            media: {
-                                where: { type: "IMAGE" },
-                                orderBy: { sortOrder: "asc" },
-                                take: 1,
-                            },
-                        },
-                    })
-                )
-            );
-
-            const imageByType = new Map(
-                types.map((type, index) => [
-                    type,
-                    thumbnails[index]?.media[0]?.url ?? null,
-                ])
-            );
-
-            return grouped
-                .filter((g) => !!g.type)
-                .map((g) => ({
-                    type: g.type,
-                    count: g._count.type,
-                    image: imageByType.get(g.type) ?? null,
-                }));
-        },
+        ) => fetchProductCategories(limit ?? 5),
 
         product: async (
             _parent: unknown,
@@ -247,7 +222,10 @@ export const productResolvers = {
     },
 
     Product: {
-        isWishlisted: async (parent: { id: string }) => {
+        isWishlisted: async (parent: { id: string; isWishlisted?: boolean }) => {
+            // Already resolved in bulk by the `products` query.
+            if (typeof parent.isWishlisted === "boolean") return parent.isWishlisted;
+
             const { userId } = await auth();
 
             if (!userId) return false;

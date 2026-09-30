@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { findActivePromotion } from "@/lib/data/promotion";
 import { getAdminUser } from "@/lib/auth/admin";
 import { validateCoupon } from "../../lib/coupon/validateCoupon";
 import { calculateDiscount } from "../../lib/coupon/calculateDiscount";
@@ -135,7 +136,6 @@ export const couponResolvers = {
         //     return availablePromotion ?? null;
         // },
 
-        //update immediatley
         activePromotion: async () => {
             const { userId: clerkUserId } = await auth();
 
@@ -161,57 +161,7 @@ export const couponResolvers = {
                 isNewUser = !currentUser || currentUser.orders.length === 0;
             }
 
-            const promotions = await prisma.coupon.findMany({
-                where: {
-                    isActive: true,
-
-                    // Only coupons configured for the promotional/navbar bar.
-                    isPromotional: true,
-
-                    promotionText: {
-                        not: null,
-                    },
-
-                    OR: [
-                        {
-                            expiresAt: null,
-                        },
-                        {
-                            expiresAt: {
-                                gt: new Date(),
-                            },
-                        },
-                    ],
-
-                    // Anonymous visitors + new customers:
-                    //   can see both new-user and all-customer promotions.
-                    //
-                    // Existing customers:
-                    //   can only see all-customer promotions.
-                    ...(isNewUser
-                        ? {}
-                        : {
-                            newUserOnly: false,
-                        }),
-                },
-
-                orderBy: [
-                    {
-                        priority: "desc",
-                    },
-                    {
-                        createdAt: "desc",
-                    },
-                ],
-            });
-
-            const availablePromotion = promotions.find(
-                (coupon) =>
-                    coupon.usageLimit == null ||
-                    coupon.usedCount < coupon.usageLimit
-            );
-
-            return availablePromotion ?? null;
+            return findActivePromotion(isNewUser);
         },
     },
 

@@ -13,7 +13,7 @@ export default function CartPage() {
   const totalItemCount = items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <main
+    <div
       id="main-content"
       tabIndex={-1}
       className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background transition-colors duration-200"
@@ -119,6 +119,6 @@ export default function CartPage() {
         )}
 
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,167 +1,107 @@
-"use client";
-
-import { motion, type Variants } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import ProductGrid from "@/components/product/ProductGrid";
 import ShopByCategory from "@/components/product/ShopByCategory";
 import DesignedForYou from "@/components/layout/DesignedForYou";
-import Image from "next/image";
-import Link from "next/link";
+import HeroActions from "@/components/home/HeroActions";
 import heroFurniture from "@/public/images/hero-sofa.webp";
-import { event as trackEvent } from "@/lib/analytics/gtag";
+import { getFeaturedProducts, getTopCategories } from "@/lib/data/cached";
 
-const heroContainer: Variants = {
-    hidden: {},
-    show: {
-        transition: {
-            staggerChildren: 0.12,
-            delayChildren: 0.2,
-        },
-    },
-};
+// Statically generated and refreshed in the background, so the storefront
+// never waits on a serverless function + database round trip.
+export const revalidate = 300;
 
-const heroItem: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    show: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-    },
-};
+export default async function Shop() {
+    // Seed the React Query cache with server-rendered data. The client hooks
+    // (same query keys) find it already there: no skeletons, no waterfall
+    // (JS -> hydrate -> fetch /api/graphql -> render), and the product / category
+    // images are in the initial HTML.
+    const queryClient = new QueryClient();
 
-const revealUp: Variants = {
-    hidden: { opacity: 0, y: 32 },
-    show: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-    },
-};
+    try {
+        const [products, categories] = await Promise.all([
+            getFeaturedProducts(),
+            getTopCategories(),
+        ]);
 
-export default function Shop() {
+        queryClient.setQueryData(["products", {}, 1], products);
+        queryClient.setQueryData(["productCategories", 5], categories);
+    } catch (error) {
+        // If the database is unreachable, fall back to client-side fetching.
+        console.error("[home] Failed to prefetch storefront data:", error);
+    }
+
     return (
-        <main
-            id="main-content"
-            className="min-h-screen bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground"
-        >
+        <HydrationBoundary state={dehydrate(queryClient)}>
             {/* Hero Section */}
             <section
                 aria-labelledby="hero-heading"
                 className="relative min-h-162.5 h-[85vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden"
             >
-                {/* Background Image Container */}
-                <motion.div
+                {/* Background Image: the LCP element, painted immediately (no opacity animation) */}
+                <div
                     aria-hidden="true"
                     className="absolute inset-0 z-0 overflow-hidden rounded-b-[2.5rem]"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.9, ease: "easeOut" }}
                 >
                     <Image
                         src={heroFurniture}
-                        alt="Minimalist modern sofa in a contemporary living space showcasing the featured collection"
+                        alt=""
                         fill
                         priority
                         fetchPriority="high"
                         sizes="100vw"
-                        className="object-cover object-center scale-105 animate-[subtle-zoom_25s_ease-out_forwards]"
+                        placeholder="empty"
+                        className="object-cover object-center"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/40 to-foreground/20" />
-                </motion.div>
+                </div>
 
                 {/* Hero Content */}
                 <div className="absolute inset-0 flex items-center">
-                    <motion.div
-                        className="max-w-360 mx-auto w-full px-5 sm:px-8 lg:px-10"
-                        variants={heroContainer}
-                        initial="hidden"
-                        animate="show"
-                    >
+                    <div className="max-w-360 mx-auto w-full px-5 sm:px-8 lg:px-10">
                         <div className="max-w-xl md:max-w-2xl lg:max-w-3xl">
                             {/* Badge */}
-                            <motion.div
-                                variants={heroItem}
-                                role="status"
-                                aria-label="Announcement: New Collection"
-                                className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md px-3 py-2 sm:px-4"
-                            >
+                            <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md px-3 py-2 sm:px-4">
                                 <span
                                     aria-hidden="true"
-                                    className="h-2 w-2 rounded-full bg-success animate-pulse"
+                                    className="h-2 w-2 rounded-full bg-success"
                                 />
-                                <span className="text-xs uppercase tracking-[0.3em] text-primary-foreground/90">
+                                <span className="text-xs uppercase tracking-[0.3em] text-primary-foreground">
                                     New Collection
                                 </span>
-                            </motion.div>
+                            </div>
 
                             {/* Heading */}
-                            <motion.h1
-                                variants={heroItem}
+                            <h1
                                 id="hero-heading"
                                 className="font-serif text-5xl sm:text-7xl md:text-8xl tracking-tight text-primary-foreground leading-[1.03]"
                             >
                                 Elevate Your <br />
-                                <span className="italic font-light text-primary-foreground/80">Living</span> Space.
-                            </motion.h1>
+                                <span className="italic font-light text-primary-foreground/90">Living</span> Space.
+                            </h1>
 
                             {/* Description */}
-                            <motion.p
-                                variants={heroItem}
-                                className="mt-5 max-w-128.5 text-primary-foreground/80 text-base sm:text-md leading-7 sm:leading-8"
-                            >
+                            <p className="mt-5 max-w-128.5 text-primary-foreground/90 text-base sm:text-md leading-7 sm:leading-8">
                                 Timeless furniture crafted with premium materials,
                                 modern aesthetics, and exceptional comfort for
                                 contemporary homes.
-                            </motion.p>
+                            </p>
 
-                            {/* CTA Actions */}
-                            <motion.nav
-                                variants={heroItem}
-                                aria-label="Hero quick navigation"
-                                className="mt-8 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-                            >
-                                <Link
-                                    href="/products"
-                                    aria-label="Explore the full furniture collection"
-                                    onClick={() =>
-                                        trackEvent("select_content", {
-                                            content_type: "hero_cta",
-                                            item_id: "explore_collection",
-                                        })
-                                    }
-                                    className="flex justify-center rounded-xl bg-primary-foreground px-8 py-4 text-sm font-semibold text-primary transition-all hover:scale-[1.03] hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                                >
-                                    Explore Collection
-                                </Link>
-                                <Link
-                                    href="/about"
-                                    aria-label="Learn about our design ethos and craftsmanship"
-                                    onClick={() =>
-                                        trackEvent("select_content", {
-                                            content_type: "hero_cta",
-                                            item_id: "our_design_ethos",
-                                        })
-                                    }
-                                    className="flex justify-center rounded-xl border border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-md px-8 py-4 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                                >
-                                    Our Design Ethos
-                                </Link>
-                            </motion.nav>
+                            <HeroActions />
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Floating Card */}
-                <motion.aside
+                <aside
                     aria-label="Design philosophy spotlight"
                     className="absolute right-4 lg:right-10 bottom-6 lg:bottom-12 hidden md:block"
-                    initial={{ opacity: 0, x: 32 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <div className="rounded-3xl border border-primary-foreground/15 bg-primary-foreground/10 backdrop-blur-xl p-6 w-60 lg:w-72 shadow-2xl">
                         <p
                             aria-hidden="true"
-                            className="text-xs uppercase tracking-[0.3em] text-primary-foreground/60"
+                            className="text-xs uppercase tracking-[0.3em] text-primary-foreground/80"
                         >
                             The Art of Home
                         </p>
@@ -170,29 +110,22 @@ export default function Shop() {
                             Form Meets Comfort
                         </h2>
 
-                        <p className="mt-3 text-sm leading-6 text-primary-foreground/70">
+                        <p className="mt-3 text-sm leading-6 text-primary-foreground/85">
                             Refined silhouettes and natural materials created for spaces that feel effortlessly yours.
                         </p>
 
                         <div aria-hidden="true" className="mt-6 flex items-center gap-3">
                             <span className="h-px w-8 bg-primary-foreground/40" />
-                            <span className="text-xs uppercase tracking-[0.2em] text-primary-foreground/60">
+                            <span className="text-xs uppercase tracking-[0.2em] text-primary-foreground/80">
                                 Thoughtfully Designed
                             </span>
                         </div>
                     </div>
-                </motion.aside>
+                </aside>
             </section>
 
             {/* Product Categories Section */}
-            <motion.div
-                variants={revealUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-100px" }}
-            >
-                <ShopByCategory />
-            </motion.div>
+            <ShopByCategory />
 
             {/* Featured Collection Section */}
             <section
@@ -200,13 +133,7 @@ export default function Shop() {
                 className="py-14 md:py-20 px-5 sm:px-6 lg:px-10"
             >
                 <div className="max-w-360 mx-auto space-y-12">
-                    <motion.header
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="text-center space-y-3 max-w-2xl mx-auto"
-                    >
+                    <header className="text-center space-y-3 max-w-2xl mx-auto">
                         <h2
                             id="collection-heading"
                             className="text-3xl sm:text-4xl font-normal tracking-tight font-serif text-foreground"
@@ -216,47 +143,29 @@ export default function Shop() {
                         <p className="text-muted-foreground text-sm sm:text-base font-light max-w-md mx-auto leading-relaxed">
                             Carefully curated signature pieces designed to establish clean lines, warm minimalism, and structural purpose.
                         </p>
-                    </motion.header>
+                    </header>
 
-                    <motion.div
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true, margin: "-100px" }}
+                    <div
                         className="pt-4"
                         role="region"
                         aria-label="Featured Products Grid"
                     >
                         <ProductGrid ignoreGlobalFilters />
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="mt-16 flex justify-center"
-                    >
+                    <div className="mt-16 flex justify-center">
                         <Link
                             href="/products"
-                            aria-label="View our full furniture catalog and available products"
                             className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-semibold tracking-widest uppercase hover:bg-primary/90 active:scale-[0.98] transition-all shadow-md shadow-primary/10 hover:shadow-lg hover:shadow-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         >
                             View Full Catalog
                         </Link>
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
             {/* Recommendations Section */}
-            <motion.div
-                variants={revealUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-100px" }}
-            >
-                <DesignedForYou />
-            </motion.div>
-        </main>
+            <DesignedForYou />
+        </HydrationBoundary>
     );
 }

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { useWishlist } from "@/hooks/useWishlist";
 
 interface Props {
     productId: string;
@@ -25,12 +26,20 @@ export default function WishlistButton({
     const { user } = useUser();
     const { openSignIn } = useClerk();
 
+    // Product lists can be server-rendered/cached without user context, so for a
+    // signed-in user the shared wishlist query (already fetched by the navbar)
+    // is the source of truth for the heart state.
+    const { data: wishlistData } = useWishlist(!!user);
+    const resolvedWishlisted = wishlistData
+        ? wishlistData.wishlist.some((item) => item.product.id === productId)
+        : isWishlisted;
+
     const [loading, setLoading] = useState(false);
-    const [wishlisted, setWishlisted] = useState(isWishlisted);
+    const [wishlisted, setWishlisted] = useState(resolvedWishlisted);
 
     useEffect(() => {
-        setWishlisted(isWishlisted);
-    }, [isWishlisted]);
+        setWishlisted(resolvedWishlisted);
+    }, [resolvedWishlisted]);
 
     async function toggleWishlist(e: MouseEvent<HTMLButtonElement>) {
         // Prevent triggering parent Link elements or card click events

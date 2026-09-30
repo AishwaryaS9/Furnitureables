@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { useUser } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddresses } from "@/hooks/useAddresses";
@@ -16,12 +17,22 @@ import { useCouponStore } from "@/store/coupon";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import OrderSummary from "@/components/checkout/OrderSummary";
 import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector";
-import StripePaymentForm, { StripePaymentFormRef } from "@/components/checkout/StripePaymentForm";
+import type { StripePaymentFormRef } from "@/components/checkout/StripePaymentForm";
 import { RazorpayOptions, RazorpayResponse } from "@/types/razorpay";
 import { toast } from "sonner";
 import { ShieldCheck, Lock, MapPin, CreditCard, ShoppingBag } from "lucide-react";
-import { Elements } from "@stripe/react-stripe-js";
-import { stripePromise } from "@/lib/stripe-client";
+
+// Stripe.js + react-stripe-js are only downloaded when the Stripe method is selected.
+const StripeSection = dynamic(() => import("@/components/checkout/StripeSection"), {
+    ssr: false,
+    loading: () => (
+        <div
+            role="status"
+            aria-label="Loading secure card form"
+            className="h-40 animate-pulse rounded-2xl bg-muted/60"
+        />
+    ),
+});
 
 export default function CheckoutPage() {
     const { user } = useUser();
@@ -186,8 +197,7 @@ export default function CheckoutPage() {
         <>
             <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-            <main
-                id="main-content"
+            <div
                 tabIndex={-1}
                 className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background transition-colors duration-200"
             >
@@ -263,12 +273,10 @@ export default function CheckoutPage() {
 
                                 {paymentMethod === "STRIPE" && (
                                     <div className="pt-4 border-t border-border/60">
-                                        <Elements stripe={stripePromise}>
-                                            <StripePaymentForm
-                                                ref={stripeFormRef}
-                                                addresses={addresses ?? []}
-                                            />
-                                        </Elements>
+                                        <StripeSection
+                                            formRef={stripeFormRef}
+                                            addresses={addresses ?? []}
+                                        />
                                     </div>
                                 )}
                             </section>
@@ -294,7 +302,7 @@ export default function CheckoutPage() {
                         </aside>
                     </div>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

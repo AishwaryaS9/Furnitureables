@@ -77,12 +77,11 @@ export default function ShopByCategory() {
                                 >
                                     <Link
                                         href={categoryUrl}
-                                        aria-label={`Browse ${formattedLabel} furniture collection (${cat.count} ${cat.count === 1 ? "item" : "items"} available)`}
                                         className="group relative w-full h-full overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                     >
                                         <Image
                                             src={cat.image || "/images/placeholder.webp"}
-                                            alt={`${formattedLabel} interior furniture collection showcase`}
+                                            alt=""
                                             fill
                                             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 33vw, 50vw"
                                             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"

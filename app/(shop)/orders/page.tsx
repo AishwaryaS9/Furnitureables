@@ -28,7 +28,7 @@ export default async function OrdersPage() {
     const orderCount = orders.length;
 
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background focus:outline-none"
@@ -92,6 +92,6 @@ export default async function OrdersPage() {
                     <OrdersFeed orders={orders} />
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function AddressesPage() {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background focus:outline-none"
@@ -58,7 +58,7 @@ export default function AddressesPage() {
                     <AddressList />
                 </div>
             </section>
-        </main>
+        </div>
     );
 }
 

@@ -2,11 +2,10 @@
 
 import { useState, useRef, useEffect, useCallback, MouseEvent } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Truck, ShieldCheck, Minus, Plus, Maximize2, X, AlertCircle, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
-import RelatedProducts from "@/components/product/RelatedProducts";
-import ProductReviews from "@/components/product/ProductReviews";
 import { Product } from "@/types/product";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import { useCartStore } from "@/store/cart";
@@ -15,6 +14,11 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { formatCurrency } from "@/lib/order";
 import { ProductReviews as ProductReviewsData } from "@/types/review";
+
+// Below-the-fold sections are split into their own chunks (still server-rendered,
+// so reviews stay crawlable) and no longer block the buy box from becoming interactive.
+const RelatedProducts = dynamic(() => import("@/components/product/RelatedProducts"));
+const ProductReviews = dynamic(() => import("@/components/product/ProductReviews"));
 
 export default function ProductClient({ product, reviews }: { product: Product; reviews: ProductReviewsData }) {
     const addToCart = useAddToCart();
@@ -106,7 +110,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
         <>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
 
-            <main id="main-content" tabIndex={-1} className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground 
+            <div tabIndex={-1} className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground 
             selection:text-background transition-colors duration-200">
                 <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
 
@@ -400,7 +404,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
 
                     <ProductReviews productId={product.id} initialData={reviews} />
                 </div>
-            </main>
+            </div>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-[85vw] lg:max-w-[65vw] xl:max-w-6xl h-[90vh] p-0 overflow-hidden 

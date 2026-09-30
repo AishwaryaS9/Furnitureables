@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CartLoading() {
     return (
-        <main
+        <div
             className="min-h-screen bg-background text-foreground antialiased"
             role="status"
             aria-busy="true"
@@ -71,6 +71,6 @@ export default function CartLoading() {
                     </aside>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

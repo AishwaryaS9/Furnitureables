@@ -73,7 +73,7 @@ export default function ProductsPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
             />
 
-            <main
+            <div
                 id="main-content"
                 tabIndex={-1}
                 className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background transition-colors duration-200"
@@ -254,7 +254,7 @@ export default function ProductsPage() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

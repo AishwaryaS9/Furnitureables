@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 
 export default function CheckoutLoading() {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             aria-busy="true"
@@ -152,6 +152,6 @@ export default function CheckoutLoading() {
                 </div>
 
             </div>
-        </main>
+        </div>
     );
 }

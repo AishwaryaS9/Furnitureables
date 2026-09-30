@@ -34,7 +34,7 @@ export default async function WishlistPage({ searchParams }: WishlistPageProps) 
   // 1. Unauthenticated User State
   if (!userId) {
     return (
-      <main
+      <div
         id="main-content"
         tabIndex={-1}
         className="min-h-[70vh] flex items-center justify-center px-4 py-16 sm:py-24 bg-background text-foreground antialiased"
@@ -64,7 +64,7 @@ export default async function WishlistPage({ searchParams }: WishlistPageProps) 
             </Button>
           </CardContent>
         </Card>
-      </main>
+      </div>
     );
   }
 

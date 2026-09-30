@@ -3,28 +3,22 @@ import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import CartSync from "@/components/cart/CartSync";
 import { Toaster } from "@/components/ui/sonner";
-import WishlistSync from "@/components/wishlist/WishlistSync";
-import RazorpayProvider from "@/components/providers/RazorpayProvider";
-import CartLiveSync from "@/components/cart/CartLiveSync";
-import CartLogoutSync from "@/components/cart/CartLogoutSync";
-import SplashScreen from "@/components/common/SplashScreen";
 import ScrollToTop from "@/components/common/ScrollToTop";
-import { PromotionAuthSync } from "@/components/admin/coupons/PromotionAuthSync";
+import DeferredClientEffects from "@/components/providers/DeferredClientEffects";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfairDisplay",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
   display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
   display: "swap",
+  fallback: ["system-ui", "Arial", "sans-serif"],
 });
 
 export const viewport: Viewport = {
@@ -88,16 +82,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // prefetchUI={false}: don't preload Clerk's large UI bundle on every page.
+  // It is still fetched on demand when a sign-in / user component is used.
   return (
-    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      prefetchUI={false}
+    >
       <html
         lang="en"
         suppressHydrationWarning
         className={`${playfairDisplay.variable} ${montserrat.variable} h-full scroll-smooth antialiased`}
       >
         <body className="min-h-full bg-background font-sans text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
-          <SplashScreen />
-
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -107,12 +104,7 @@ export default function RootLayout({
 
           <QueryProvider>
             <ScrollToTop />
-            <CartLogoutSync />
-            <CartSync />
-            <CartLiveSync />
-            <WishlistSync />
-            <RazorpayProvider />
-            <PromotionAuthSync />
+            <DeferredClientEffects />
             {children}
             <Toaster position="top-right" richColors closeButton />
           </QueryProvider>

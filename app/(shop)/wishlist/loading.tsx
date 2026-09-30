@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             role="status"
@@ -60,6 +60,6 @@ export default function Loading() {
                 </div>
 
             </div>
-        </main>
+        </div>
     );
 }

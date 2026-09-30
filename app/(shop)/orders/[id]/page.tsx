@@ -54,7 +54,7 @@ export default async function OrderPage({ params }: Props) {
     }
 
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background focus:outline-none"
@@ -65,6 +65,6 @@ export default async function OrderPage({ params }: Props) {
             >
                 <OrderDetails order={order} />
             </section>
-        </main>
+        </div>
     );
 }

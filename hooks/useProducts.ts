@@ -32,6 +32,10 @@ export const useProducts = (options: UseProductsOptions = {}) => {
   return useQuery({
     queryKey: ["products", cleanFilters, page],
 
+    // Catalog data changes rarely; avoid refetching (and re-rendering the grid)
+    // right after it was server-rendered / just loaded.
+    staleTime: 60 * 1000,
+
     queryFn: async () => {
       const data = await graphqlClient.request<ProductsResponse>(
         GET_PRODUCTS,

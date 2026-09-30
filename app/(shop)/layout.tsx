@@ -1,10 +1,16 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import GoogleAnalyticsPageTracker from "@/components/analytics/GoogleAnalyticsPageTracker";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics/gtag";
+import { getAnonymousPromotion, getTopCategories } from "@/lib/data/cached";
+
+// Shop pages are cached and refreshed in the background (pages that use
+// request-time APIs remain dynamic).
+export const revalidate = 300;
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
@@ -70,11 +76,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ShopLayout({
+export default async function ShopLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Server-render data every shop page needs (navbar promo bar, navbar and
+  // footer category links). Without this the promo bar is injected after a
+  // client fetch and pushes the whole page down (CLS), and the footer/nav show
+  // skeletons until the GraphQL round trip completes.
+  const queryClient = new QueryClient();
+  const [promotion, categories] = await Promise.allSettled([
+    getAnonymousPromotion(),
+    getTopCategories(),
+  ]);
+
+  if (promotion.status === "fulfilled") {
+    queryClient.setQueryData(["activePromotion"], promotion.value);
+  }
+  if (categories.status === "fulfilled") {
+    queryClient.setQueryData(["productCategories", 5], categories.value);
+  }
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -135,28 +158,23 @@ export default function ShopLayout({
         }}
       />
 
-      <div className="relative flex min-h-screen flex-col bg-background text-foreground antialiased selection:bg-foreground selection:text-background">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-foreground focus:outline-ring focus:ring-2"
-        >
-          Skip to main content
-        </a>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <div className="relative flex min-h-screen flex-col bg-background text-foreground antialiased selection:bg-foreground selection:text-background">
+          <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/40">
+            <Navbar />
+          </header>
 
-        <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/40">
-          <Navbar />
-        </header>
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="flex-1 focus:outline-none"
+          >
+            {children}
+          </main>
 
-        <main
-          id="main-content"
-          tabIndex={-1}
-          className="flex-1 focus:outline-none"
-        >
-          {children}
-        </main>
-
-        <Footer />
-      </div>
+          <Footer />
+        </div>
+      </HydrationBoundary>
 
       {GA_MEASUREMENT_ID && (
         <>

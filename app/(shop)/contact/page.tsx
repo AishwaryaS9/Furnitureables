@@ -77,7 +77,7 @@ export default function ContactPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
             />
-            <main
+            <div
                 id="main-content"
                 tabIndex={-1}
                 aria-labelledby="contact-page-heading"
@@ -377,7 +377,7 @@ export default function ContactPage() {
                         </nav>
                     </section>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

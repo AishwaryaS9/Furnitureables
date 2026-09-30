@@ -37,7 +37,7 @@ export default function FaqPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <main
+      <div
         id="main-content"
         tabIndex={-1}
         aria-labelledby="faq-page-heading"
@@ -83,7 +83,7 @@ export default function FaqPage() {
             </Link>
           </footer>
         </div>
-      </main>
+      </div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Order } from "@/types/order";
 import { formatCurrency, formatOrderDate } from "@/lib/order";
-import DownloadInvoiceButton from "./DownloadInvoiceButton";
+import DownloadInvoiceButton from "./LazyDownloadInvoiceButton";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import { SUPPORT_EMAIL } from "@/lib/constants/contact";

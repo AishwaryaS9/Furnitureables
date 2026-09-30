@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import DashboardCards from "@/components/admin/dashboard/DashboardCards";
 import LowStockProducts from "@/components/admin/dashboard/LowStockProducts";
 import RecentOrders from "@/components/admin/dashboard/RecentOrders";
-import SalesChart from "@/components/admin/dashboard/SalesChart";
+import SalesChart from "@/components/admin/dashboard/LazySalesChart";
 
 export const metadata: Metadata = {
     title: "Dashboard Overview | Admin Portal — Furnitureables",

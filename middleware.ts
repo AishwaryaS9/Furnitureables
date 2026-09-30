@@ -18,6 +18,5 @@ export const config = {
         '/__clerk/:path*',
         // Always run for API routes
         '/(api|trpc)(.*)',
-        '/((?!_next/static|_next/image|favicon.ico).*)',
     ],
 };

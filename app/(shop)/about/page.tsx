@@ -48,8 +48,7 @@ export default function AboutPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
             />
-            <main
-                id="main-content"
+            <div
                 tabIndex={-1}
                 aria-labelledby="about-page-heading"
                 className="min-h-screen bg-background text-foreground antialiased py-10 sm:py-16 lg:py-20 focus:outline-none"
@@ -343,7 +342,7 @@ export default function AboutPage() {
                         </div>
                     </section>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

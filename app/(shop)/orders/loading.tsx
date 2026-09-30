@@ -4,7 +4,7 @@ const SKELETON_ROW_COUNT = 5;
 
 export default function Loading() {
     return (
-        <main
+        <div
             id="main-content"
             tabIndex={-1}
             className="min-h-screen bg-background text-foreground antialiased focus:outline-none"
@@ -93,6 +93,6 @@ export default function Loading() {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }
