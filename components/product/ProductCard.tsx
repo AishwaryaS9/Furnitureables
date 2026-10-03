@@ -117,7 +117,7 @@ export default function ProductCard({ product }: { product: Product }) {
           tabIndex={-1}
           aria-hidden="true"
           onClick={handleNavigate}
-          className="block h-full w-full focus:outline-none"
+          className="relative block h-full w-full focus:outline-none"
         >
           {thumbnailUrl ? (
             <Image
