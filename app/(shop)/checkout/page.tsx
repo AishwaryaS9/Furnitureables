@@ -184,7 +184,7 @@ export default function CheckoutPage() {
 
     return (
         <>
-            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
             <main
                 id="main-content"

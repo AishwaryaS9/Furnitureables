@@ -3,6 +3,7 @@ import { graphqlClient } from "@/lib/graphql/client";
 import { GET_PRODUCTS } from "@/lib/graphql/queries";
 import { Product } from "@/types/product";
 import { useFilterStore } from "@/store/useFilterStore";
+import { useHydrationSafe } from "@/hooks/useHydrated";
 
 interface ProductsResponse {
   products: {
@@ -29,7 +30,7 @@ export const useProducts = (options: UseProductsOptions = {}) => {
     Object.entries(filters).filter(([_, value]) => value !== "" && value !== undefined)
   );
 
-  return useQuery({
+  const query = useQuery({
     queryKey: ["products", cleanFilters, page],
 
     queryFn: async () => {
@@ -44,4 +45,6 @@ export const useProducts = (options: UseProductsOptions = {}) => {
       return data.products;
     },
   });
+
+  return useHydrationSafe(query);
 };

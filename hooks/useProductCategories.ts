@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { graphqlClient } from "@/lib/graphql/client";
 import { GET_PRODUCT_CATEGORIES } from "@/lib/graphql/queries";
+import { useHydrationSafe } from "@/hooks/useHydrated";
 
 export interface ProductCategory {
     type: string;
@@ -13,7 +14,7 @@ interface ProductCategoriesResponse {
 }
 
 export const useProductCategories = (limit = 5) => {
-    return useQuery({
+    const query = useQuery({
         queryKey: ["productCategories", limit],
 
         queryFn: async () => {
@@ -26,4 +27,6 @@ export const useProductCategories = (limit = 5) => {
         },
         staleTime: 5 * 60 * 1000,
     });
+
+    return useHydrationSafe(query);
 };

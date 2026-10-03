@@ -1,19 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/hooks/useCart";
 import { useSaveCart } from "@/hooks/useSaveCart";
 import { useCartStore } from "@/store/cart";
 import { mergeCart } from "@/lib/mergeCart";
 import { mapServerCartItems } from "@/lib/cartMapper";
 
-export default function CartSync() {
-    const { user } = useUser();
-
-    const { data: cart } = useCart(user?.id);
-
-    const saveCart = useSaveCart();
+export function useCartSync(userId?: string | null) {
+    const { data: cart } = useCart(userId ?? undefined);
+    const { mutateAsync: saveCart } = useSaveCart();
 
     const syncedUserId = useCartStore((s) => s.syncedUserId);
     const setSyncedUserId = useCartStore((s) => s.setSyncedUserId);
@@ -23,10 +19,8 @@ export default function CartSync() {
 
     useEffect(() => {
         async function syncCart() {
-            if (!user) return;
-            if (!cart) return;
-
-            if (syncedUserId === user.id) return;
+            if (!userId || !cart) return;
+            if (syncedUserId === userId) return;
             if (syncing.current) return;
 
             syncing.current = true;
@@ -37,9 +31,9 @@ export default function CartSync() {
 
                 const merged = mergeCart(guestItems, serverItems);
                 setCart(merged);
+                setSyncedUserId(userId);
 
-                setSyncedUserId(user.id);
-                await saveCart.mutateAsync(
+                await saveCart(
                     merged.map((item) => ({
                         productId: item.id,
                         quantity: item.quantity,
@@ -54,14 +48,5 @@ export default function CartSync() {
         }
 
         syncCart();
-    }, [
-        user,
-        cart,
-        syncedUserId,
-        saveCart,
-        setCart,
-        setSyncedUserId,
-    ]);
-
-    return null;
+    }, [userId, cart, syncedUserId, saveCart, setCart, setSyncedUserId]);
 }
