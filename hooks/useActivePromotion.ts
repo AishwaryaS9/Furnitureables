@@ -13,8 +13,8 @@ export function useActivePromotion() {
             return data.activePromotion;
         },
 
-        staleTime: 60 * 1000,
-        refetchInterval: 60 * 1000,
+        staleTime: 2 * 60 * 1000,
+        refetchInterval: 5 * 60 * 1000,
         refetchOnWindowFocus: true,
     });
 }

@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useCartStore } from "@/store/cart";
 import { useSaveCart } from "@/hooks/useSaveCart";
 
-export default function CartLiveSync() {
-    const { user } = useUser();
-
+export function useCartLiveSync(userId?: string | null) {
     const items = useCartStore((s) => s.items);
     const syncedUserId = useCartStore((s) => s.syncedUserId);
 
@@ -17,9 +14,8 @@ export default function CartLiveSync() {
     const previousPayload = useRef("");
 
     useEffect(() => {
-        if (!user) return;
-
-        if (syncedUserId !== user.id) return;
+        if (!userId) return;
+        if (syncedUserId !== userId) return;
 
         if (!initialized.current) {
             initialized.current = true;
@@ -34,12 +30,9 @@ export default function CartLiveSync() {
         }));
 
         const serialized = JSON.stringify(payload);
-
         if (serialized === previousPayload.current) return;
 
         previousPayload.current = serialized;
         mutate(payload);
-    }, [items, user, syncedUserId, isPending, mutate]);
-
-    return null;
+    }, [items, userId, syncedUserId, isPending, mutate]);
 }
