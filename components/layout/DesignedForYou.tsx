@@ -42,10 +42,10 @@ export default function DesignedForYou() {
                             <div>
                                 <Link
                                     href="/about"
-                                    aria-label="Learn more about our custom furniture design process and team"
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-foreground px-7 py-3.5 text-sm font-semibold text-primary shadow-xs transition-all hover:scale-[1.03] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-foreground px-7 py-3.5 text-sm font-semibold text-primary 
+                                    shadow-xs hover:shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-secondary"
                                 >
-                                    <span>Learn More</span>
+                                    <span>About Furnitureables</span>
                                     <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
                                 </Link>
                             </div>
