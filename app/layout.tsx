@@ -85,6 +85,7 @@ export default function RootLayout({
       <html
         lang="en"
         suppressHydrationWarning
+        data-scroll-behavior="smooth"
         className={`${playfairDisplay.variable} ${montserrat.variable} h-full scroll-smooth antialiased`}
       >
         <body className="min-h-full bg-background font-sans text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
