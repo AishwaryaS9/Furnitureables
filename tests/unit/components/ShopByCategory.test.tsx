@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ShopByCategory from "@/components/product/ShopByCategory";

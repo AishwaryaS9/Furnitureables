@@ -14,7 +14,7 @@ export function mergeCart(
     const map = new Map<string, CartItem>();
 
     remote.forEach(item => {
-        map.set(item.id, item);
+        map.set(item.id, { ...item });
     });
 
     local.forEach(item => {
@@ -27,7 +27,7 @@ export function mergeCart(
 
         } else {
 
-            map.set(item.id, item);
+            map.set(item.id, { ...item });
 
         }
 
