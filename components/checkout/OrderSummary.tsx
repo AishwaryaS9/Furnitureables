@@ -31,7 +31,7 @@ export default function OrderSummary({
             ? "Place Order (COD)"
             : paymentMethod === "RAZORPAY"
                 ? "Pay with Razorpay"
-                : "Pay with Credit / Debit Card";
+                : "Pay with Stripe";
 
     const items = cart?.items ?? [];
     const itemCount = items.reduce((acc, i) => acc + i.quantity, 0);
@@ -187,7 +187,7 @@ export default function OrderSummary({
                         ) : (
                             <>
                                 <CreditCard className="w-3 h-3 text-primary" aria-hidden="true" />
-                                <span>{paymentMethod === "RAZORPAY" ? "Razorpay Gateway" : "Credit / Debit Card"}</span>
+                                <span>{paymentMethod === "RAZORPAY" ? "Razorpay Gateway" : "Stripe Payment Gateway"}</span>
                             </>
                         )}
                     </dd>

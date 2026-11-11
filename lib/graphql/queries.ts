@@ -222,6 +222,12 @@ export const GET_ORDER = gql`
 
       createdAt
 
+      confirmedAt
+      shippedAt
+      inTransitAt
+      outForDeliveryAt
+      deliveredAt
+
       razorpayPaymentId
 
       coupon {

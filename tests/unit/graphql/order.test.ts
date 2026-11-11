@@ -423,7 +423,7 @@ describe("adminUpdateOrderStatus", () => {
 
         expect(prisma.order.update).toHaveBeenCalledWith({
             where: { id: "order-1" },
-            data: { status: "SHIPPED" },
+            data: { status: "SHIPPED", shippedAt: expect.any(Date) },
         });
     });
 
@@ -432,7 +432,7 @@ describe("adminUpdateOrderStatus", () => {
 
         expect(prisma.order.update).toHaveBeenCalledWith({
             where: { id: "order-1" },
-            data: { status: "DELIVERED", paymentStatus: "PAID" },
+            data: { status: "DELIVERED", paymentStatus: "PAID", deliveredAt: expect.any(Date) },
         });
     });
 
@@ -445,7 +445,7 @@ describe("adminUpdateOrderStatus", () => {
 
         expect(prisma.order.update).toHaveBeenCalledWith({
             where: { id: "order-1" },
-            data: { status: "DELIVERED" },
+            data: { status: "DELIVERED", deliveredAt: expect.any(Date) },
         });
     });
 

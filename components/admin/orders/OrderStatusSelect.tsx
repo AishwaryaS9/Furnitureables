@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, CheckCircle2, Truck, XCircle } from "lucide-react";
+import { Loader2, CheckCircle2, Truck, MapPin, PackageCheck, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -15,7 +15,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAdminUpdateOrderStatus } from "@/hooks/useAdminUpdateOrderStatus";
-import { getOrderStatusColor, STATUS_OPTIONS } from "@/lib/order";
+import { formatOrderStatus, getOrderStatusColor, STATUS_OPTIONS } from "@/lib/order";
 import { cn } from "@/lib/utils";
 import { OrderStatus } from "@/types/order";
 
@@ -27,7 +27,7 @@ interface Props {
 }
 
 function formatStatusLabel(status: OrderStatus) {
-    return status.charAt(0) + status.slice(1).toLowerCase();
+    return formatOrderStatus(status);
 }
 
 function renderStatusIcon(status: OrderStatus) {
@@ -37,7 +37,10 @@ function renderStatusIcon(status: OrderStatus) {
         case "CONFIRMED":
             return <CheckCircle2 className="h-3 w-3 shrink-0" aria-hidden="true" />;
         case "SHIPPED":
+        case "IN_TRANSIT":
             return <Truck className="h-3 w-3 shrink-0" aria-hidden="true" />;
+        case "OUT_FOR_DELIVERY":
+            return <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />;
         case "DELIVERED":
             return <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />;
         case "CANCELLED":
@@ -77,6 +80,7 @@ export default function OrderStatusSelect({ orderId, orderNumber, status, classN
                                 ? error.message
                                 : "Please try again.",
                     });
+                    console.log("error msg", error.message);
                 },
             }
         );

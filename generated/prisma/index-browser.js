@@ -217,6 +217,11 @@ exports.Prisma.OrderScalarFieldEnum = {
   country: 'country',
   couponId: 'couponId',
   notes: 'notes',
+  confirmedAt: 'confirmedAt',
+  shippedAt: 'shippedAt',
+  inTransitAt: 'inTransitAt',
+  outForDeliveryAt: 'outForDeliveryAt',
+  deliveredAt: 'deliveredAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -305,6 +310,8 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  OUT_FOR_DELIVERY: 'OUT_FOR_DELIVERY',
   DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED'
 };

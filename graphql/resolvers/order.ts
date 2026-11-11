@@ -11,9 +11,20 @@ const VALID_ORDER_STATUSES: OrderStatus[] = [
     "PENDING",
     "CONFIRMED",
     "SHIPPED",
+    "IN_TRANSIT",
+    "OUT_FOR_DELIVERY",
     "DELIVERED",
     "CANCELLED",
 ];
+
+// Which timestamp column records when an order first reached a given status.
+const STATUS_TIMESTAMP_FIELD = {
+    CONFIRMED: "confirmedAt",
+    SHIPPED: "shippedAt",
+    IN_TRANSIT: "inTransitAt",
+    OUT_FOR_DELIVERY: "outForDeliveryAt",
+    DELIVERED: "deliveredAt",
+} as const;
 
 async function getCurrentUser() {
     const { userId } = await auth();
@@ -414,6 +425,7 @@ export const orderResolver = {
                             paymentMethod: input.paymentMethod,
 
                             status: "CONFIRMED",
+                            confirmedAt: new Date(),
 
                             paymentStatus:
                                 input.paymentMethod === "COD"
@@ -604,11 +616,22 @@ export const orderResolver = {
             const shouldFlagRefund =
                 status === "CANCELLED" && existingOrder.paymentStatus === "PAID";
 
+            const timestampField =
+                status in STATUS_TIMESTAMP_FIELD
+                    ? STATUS_TIMESTAMP_FIELD[status as keyof typeof STATUS_TIMESTAMP_FIELD]
+                    : null;
+
+            // Stamp the time the order reached this status (admin can move
+            // an order forward, so any earlier milestone it skipped is left empty).
+            const timestampData = timestampField
+                ? { [timestampField]: new Date() }
+                : {};
+
             const updateData = shouldMarkCodAsPaid
-                ? { status, paymentStatus: "PAID" as const }
+                ? { status, paymentStatus: "PAID" as const, ...timestampData }
                 : shouldFlagRefund
-                    ? { status, paymentStatus: "REFUNDED" as const }
-                    : { status };
+                    ? { status, paymentStatus: "REFUNDED" as const, ...timestampData }
+                    : { status, ...timestampData };
 
             // Restore stock if order is being cancelled
             if (

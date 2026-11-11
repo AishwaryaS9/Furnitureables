@@ -139,6 +139,7 @@ export const paymentResolver = {
                     where: { id: order.id },
                     data: {
                         status: "CONFIRMED",
+                        confirmedAt: new Date(),
                         paymentStatus: "PAID",
                         razorpayPaymentId,
                         razorpaySignature,

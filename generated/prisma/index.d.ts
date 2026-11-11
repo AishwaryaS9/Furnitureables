@@ -97,6 +97,8 @@ export const OrderStatus: {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  OUT_FOR_DELIVERY: 'OUT_FOR_DELIVERY',
   DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED'
 };
@@ -9322,6 +9324,11 @@ export namespace Prisma {
     country: string | null
     couponId: string | null
     notes: string | null
+    confirmedAt: Date | null
+    shippedAt: Date | null
+    inTransitAt: Date | null
+    outForDeliveryAt: Date | null
+    deliveredAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9355,6 +9362,11 @@ export namespace Prisma {
     country: string | null
     couponId: string | null
     notes: string | null
+    confirmedAt: Date | null
+    shippedAt: Date | null
+    inTransitAt: Date | null
+    outForDeliveryAt: Date | null
+    deliveredAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9388,6 +9400,11 @@ export namespace Prisma {
     country: number
     couponId: number
     notes: number
+    confirmedAt: number
+    shippedAt: number
+    inTransitAt: number
+    outForDeliveryAt: number
+    deliveredAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9439,6 +9456,11 @@ export namespace Prisma {
     country?: true
     couponId?: true
     notes?: true
+    confirmedAt?: true
+    shippedAt?: true
+    inTransitAt?: true
+    outForDeliveryAt?: true
+    deliveredAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9472,6 +9494,11 @@ export namespace Prisma {
     country?: true
     couponId?: true
     notes?: true
+    confirmedAt?: true
+    shippedAt?: true
+    inTransitAt?: true
+    outForDeliveryAt?: true
+    deliveredAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9505,6 +9532,11 @@ export namespace Prisma {
     country?: true
     couponId?: true
     notes?: true
+    confirmedAt?: true
+    shippedAt?: true
+    inTransitAt?: true
+    outForDeliveryAt?: true
+    deliveredAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9625,6 +9657,11 @@ export namespace Prisma {
     country: string
     couponId: string | null
     notes: string | null
+    confirmedAt: Date | null
+    shippedAt: Date | null
+    inTransitAt: Date | null
+    outForDeliveryAt: Date | null
+    deliveredAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: OrderCountAggregateOutputType | null
@@ -9677,6 +9714,11 @@ export namespace Prisma {
     country?: boolean
     couponId?: boolean
     notes?: boolean
+    confirmedAt?: boolean
+    shippedAt?: boolean
+    inTransitAt?: boolean
+    outForDeliveryAt?: boolean
+    deliveredAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     coupon?: boolean | Order$couponArgs<ExtArgs>
@@ -9715,6 +9757,11 @@ export namespace Prisma {
     country?: boolean
     couponId?: boolean
     notes?: boolean
+    confirmedAt?: boolean
+    shippedAt?: boolean
+    inTransitAt?: boolean
+    outForDeliveryAt?: boolean
+    deliveredAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     coupon?: boolean | Order$couponArgs<ExtArgs>
@@ -9751,6 +9798,11 @@ export namespace Prisma {
     country?: boolean
     couponId?: boolean
     notes?: boolean
+    confirmedAt?: boolean
+    shippedAt?: boolean
+    inTransitAt?: boolean
+    outForDeliveryAt?: boolean
+    deliveredAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     coupon?: boolean | Order$couponArgs<ExtArgs>
@@ -9787,11 +9839,16 @@ export namespace Prisma {
     country?: boolean
     couponId?: boolean
     notes?: boolean
+    confirmedAt?: boolean
+    shippedAt?: boolean
+    inTransitAt?: boolean
+    outForDeliveryAt?: boolean
+    deliveredAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "subtotal" | "shipping" | "tax" | "discount" | "total" | "currency" | "status" | "paymentStatus" | "paymentMethod" | "stripePaymentIntentId" | "razorpayOrderId" | "razorpayPaymentId" | "razorpaySignature" | "fullName" | "phoneCode" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "couponId" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "subtotal" | "shipping" | "tax" | "discount" | "total" | "currency" | "status" | "paymentStatus" | "paymentMethod" | "stripePaymentIntentId" | "razorpayOrderId" | "razorpayPaymentId" | "razorpaySignature" | "fullName" | "phoneCode" | "phone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "country" | "couponId" | "notes" | "confirmedAt" | "shippedAt" | "inTransitAt" | "outForDeliveryAt" | "deliveredAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     coupon?: boolean | Order$couponArgs<ExtArgs>
     address?: boolean | Order$addressArgs<ExtArgs>
@@ -9847,6 +9904,11 @@ export namespace Prisma {
       country: string
       couponId: string | null
       notes: string | null
+      confirmedAt: Date | null
+      shippedAt: Date | null
+      inTransitAt: Date | null
+      outForDeliveryAt: Date | null
+      deliveredAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["order"]>
@@ -10304,6 +10366,11 @@ export namespace Prisma {
     readonly country: FieldRef<"Order", 'String'>
     readonly couponId: FieldRef<"Order", 'String'>
     readonly notes: FieldRef<"Order", 'String'>
+    readonly confirmedAt: FieldRef<"Order", 'DateTime'>
+    readonly shippedAt: FieldRef<"Order", 'DateTime'>
+    readonly inTransitAt: FieldRef<"Order", 'DateTime'>
+    readonly outForDeliveryAt: FieldRef<"Order", 'DateTime'>
+    readonly deliveredAt: FieldRef<"Order", 'DateTime'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
   }
@@ -16603,6 +16670,11 @@ export namespace Prisma {
     country: 'country',
     couponId: 'couponId',
     notes: 'notes',
+    confirmedAt: 'confirmedAt',
+    shippedAt: 'shippedAt',
+    inTransitAt: 'inTransitAt',
+    outForDeliveryAt: 'outForDeliveryAt',
+    deliveredAt: 'deliveredAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17381,6 +17453,11 @@ export namespace Prisma {
     country?: StringFilter<"Order"> | string
     couponId?: StringNullableFilter<"Order"> | string | null
     notes?: StringNullableFilter<"Order"> | string | null
+    confirmedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    inTransitAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    outForDeliveryAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     coupon?: XOR<CouponNullableScalarRelationFilter, CouponWhereInput> | null
@@ -17418,6 +17495,11 @@ export namespace Prisma {
     country?: SortOrder
     couponId?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+    shippedAt?: SortOrderInput | SortOrder
+    inTransitAt?: SortOrderInput | SortOrder
+    outForDeliveryAt?: SortOrderInput | SortOrder
+    deliveredAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     coupon?: CouponOrderByWithRelationInput
@@ -17458,6 +17540,11 @@ export namespace Prisma {
     country?: StringFilter<"Order"> | string
     couponId?: StringNullableFilter<"Order"> | string | null
     notes?: StringNullableFilter<"Order"> | string | null
+    confirmedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    inTransitAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    outForDeliveryAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     coupon?: XOR<CouponNullableScalarRelationFilter, CouponWhereInput> | null
@@ -17495,6 +17582,11 @@ export namespace Prisma {
     country?: SortOrder
     couponId?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+    shippedAt?: SortOrderInput | SortOrder
+    inTransitAt?: SortOrderInput | SortOrder
+    outForDeliveryAt?: SortOrderInput | SortOrder
+    deliveredAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: OrderCountOrderByAggregateInput
@@ -17536,6 +17628,11 @@ export namespace Prisma {
     country?: StringWithAggregatesFilter<"Order"> | string
     couponId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    confirmedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    shippedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    inTransitAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    outForDeliveryAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    deliveredAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
   }
@@ -18479,6 +18576,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     coupon?: CouponCreateNestedOneWithoutOrdersInput
@@ -18516,6 +18618,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -18547,6 +18654,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coupon?: CouponUpdateOneWithoutOrdersNestedInput
@@ -18584,6 +18696,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -18618,6 +18735,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18648,6 +18770,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18681,6 +18808,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19636,6 +19768,17 @@ export namespace Prisma {
     not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type CouponNullableScalarRelationFilter = {
     is?: CouponWhereInput | null
     isNot?: CouponWhereInput | null
@@ -19675,6 +19818,11 @@ export namespace Prisma {
     country?: SortOrder
     couponId?: SortOrder
     notes?: SortOrder
+    confirmedAt?: SortOrder
+    shippedAt?: SortOrder
+    inTransitAt?: SortOrder
+    outForDeliveryAt?: SortOrder
+    deliveredAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19716,6 +19864,11 @@ export namespace Prisma {
     country?: SortOrder
     couponId?: SortOrder
     notes?: SortOrder
+    confirmedAt?: SortOrder
+    shippedAt?: SortOrder
+    inTransitAt?: SortOrder
+    outForDeliveryAt?: SortOrder
+    deliveredAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19749,6 +19902,11 @@ export namespace Prisma {
     country?: SortOrder
     couponId?: SortOrder
     notes?: SortOrder
+    confirmedAt?: SortOrder
+    shippedAt?: SortOrder
+    inTransitAt?: SortOrder
+    outForDeliveryAt?: SortOrder
+    deliveredAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19789,6 +19947,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type OrderScalarRelationFilter = {
@@ -19960,17 +20132,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type CouponCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -20092,20 +20253,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumAdminNotificationTypeFilter<$PrismaModel = never> = {
@@ -20799,6 +20946,10 @@ export namespace Prisma {
     set?: $Enums.PaymentMethod
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type CouponUpdateOneWithoutOrdersNestedInput = {
     create?: XOR<CouponCreateWithoutOrdersInput, CouponUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: CouponCreateOrConnectWithoutOrdersInput
@@ -20975,10 +21126,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type OrderUpdateManyWithoutCouponNestedInput = {
@@ -21216,6 +21363,17 @@ export namespace Prisma {
     not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -21244,6 +21402,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReviewStatusFilter<$PrismaModel = never> = {
@@ -21279,17 +21451,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedEnumDiscountTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -21332,20 +21493,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumAdminNotificationTypeFilter<$PrismaModel = never> = {
@@ -21456,6 +21603,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     coupon?: CouponCreateNestedOneWithoutOrdersInput
@@ -21491,6 +21643,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -21670,6 +21827,11 @@ export namespace Prisma {
     country?: StringFilter<"Order"> | string
     couponId?: StringNullableFilter<"Order"> | string | null
     notes?: StringNullableFilter<"Order"> | string | null
+    confirmedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    inTransitAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    outForDeliveryAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
   }
@@ -22387,6 +22549,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     coupon?: CouponCreateNestedOneWithoutOrdersInput
@@ -22422,6 +22589,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -22824,6 +22996,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     coupon?: CouponCreateNestedOneWithoutOrdersInput
@@ -22860,6 +23037,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22951,6 +23133,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coupon?: CouponUpdateOneWithoutOrdersNestedInput
@@ -22987,6 +23174,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23404,6 +23596,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     address?: AddressCreateNestedOneWithoutOrdersInput
@@ -23439,6 +23636,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -23515,6 +23717,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23615,6 +23822,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coupon?: CouponUpdateOneWithoutOrdersNestedInput
@@ -23650,6 +23862,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -23683,6 +23900,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23958,6 +24180,11 @@ export namespace Prisma {
     country: string
     couponId?: string | null
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23988,6 +24215,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coupon?: CouponUpdateOneWithoutOrdersNestedInput
@@ -24023,6 +24255,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -24056,6 +24293,11 @@ export namespace Prisma {
     country?: StringFieldUpdateOperationsInput | string
     couponId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24128,6 +24370,11 @@ export namespace Prisma {
     postalCode: string
     country: string
     notes?: string | null
+    confirmedAt?: Date | string | null
+    shippedAt?: Date | string | null
+    inTransitAt?: Date | string | null
+    outForDeliveryAt?: Date | string | null
+    deliveredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24158,6 +24405,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: AddressUpdateOneWithoutOrdersNestedInput
@@ -24193,6 +24445,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -24226,6 +24483,11 @@ export namespace Prisma {
     postalCode?: StringFieldUpdateOperationsInput | string
     country?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inTransitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    outForDeliveryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

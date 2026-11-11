@@ -75,7 +75,7 @@ describe("confirmStripeOrderPayment", () => {
 
             expect(tx.order.update).toHaveBeenCalledWith({
                 where: { id: "order-1" },
-                data: { paymentStatus: "PAID", status: "CONFIRMED" },
+                data: { paymentStatus: "PAID", status: "CONFIRMED", confirmedAt: expect.any(Date) },
             });
         });
 

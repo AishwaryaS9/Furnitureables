@@ -54,6 +54,7 @@ export async function confirmStripeOrderPayment(
             data: {
                 paymentStatus: "PAID",
                 status: "CONFIRMED",
+                confirmedAt: new Date(),
             },
         });
 

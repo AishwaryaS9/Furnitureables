@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { useUser } from "@clerk/nextjs";
@@ -26,6 +26,7 @@ import { stripePromise } from "@/lib/stripe-client";
 export default function CheckoutPage() {
     const { user } = useUser();
     const stripeFormRef = useRef<StripePaymentFormRef>(null);
+    const [isStripeProcessing, setIsStripeProcessing] = useState(false);
     const router = useRouter();
 
     const placeOrder = usePlaceOrder();
@@ -267,6 +268,7 @@ export default function CheckoutPage() {
                                             <StripePaymentForm
                                                 ref={stripeFormRef}
                                                 addresses={addresses ?? []}
+                                                onProcessingChange={setIsStripeProcessing}
                                             />
                                         </Elements>
                                     </div>
@@ -281,7 +283,7 @@ export default function CheckoutPage() {
                                 cart={cart}
                                 selectedAddressId={selectedAddressId}
                                 onCheckout={handlePlaceOrder}
-                                loading={placeOrder.isPending || createRazorpayOrder.isPending || isAddressesLoading || isCartLoading}
+                                loading={placeOrder.isPending || createRazorpayOrder.isPending || isStripeProcessing || isAddressesLoading || isCartLoading}
                             />
 
                             {/* Trust Guarantee Card */}
