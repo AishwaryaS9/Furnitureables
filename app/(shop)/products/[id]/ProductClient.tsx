@@ -160,7 +160,7 @@ export default function ProductClient({ product, reviews }: { product: Product; 
 
                                 <div className="absolute top-3.5 left-3.5 z-10 pointer-events-none">
                                     {isOutOfStock ? (
-                                        <span className="rounded-full bg-destructive/90 text-destructive-foreground px-3 py-1 text-[10px] font-semibold tracking-widest uppercase">
+                                        <span className="rounded-full bg-stock-status text-stock-status-foreground px-3 py-1 text-[10px] font-semibold tracking-widest uppercase">
                                             Out of Stock
                                         </span>
                                     ) : (

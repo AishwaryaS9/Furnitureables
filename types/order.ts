@@ -1,4 +1,5 @@
 import { PaymentMethod } from "@/generated/prisma";
+import { LucideIcon } from "lucide-react";
 
 export interface PlaceOrderInput {
   addressId: string;
@@ -45,6 +46,8 @@ export type OrderStatus =
   | "PENDING"
   | "CONFIRMED"
   | "SHIPPED"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
   | "DELIVERED"
   | "CANCELLED";
 
@@ -90,6 +93,12 @@ export interface Order {
 
   createdAt: string;
 
+  confirmedAt?: string | null;
+  shippedAt?: string | null;
+  inTransitAt?: string | null;
+  outForDeliveryAt?: string | null;
+  deliveredAt?: string | null;
+
   items: OrderItem[];
 }
 
@@ -105,4 +114,21 @@ export interface BuyAgainResponse {
   buyAgain: {
     id: string;
   };
+}
+
+export type StepKey =
+  | "PLACED"
+  | "CONFIRMED"
+  | "SHIPPED"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED";
+
+export interface Step {
+  key: StepKey;
+  title: string;
+  icon: LucideIcon;
+  reachedDescription: string;
+  currentDescription?: string;
+  upcomingDescription: string;
 }

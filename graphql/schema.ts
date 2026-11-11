@@ -7,6 +7,8 @@ export const typeDefs = /* GraphQL */ `
     PENDING
     CONFIRMED
     SHIPPED
+    IN_TRANSIT
+    OUT_FOR_DELIVERY
     DELIVERED
     CANCELLED
   }
@@ -222,6 +224,12 @@ export const typeDefs = /* GraphQL */ `
  
     notes: String
     coupon: Coupon
+
+    confirmedAt: DateTime
+    shippedAt: DateTime
+    inTransitAt: DateTime
+    outForDeliveryAt: DateTime
+    deliveredAt: DateTime
 
     createdAt: DateTime!
     updatedAt: String!

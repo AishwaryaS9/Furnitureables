@@ -11,6 +11,8 @@ export const ORDER_STATUS_COLORS: Record<string, string> = {
     PENDING: "var(--chart-2)",
     CONFIRMED: "var(--accent)",
     SHIPPED: "#D97706",
+    IN_TRANSIT: "#0EA5E9",
+    OUT_FOR_DELIVERY: "#8B5CF6",
     DELIVERED: "var(--success)",
     CANCELLED: "var(--destructive)",
 };

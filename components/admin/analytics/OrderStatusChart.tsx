@@ -10,6 +10,8 @@ const STATUS_LABELS: Record<string, string> = {
     PENDING: "Pending",
     CONFIRMED: "Confirmed",
     SHIPPED: "Shipped",
+    IN_TRANSIT: "In Transit",
+    OUT_FOR_DELIVERY: "Out for Delivery",
     DELIVERED: "Delivered",
     CANCELLED: "Cancelled",
 };

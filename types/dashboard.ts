@@ -21,6 +21,8 @@ export type RecentOrderStatus =
     | "PENDING"
     | "CONFIRMED"
     | "SHIPPED"
+    | "IN_TRANSIT"
+    | "OUT_FOR_DELIVERY"
     | "DELIVERED"
     | "CANCELLED";
 

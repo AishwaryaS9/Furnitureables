@@ -192,6 +192,7 @@ describe("verifyRazorpayPayment", () => {
                     where: { id: "order-1" },
                     data: {
                         status: "CONFIRMED",
+                        confirmedAt: expect.any(Date),
                         paymentStatus: "PAID",
                         razorpayPaymentId: "pay_1",
                         razorpaySignature: sign("rzp_order_1", "pay_1"),

@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -18,6 +18,8 @@ import { Label } from "@/components/ui/label";
 
 interface StripePaymentFormProps {
     addresses: Address[];
+    /** Notifies the parent while a Stripe payment is being processed so it can show the "Processing Order…" loader. */
+    onProcessingChange?: (processing: boolean) => void;
 }
 
 export interface StripePaymentFormRef {
@@ -25,7 +27,7 @@ export interface StripePaymentFormRef {
 }
 
 const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProps>(
-    function StripePaymentForm({ addresses }, ref) {
+    function StripePaymentForm({ addresses, onProcessingChange }, ref) {
         const stripe = useStripe();
         const elements = useElements();
 
@@ -44,8 +46,10 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
         const coupon = useCouponStore((s) => s.coupon);
         const clearCoupon = useCouponStore((s) => s.clearCoupon);
 
+        const isProcessingRef = useRef(false);
+
         const handleStripePayment = async () => {
-            if (!stripe || !elements) return;
+            if (!stripe || !elements || isProcessingRef.current) return;
 
             const addressId =
                 selectedAddressId ||
@@ -56,6 +60,13 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                 toast.error("Please select an address.");
                 return;
             }
+
+            isProcessingRef.current = true;
+            onProcessingChange?.(true);
+
+            // Stays true on success so the loader remains visible until the
+            // redirect to the order page completes.
+            let redirected = false;
 
             try {
                 const result = await createStripePaymentIntent.mutateAsync({
@@ -117,12 +128,18 @@ const StripePaymentForm = forwardRef<StripePaymentFormRef, StripePaymentFormProp
                 clearCoupon();
 
                 const orderId = payment.orderId;
+                redirected = true;
                 router.push(`/orders/${orderId}`);
 
                 return;
             } catch (error) {
                 console.error(error);
                 toast.error("Unable to complete payment.");
+            } finally {
+                if (!redirected) {
+                    isProcessingRef.current = false;
+                    onProcessingChange?.(false);
+                }
             }
         };
 

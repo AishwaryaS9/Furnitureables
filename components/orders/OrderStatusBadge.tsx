@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { getOrderStatusColor } from "@/lib/order";
+import { formatOrderStatus, getOrderStatusColor } from "@/lib/order";
 import { Badge } from "@/components/ui/badge";
-import { Truck, CheckCircle2, XCircle } from "lucide-react";
+import { Truck, MapPin, CheckCircle2, XCircle } from "lucide-react";
 import { OrderStatusFilter } from "@/types/order";
 
 interface Props {
@@ -17,7 +17,10 @@ function renderStatusIcon(status: Props["status"]) {
         case "CONFIRMED":
             return <CheckCircle2 className="h-3 w-3" />;
         case "SHIPPED":
+        case "IN_TRANSIT":
             return <Truck className="h-3 w-3" />;
+        case "OUT_FOR_DELIVERY":
+            return <MapPin className="h-3 w-3" />;
         case "DELIVERED":
             return <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />;
         case "CANCELLED":
@@ -28,7 +31,7 @@ function renderStatusIcon(status: Props["status"]) {
 }
 
 export default function OrderStatusBadge({ status, showLabel = false, className }: Props) {
-    const formattedStatus = status.charAt(0) + status.slice(1).toLowerCase();
+    const formattedStatus = formatOrderStatus(status);
 
     return (
         <div className="inline-flex items-center gap-1.5">

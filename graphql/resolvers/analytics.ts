@@ -314,10 +314,10 @@ export const analyticsResolver = {
                     where: { status: { notIn: [...NON_REVENUE_STATUSES] } },
                 }),
                 prisma.order.count({
-                    where: { status: { in: ["CONFIRMED", "SHIPPED", "DELIVERED"] } },
+                    where: { status: { in: ["CONFIRMED", "SHIPPED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED"] } },
                 }),
                 prisma.order.count({
-                    where: { status: { in: ["SHIPPED", "DELIVERED"] } },
+                    where: { status: { in: ["SHIPPED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED"] } },
                 }),
                 prisma.order.count({ where: { status: "DELIVERED" } }),
             ]);

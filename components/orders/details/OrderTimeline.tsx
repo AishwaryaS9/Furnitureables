@@ -1,48 +1,12 @@
-import { CheckCircle2, Package, Truck, PackageCheck, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { Order } from "@/types/order";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatStepTime, getStepTimestamp, STATUS_LABELS, statusIndex, steps } from "@/lib/order";
 
 interface Props {
     order: Order;
 }
-
-const steps = [
-    {
-        key: "CONFIRMED",
-        title: "Order Placed",
-        description: "We've received your order.",
-        icon: Package,
-    },
-    {
-        key: "SHIPPED",
-        title: "Shipped",
-        description: "Your package is on its way.",
-        icon: Truck,
-    },
-    {
-        key: "DELIVERED",
-        title: "Delivered",
-        description: "Package delivered successfully.",
-        icon: PackageCheck,
-    },
-] as const;
-
-const statusIndex = {
-    PENDING: -1,
-    CONFIRMED: 0,
-    SHIPPED: 1,
-    DELIVERED: 2,
-    CANCELLED: 99,
-};
-
-const STATUS_LABELS: Record<Order["status"], string> = {
-    PENDING: "Pending",
-    CONFIRMED: "Order Placed",
-    SHIPPED: "Shipped",
-    DELIVERED: "Delivered",
-    CANCELLED: "Cancelled",
-};
 
 export default function OrderTimeline({ order }: Props) {
     if (order.status === "CANCELLED") {
@@ -69,6 +33,7 @@ export default function OrderTimeline({ order }: Props) {
     }
 
     const current = statusIndex[order.status];
+    const isFullyDelivered = order.status === "DELIVERED";
 
     return (
         <Card className="rounded-2xl border-border/60 bg-card shadow-2xs">
@@ -83,11 +48,11 @@ export default function OrderTimeline({ order }: Props) {
                         className="flex items-center gap-3 text-[11px] text-muted-foreground"
                     >
                         <span className="flex items-center gap-1.5">
-                            <span className="inline-block h-0 w-4 border-t-2 border-dashed border-emerald-500 dark:border-emerald-400" />
+                            <span className="inline-block h-4 w-0 border-l-2 border-dashed border-emerald-500 dark:border-emerald-400" />
                             Completed
                         </span>
                         <span className="flex items-center gap-1.5">
-                            <span className="inline-block h-0 w-4 border-t-2 border-dotted border-border" />
+                            <span className="inline-block h-4 w-0 border-l-2 border-dotted border-border" />
                             Upcoming
                         </span>
                     </div>
@@ -99,9 +64,10 @@ export default function OrderTimeline({ order }: Props) {
                     Current status: {STATUS_LABELS[order.status]}
                 </p>
 
+                {/* Vertical on mobile, horizontal from md and up */}
                 <ol
                     aria-label="Order tracking progress steps"
-                    className="relative flex items-start justify-between"
+                    className="relative flex flex-col md:flex-row md:items-start md:justify-between"
                 >
                     {steps.map((step, index) => {
                         const isCompleted = index <= current;
@@ -110,17 +76,38 @@ export default function OrderTimeline({ order }: Props) {
                         const isSegmentReached = index < current;
                         const Icon = step.icon;
 
+                        const timestamp = isCompleted
+                            ? formatStepTime(getStepTimestamp(order, step.key))
+                            : null;
+
+                        const description = isCurrentStep
+                            ? step.currentDescription ?? step.reachedDescription
+                            : isCompleted
+                                ? step.reachedDescription
+                                : step.upcomingDescription;
+
+                        const showPulse = isCurrentStep && !isFullyDelivered;
+
                         return (
                             <li
                                 key={step.key}
                                 aria-current={isCurrentStep ? "step" : undefined}
-                                className="relative flex flex-1 flex-col items-center gap-2 text-center"
+                                className={cn(
+                                    "relative flex gap-4",
+                                    "md:flex-1 md:flex-col md:items-center md:gap-3 md:text-center",
+                                    !isLast && "pb-8 md:pb-0"
+                                )}
                             >
+                                {/* Connector: vertical line on mobile, horizontal line on md+ */}
                                 {!isLast && (
                                     <div
                                         aria-hidden="true"
                                         className={cn(
-                                            "absolute top-5 left-1/2 z-0 w-full border-t-2 transition-colors duration-300",
+                                            "absolute z-0 transition-colors duration-300",
+                                            // mobile (vertical)
+                                            "left-5 top-10 bottom-0 -translate-x-1/2 border-l-2",
+                                            // md+ (horizontal)
+                                            "md:left-1/2 md:top-5 md:bottom-auto md:h-0 md:w-full md:translate-x-0 md:border-l-0 md:border-t-2",
                                             isSegmentReached
                                                 ? "border-dashed border-emerald-500 dark:border-emerald-400"
                                                 : "border-dotted border-border"
@@ -129,22 +116,22 @@ export default function OrderTimeline({ order }: Props) {
                                 )}
 
                                 {/* Step Icon Badge */}
-                                <div className="relative">
-                                    {isCurrentStep && (
+                                <div className="relative h-10 w-10 shrink-0">
+                                    {showPulse && (
                                         <span
                                             aria-hidden="true"
-                                            className="absolute inset-0 rounded-full bg-emerald-500/40 dark:bg-emerald-400/40"
+                                            className="absolute inset-0 animate-pulse rounded-full bg-emerald-500/40 motion-reduce:animate-none dark:bg-emerald-400/40"
                                         />
                                     )}
                                     <div
                                         className={cn(
-                                            "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 bg-background transition-colors motion-reduce:transition-none",
+                                            "relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-background transition-colors motion-reduce:transition-none",
                                             isCompleted
                                                 ? "border-emerald-500 bg-emerald-500 text-white dark:border-emerald-400 dark:bg-emerald-400 dark:text-emerald-950"
                                                 : "border-border text-muted-foreground"
                                         )}
                                     >
-                                        {isCompleted ? (
+                                        {isCompleted && !showPulse ? (
                                             <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
                                         ) : (
                                             <Icon className="h-5 w-5" aria-hidden="true" />
@@ -152,24 +139,38 @@ export default function OrderTimeline({ order }: Props) {
                                     </div>
                                 </div>
 
-                                {/* Step Details Label */}
-                                <div className="space-y-0.5 px-1">
-                                    <p
-                                        className={cn(
-                                            "text-xs sm:text-sm font-semibold tracking-tight",
-                                            isCompleted ? "text-foreground" : "text-muted-foreground"
+                                {/* Step Details */}
+                                <div className="min-w-0 flex-1 space-y-0.5 pt-1 md:flex-none md:px-1 md:pt-0">
+                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 md:flex-col md:gap-1">
+                                        <p
+                                            className={cn(
+                                                "text-sm font-semibold tracking-tight",
+                                                isCompleted ? "text-foreground" : "text-muted-foreground"
+                                            )}
+                                        >
+                                            {step.title}
+                                        </p>
+                                        {showPulse && (
+                                            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+                                                Current Status
+                                            </span>
                                         )}
-                                    >
-                                        {step.title}
-                                    </p>
-                                    <p className="hidden text-[11px] font-light text-muted-foreground sm:block">
-                                        {isCompleted ? step.description : "Pending"}
-                                    </p>
-                                    {isCurrentStep && (
-                                        <p className="text-[10px] font-medium uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
-                                            Current
+                                    </div>
+
+                                    {timestamp && (
+                                        <p className="text-xs tabular-nums text-muted-foreground">
+                                            {timestamp}
                                         </p>
                                     )}
+
+                                    <p
+                                        className={cn(
+                                            "text-xs font-light",
+                                            isCompleted ? "text-muted-foreground" : "text-muted-foreground/70"
+                                        )}
+                                    >
+                                        {description}
+                                    </p>
                                 </div>
                             </li>
                         );

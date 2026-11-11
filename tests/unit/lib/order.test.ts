@@ -105,11 +105,13 @@ describe("getPaymentMethodLabel", () => {
 });
 
 describe("status option lists", () => {
-    it("has the five order statuses", () => {
+    it("has every order status", () => {
         expect(STATUS_OPTIONS.map((o) => o.value)).toEqual([
             "PENDING",
             "CONFIRMED",
             "SHIPPED",
+            "IN_TRANSIT",
+            "OUT_FOR_DELIVERY",
             "DELIVERED",
             "CANCELLED",
         ]);
