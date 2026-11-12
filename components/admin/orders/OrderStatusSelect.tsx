@@ -80,7 +80,6 @@ export default function OrderStatusSelect({ orderId, orderNumber, status, classN
                                 ? error.message
                                 : "Please try again.",
                     });
-                    console.log("error msg", error.message);
                 },
             }
         );
